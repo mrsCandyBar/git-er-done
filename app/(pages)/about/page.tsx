@@ -1,22 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
-import nextLogo from "../../../assets/images/next.svg";
-import vercelLogo from "../../../assets/images/vercel.svg";
-import styles from "./page.module.scss";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 
 export default function About() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src={nextLogo}
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
+    <>
+      <Header />
+      <div className="intro">
           <h1>About page To get started, edit the page.tsx file.</h1>
           <p>
             Looking for a starting point or more instructions? Head over to{" "}
@@ -38,35 +27,7 @@ export default function About() {
             center.
           </p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src={vercelLogo}
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-          <Link className={styles.secondary} href="/home">
-            Back Home
-          </Link>
-        </div>
-      </main>
-    </div>
+        <Footer activePage="about" />
+    </>
   );
 }

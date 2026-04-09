@@ -1,2 +1,2 @@
-export { metadata } from "../components/layout";
-export { default } from "../components/layout";
+export { metadata } from "../components/Layout";
+export { default } from "../components/Layout";

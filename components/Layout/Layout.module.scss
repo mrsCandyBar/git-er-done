@@ -1,0 +1,24 @@
+@use '../../assets/styles/variables' as v;
+@use '../../assets/styles/mixins' as m;
+
+.page {
+  @include m.flex-center-col;
+  flex: 1;
+  background-color: var(--color-bg);
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  max-width: v.$max-width-content;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  background-color: var(--color-fg);
+  padding: v.$spacing-2xl v.$spacing-xl;
+
+  @include m.mobile {
+    padding: v.$spacing-lg v.$spacing-md;
+  }
+}

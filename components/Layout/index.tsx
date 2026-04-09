@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
-import favicon from "../assets/favicon.ico";
-import "../assets/globals.scss";
+import "../../assets/globals.scss";
+import styles from "./Layout.module.scss";
 
 export const metadata: Metadata = {
   title: "Git-Er-Done",
   description: "A task manager for serial procrastinators",
-  icons: {
-    icon: favicon.src,
-    shortcut: favicon.src,
-  },
 };
 
 export default function RootLayout({
@@ -18,7 +14,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <div className={styles.page}>
+          <main className={styles.main}>{children}</main>
+        </div>
+      </body>
     </html>
   );
 }
