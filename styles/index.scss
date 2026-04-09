@@ -1,0 +1,10 @@
+// ─── Styles barrel ────────────────────────────────────────────────────────────
+// Import this file in any component or page that needs access to all shared
+// design tokens and helpers.
+//
+// Partials that emit CSS (reset, typography, buttons) are intentionally NOT
+// re-exported here so they are never double-emitted.  Import them explicitly
+// where you need the actual CSS output (e.g. globals.scss).
+
+@forward 'variables';
+@forward 'mixins';

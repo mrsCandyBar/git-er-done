@@ -1,0 +1,59 @@
+// ─── Color Palette ────────────────────────────────────────────────────────────
+$color-bg-light:          #ffffff;
+$color-bg-dark:           #0a0a0a;
+
+$color-fg-light:          #171717;
+$color-fg-dark:           #ededed;
+
+$color-text-primary:      #000000;
+$color-text-secondary:    #666666;
+
+$color-text-primary-dark: #ededed;
+$color-text-secondary-dark: #999999;
+
+$color-btn-primary-hover:          #383838;
+$color-btn-secondary-hover:        #f2f2f2;
+$color-btn-secondary-border:       #ebebeb;
+
+$color-btn-primary-hover-dark:     #cccccc;
+$color-btn-secondary-hover-dark:   #1a1a1a;
+$color-btn-secondary-border-dark:  #1a1a1a;
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+$font-family-base:  Arial, Helvetica, sans-serif;
+$font-family-mono:  ui-monospace, 'Courier New', Courier, monospace;
+
+$font-size-sm:   14px;
+$font-size-base: 18px;
+$font-size-lg:   32px;
+$font-size-xl:   40px;
+
+$font-weight-normal:    400;
+$font-weight-medium:    500;
+$font-weight-semibold:  600;
+
+$line-height-base: 32px;
+$line-height-lg:   40px;
+$line-height-xl:   48px;
+
+// ─── Spacing ──────────────────────────────────────────────────────────────────
+$spacing-xs:   8px;
+$spacing-sm:  16px;
+$spacing-md:  24px;
+$spacing-lg:  48px;
+$spacing-xl:  60px;
+$spacing-2xl: 120px;
+
+// ─── Layout ───────────────────────────────────────────────────────────────────
+$max-width-content: 800px;
+$max-width-text:    440px;
+$max-width-heading: 320px;
+
+// ─── Breakpoints ──────────────────────────────────────────────────────────────
+$breakpoint-sm: 600px;
+
+// ─── Transitions ──────────────────────────────────────────────────────────────
+$transition-base: 0.2s;
+
+// ─── Border Radius ────────────────────────────────────────────────────────────
+$border-radius-pill: 128px;

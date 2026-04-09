@@ -1,0 +1,41 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+// ─── Button base ──────────────────────────────────────────────────────────────
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 v.$spacing-sm;
+  border-radius: v.$border-radius-pill;
+  border: 1px solid transparent;
+  font-size: v.$font-size-sm;
+  font-weight: v.$font-weight-medium;
+  cursor: pointer;
+  transition: background v.$transition-base, border-color v.$transition-base;
+  text-decoration: none;
+
+  // ── Variants ──────────────────────────────────────────────────────────────
+
+  &--primary {
+    background: var(--color-text-primary);
+    color: var(--color-bg);
+    gap: v.$spacing-xs;
+
+    @include m.hover {
+      background: v.$color-btn-primary-hover;
+      border-color: transparent;
+    }
+  }
+
+  &--secondary {
+    border-color: var(--color-btn-secondary-border);
+
+    @include m.hover {
+      background: var(--color-btn-secondary-hover);
+      border-color: transparent;
+    }
+  }
+}

@@ -1,0 +1,57 @@
+@use 'variables' as v;
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+
+/// Apply styles only on screens narrower than the given breakpoint.
+/// @param {String} $bp - breakpoint value (e.g. v.$breakpoint-sm)
+@mixin mobile($bp: v.$breakpoint-sm) {
+  @media (max-width: $bp) {
+    @content;
+  }
+}
+
+// ─── Interaction ──────────────────────────────────────────────────────────────
+
+/// Apply hover styles only on non-touch (pointer: fine) devices.
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// ─── Flexbox helpers ──────────────────────────────────────────────────────────
+
+/// Flex column, centred on both axes.
+@mixin flex-center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/// Flex row, centred on both axes.
+@mixin flex-center-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+
+/// Truncate text with an ellipsis after a given number of lines.
+/// @param {Number} $lines - number of visible lines (default 1)
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
