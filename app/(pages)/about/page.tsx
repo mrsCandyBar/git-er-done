@@ -60,7 +60,7 @@ export default function About() {
           >
             Documentation
           </a>
-          <Link className={styles.secondary} href="/">
+          <Link className={styles.secondary} href="/home">
             Back Home
           </Link>
         </div>

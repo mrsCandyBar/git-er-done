@@ -60,7 +60,7 @@ export default function Home() {
           >
             Documentation
           </a>
-          <Link className={styles.secondary} href="/pages/about">
+          <Link className={styles.secondary} href="/about">
             About Page
           </Link>
         </div>
