@@ -56,6 +56,13 @@
   gap: v.$spacing-sm;
 }
 
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: v.$spacing-sm;
+  width: 100%;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -157,6 +164,7 @@
   .wrapper {
     gap: v.$spacing-md;
   }
+
 }
 
 .wrapper select {

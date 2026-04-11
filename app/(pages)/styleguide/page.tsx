@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from "react";
 import { faCircleCheck, faClock, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
@@ -8,10 +9,14 @@ import Input from "../../../components/Input";
 import Form from "../../../components/Form";
 import Text from "../../../components/Text";
 import InfoChip from "../../../components/InfoChip";
+import Card from "../../../components/Card";
+import CardStack from "../../../components/CardStack";
 import StyleguideThemeToggle from "../../../components/StyleguideThemeToggle";
 import styles from "./page.module.scss";
 
 export default function Styleguide() {
+  const [showClosableCard, setShowClosableCard] = useState(true);
+
   return (
     <>
       <Header />
@@ -297,6 +302,69 @@ export default function Styleguide() {
             <InfoChip label="Waiting Approval" icon={faClock} variant="outline" />
             <InfoChip label="Priority" icon={faCircleCheck} variant="bright" />
           </div>
+        </section>
+
+        <section className={styles.section}>
+          <Text as="h2">Cards</Text>
+          <Text as="p" tone="secondary">
+            Card content is fully optional. Use only the blocks you need for each scenario.
+          </Text>
+          <div className={styles.cardGrid}>
+            <Card
+              title="Weekly Planning"
+              description="Review active tasks, set priorities, and share updates with your team."
+              imageUrl="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80"
+              imageDescription="Open notebook on a desk used for weekly planning notes"
+              ctaLabel="Open Board"
+              ctaHref="/task"
+            />
+
+            {showClosableCard ? (
+              <Card
+                title="Temporary Notice"
+                description="This card demonstrates the optional close button behavior."
+                showCloseButton
+                onClose={() => setShowClosableCard(false)}
+                ctaLabel="Dismiss"
+                onCtaClick={() => setShowClosableCard(false)}
+              />
+            ) : (
+              <Card
+                title="Card Closed"
+                description="The close button removed the previous card."
+                ctaLabel="Restore"
+                onCtaClick={() => setShowClosableCard(true)}
+              />
+            )}
+
+            <Card title="Title Only" fullWidth />
+          </div>
+
+          <Text as="h3">Card Stack</Text>
+          <Text as="p" tone="secondary">
+            Cards fan out like they&apos;re resting on a table. Dismiss each card to flick it away — once the last one is gone, restore them all or swap in new ones.
+          </Text>
+          <CardStack
+            emptyLabel="Bring Back Cards"
+            emptyDescription="All cards dismissed. Restore them or bring in something new."
+            cards={[
+              {
+                title: "Card One",
+                description: "Swipe me away when you&apos;re done.",
+                ctaLabel: "Open",
+              },
+              {
+                title: "Card Two",
+                description: "Dismiss the top card to reveal me.",
+                ctaLabel: "Open",
+              },
+              {
+                title: "Card Three",
+                description: "The last card. Bye!",
+                ctaLabel: "Open",
+              },
+            ]}
+          />
         </section>
       </main>
       <Footer activePage="styleguide" />
