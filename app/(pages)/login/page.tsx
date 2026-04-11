@@ -10,6 +10,10 @@ export default function Login() {
           <h1>Login page. To get started, edit the page.tsx file.</h1>
           
           <GoogleLoginButton />
+          test
+          <p>
+            You can also preview the UI baseline on the <a href="/styleguide">Styleguide page</a>.
+          </p>
           <p>
             Looking for a starting point or more instructions? Head over to{" "}
             <a

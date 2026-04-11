@@ -1,0 +1,36 @@
+@use '../../assets/styles/variables' as v;
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--color-btn-secondary-border);
+  color: var(--color-text-secondary);
+  background: var(--color-btn-secondary-hover);
+  font-size: v.$font-size-sm;
+}
+
+.icon {
+  font-size: 12px;
+}
+
+.default {
+  background: var(--color-btn-secondary-hover);
+  border-color: var(--color-btn-secondary-border);
+  color: var(--color-text-secondary);
+}
+
+.outline {
+  background: transparent;
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+.bright {
+  background: color-mix(in srgb, var(--color-text-primary) 14%, var(--color-bg));
+  border-color: color-mix(in srgb, var(--color-text-primary) 22%, var(--color-bg));
+  color: var(--color-text-primary);
+}

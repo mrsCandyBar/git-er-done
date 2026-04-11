@@ -4,7 +4,7 @@ import Button from "../Button";
 import styles from "../Button/Button.module.scss";
 
 type FooterProps = {
-  activePage?: "login" | "about" | "profile" | "base" | "task";
+  activePage?: "login" | "about" | "profile" | "base" | "task" | "styleguide";
 };
 
 export default function Footer({ activePage }: FooterProps) {
@@ -47,6 +47,9 @@ export default function Footer({ activePage }: FooterProps) {
       </Button>
       <Button variant={activePage === "task" ? "active" : "secondary"} href="/task">
         Task Page
+      </Button>
+      <Button variant={activePage === "styleguide" ? "active" : "secondary"} href="/styleguide">
+        Styleguide
       </Button>
     </footer>
   );
