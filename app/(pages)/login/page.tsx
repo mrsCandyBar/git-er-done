@@ -1,5 +1,6 @@
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
+import GoogleLoginButton from "@/components/google-login";
 
 export default function Login() {
   return (
@@ -7,6 +8,8 @@ export default function Login() {
       <Header />
       <div className="intro">
           <h1>Login page. To get started, edit the page.tsx file.</h1>
+          
+          <GoogleLoginButton />
           <p>
             Looking for a starting point or more instructions? Head over to{" "}
             <a
