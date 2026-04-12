@@ -36,6 +36,10 @@
 	}
 }
 
+.taskTarget {
+	scroll-margin-top: v.$spacing-lg;
+}
+
 .actions {
 	display: flex;
 	flex-wrap: wrap;

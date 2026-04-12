@@ -15,14 +15,14 @@ export default function Current() {
           <ul>
             <li>Break onboarding into smaller milestones</li>
             <li>Confirm deadline with product team</li>
-            <li>Write acceptance criteria for profile form</li>
+            <li id="write-acceptance-criteria-for-profile-form" className={styles.taskTarget}>Write acceptance criteria for profile form</li>
           </ul>
         </article>
 
         <article className={styles.column}>
           <h2>In Progress</h2>
           <ul>
-            <li>Finalize post-login navigation map</li>
+            <li id="finalize-post-login-navigation-map" className={styles.taskTarget}>Finalize post-login navigation map</li>
             <li>QA confetti CTA trigger behavior</li>
           </ul>
         </article>
@@ -30,7 +30,7 @@ export default function Current() {
         <article className={styles.column}>
           <h2>Done</h2>
           <ul>
-            <li>Split public and app route groups</li>
+            <li id="split-public-and-app-route-groups" className={styles.taskTarget}>Split public and app route groups</li>
             <li>Create post-login shell preview</li>
           </ul>
         </article>
