@@ -1,6 +1,5 @@
 import Button from "../components/Button";
 import buttonStyles from "../components/Button/Button.module.scss";
-import styles from "./(pages)/about/page.module.scss";
 
 export default function Unauthorized() {
   return (
@@ -13,8 +12,8 @@ export default function Unauthorized() {
         <Button variant="primary" href="/login">
           Back to Login
         </Button>
-        <Button variant="secondary" href="/about">
-          About Page
+        <Button variant="secondary" href="/support">
+          Support Page
         </Button>
       </div>
     </>

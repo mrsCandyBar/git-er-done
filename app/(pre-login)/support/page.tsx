@@ -1,12 +1,12 @@
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 
-export default function Task() {
+export default function Support() {
   return (
     <>
       <Header />
       <div className="intro">
-          <h1>Task page To get started, edit the page.tsx file.</h1>
+          <h1>Support page. To get started, edit the page.tsx file.</h1>
           <p>
             Looking for a starting point or more instructions? Head over to{" "}
             <a
@@ -27,7 +27,7 @@ export default function Task() {
             center.
           </p>
         </div>
-        <Footer activePage="task" />
+        <Footer activePage="support" />
     </>
   );
 }
