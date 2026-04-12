@@ -324,7 +324,7 @@ export default function Styleguide() {
               imageUrl="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80"
               imageDescription="Open notebook on a desk used for weekly planning notes"
               ctaLabel="Open Board"
-              ctaHref="/task"
+              ctaHref="/current"
             />
 
             {showClosableCard ? (

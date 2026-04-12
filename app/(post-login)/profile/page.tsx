@@ -27,10 +27,10 @@ export default function Profile() {
       </section>
 
       <div className={styles.actions}>
-        <Button href="/task" variant="outline">
+        <Button href="/current" variant="outline">
           Back to Tasks
         </Button>
-        <Button href="/base" variant="filled">
+        <Button href="/dashboard" variant="filled">
           Return to Workspace
         </Button>
       </div>

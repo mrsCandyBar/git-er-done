@@ -12,7 +12,7 @@ export default function Login() {
           <Text as="h1">Let's do great things together</Text>
 
           <GoogleLoginButton />
-          <Button href="/base" variant="outline">
+          <Button href="/dashboard" variant="outline">
             Continue to Post-Login Preview
           </Button>
         </div>

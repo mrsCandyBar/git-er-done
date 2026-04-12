@@ -16,19 +16,19 @@ export default function PostLoginLayout({
         </Button>
       </div>
 
+      <section className={styles.content}>{children}</section>
+
       <nav className={styles.nav} aria-label="Post-login pages">
-        <Button href="/base" variant="secondary">
-          Workspace
+        <Button href="/dashboard" variant="secondary">
+          Dashboard
         </Button>
-        <Button href="/task" variant="secondary">
-          Tasks
+        <Button href="/current" variant="secondary">
+          Current
         </Button>
         <Button href="/profile" variant="secondary">
           Profile
         </Button>
       </nav>
-
-      <section className={styles.content}>{children}</section>
     </div>
   );
 }

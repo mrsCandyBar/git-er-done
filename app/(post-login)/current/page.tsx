@@ -1,11 +1,11 @@
 import Button from "../../../components/Button";
 import styles from "./page.module.scss";
 
-export default function Task() {
+export default function Current() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1>Task Board</h1>
+        <h1>Current Tasks</h1>
         <p>Plan, prioritize, and complete work inside the authenticated app experience.</p>
       </header>
 
@@ -37,8 +37,8 @@ export default function Task() {
       </section>
 
       <div className={styles.actions}>
-        <Button href="/base" variant="outline">
-          Back to Workspace
+        <Button href="/dashboard" variant="outline">
+          Back to Dashboard
         </Button>
         <Button href="/profile" variant="filled">
           Continue to Profile
