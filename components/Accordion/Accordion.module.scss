@@ -1,0 +1,100 @@
+@use '../../assets/styles/variables' as v;
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 24px;
+}
+
+.item {
+  position: relative;
+  margin-top: -25px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-bg) 96%, var(--color-fg));
+  transition: background v.$transition-base;
+
+  &:hover {
+    background: var(--color-btn-secondary-hover);
+  }
+}
+
+.item:first-child {
+  margin-top: 0;
+}
+
+.trigger {
+  width: 100%;
+  min-height: 46px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 v.$spacing-sm;
+  text-align: left;
+  font: inherit;
+  font-weight: v.$font-weight-medium;
+  cursor: pointer;
+  transition: background v.$transition-base;
+
+  &:hover {
+    background: transparent;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-text-primary);
+    outline-offset: -2px;
+  }
+}
+
+.chevron {
+  color: var(--color-text-secondary);
+  transition: transform v.$transition-base;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.contentWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms ease;
+}
+
+.contentWrapOpen {
+  grid-template-rows: 1fr;
+}
+
+.content {
+  overflow: hidden;
+  padding: v.$spacing-xs v.$spacing-sm v.$spacing-sm;
+  color: var(--color-text-secondary);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.content > * {
+  padding-bottom: 60px;
+}
+
+.contentOpen {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contentWrap {
+    transition: none;
+  }
+
+  .content {
+    transition: none;
+  }
+}

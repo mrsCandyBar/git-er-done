@@ -1,0 +1,50 @@
+@use '../../assets/styles/variables' as v;
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-sm;
+}
+
+.tabList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.$spacing-xs;
+}
+
+.tabButton {
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color v.$transition-base, color v.$transition-base, background v.$transition-base;
+
+  &:hover {
+    border-color: var(--color-text-primary);
+    color: var(--color-text-primary);
+    background: var(--color-btn-secondary-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-text-primary);
+    outline-offset: 2px;
+  }
+}
+
+.active {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+  background: var(--color-btn-secondary-hover);
+}
+
+.panel {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 14px;
+  padding: v.$spacing-sm;
+  background: color-mix(in srgb, var(--color-bg) 96%, var(--color-fg));
+}

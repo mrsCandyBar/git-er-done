@@ -11,11 +11,18 @@ import Text from "../../../components/Text";
 import InfoChip from "../../../components/InfoChip";
 import Card from "../../../components/Card";
 import CardStack from "../../../components/CardStack";
+import Modal from "../../../components/Modal";
+import Tabs from "../../../components/Tabs";
+import Accordion from "../../../components/Accordion";
+import ToastRegion from "../../../components/Toast";
+import { useToastSystem } from "../../../components/Toast/useToast";
 import StyleguideThemeToggle from "../../../components/StyleguideThemeToggle";
 import styles from "./page.module.scss";
 
 export default function Styleguide() {
   const [showClosableCard, setShowClosableCard] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { toasts, pushToast, dismissToast } = useToastSystem();
 
   return (
     <>
@@ -366,7 +373,174 @@ export default function Styleguide() {
             ]}
           />
         </section>
+
+        <section className={styles.section}>
+          <Text as="h2">Modal</Text>
+          <Text as="p" tone="secondary">
+            Reusable modal with overlay close, escape close, and optional action buttons.
+          </Text>
+          <div className={styles.row}>
+            <Button type="button" variant="filled" onClick={() => setIsModalOpen(true)}>
+              Open Modal
+            </Button>
+          </div>
+
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Share Update"
+            description="Post a quick progress note to your team before ending the session."
+            closeLabel="Cancel"
+            primaryActionLabel="Share"
+            onPrimaryAction={() => setIsModalOpen(false)}
+          >
+            <Input label="Update" isTextarea rows={4} placeholder="What changed today?" />
+          </Modal>
+        </section>
+
+        <section className={styles.section}>
+          <Text as="h2">Toasts / Notifications</Text>
+          <Text as="p" tone="secondary">
+            Trigger contextual notifications that auto-dismiss after a short delay.
+          </Text>
+          <div className={styles.row}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() =>
+                pushToast({
+                  variant: "success",
+                  title: "Saved",
+                  description: "Your profile settings were updated.",
+                })
+              }
+            >
+              Success Toast
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() =>
+                pushToast({
+                  variant: "info",
+                  title: "Info",
+                  description: "A new comment was added to your task.",
+                })
+              }
+            >
+              Info Toast
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() =>
+                pushToast({
+                  variant: "warning",
+                  title: "Warning",
+                  description: "Storage space is running low.",
+                })
+              }
+            >
+              Warning Toast
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() =>
+                pushToast({
+                  variant: "error",
+                  title: "Error",
+                  description: "Could not sync your latest changes.",
+                })
+              }
+            >
+              Error Toast
+            </Button>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <Text as="h2">Tabs</Text>
+          <Text as="p" tone="secondary">
+            Use tabs to switch between related content views without leaving the page.
+          </Text>
+          <Tabs
+            items={[
+              {
+                id: "overview",
+                label: "Overview",
+                content: (
+                  <Text as="p" tone="secondary">
+                    This area can summarize the task state, latest updates, and next priorities.
+                  </Text>
+                ),
+              },
+              {
+                id: "activity",
+                label: "Activity",
+                content: (
+                  <Text as="ul" tone="secondary">
+                    <Text as="li">Alex updated the project timeline</Text>
+                    <Text as="li">Sam left feedback on the profile flow</Text>
+                    <Text as="li">Jordan closed two completed tasks</Text>
+                  </Text>
+                ),
+              },
+              {
+                id: "notes",
+                label: "Notes",
+                content: (
+                  <Text as="p" tone="secondary">
+                    Keep implementation notes, follow-ups, and links to docs in this view.
+                  </Text>
+                ),
+              },
+            ]}
+          />
+        </section>
+
+        <section className={styles.section}>
+          <Text as="h2">Accordion</Text>
+          <Text as="p" tone="secondary">
+            Accordions help collapse larger content blocks while keeping the page scannable.
+          </Text>
+          <Accordion
+            allowMultiple
+            defaultOpenIds={["faq-1"]}
+            items={[
+              {
+                id: "faq-1",
+                title: "How do I create a new task?",
+                content: (
+                  <Text as="p" tone="secondary">
+                    Open the task page, fill out the form fields, and submit to add a task.
+                  </Text>
+                ),
+              },
+              {
+                id: "faq-2",
+                title: "Can I edit existing tasks?",
+                content: (
+                  <Text as="p" tone="secondary">
+                    Yes. Select a task from your list, update the details, and save changes.
+                  </Text>
+                ),
+              },
+              {
+                id: "faq-3",
+                title: "How are priorities handled?",
+                content: (
+                  <Text as="p" tone="secondary">
+                    Priorities can be represented using chips, labels, or custom sorting rules.
+                  </Text>
+                ),
+              },
+            ]}
+          />
+        </section>
       </main>
+
+      <ToastRegion toasts={toasts} onDismiss={dismissToast} />
       <Footer activePage="styleguide" />
     </>
   );
