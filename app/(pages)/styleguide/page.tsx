@@ -12,6 +12,7 @@ import InfoChip from "../../../components/InfoChip";
 import Card from "../../../components/Card";
 import CardStack from "../../../components/CardStack";
 import Modal from "../../../components/Modal";
+import ConfettiButton from "../../../components/ConfettiButton";
 import Tabs from "../../../components/Tabs";
 import Accordion from "../../../components/Accordion";
 import ToastRegion from "../../../components/Toast";
@@ -456,6 +457,16 @@ export default function Styleguide() {
             >
               Error Toast
             </Button>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <Text as="h2">Confetti</Text>
+          <Text as="p" tone="secondary">
+            A short celebratory confetti burst for wins, completions, and milestone moments.
+          </Text>
+          <div className={styles.row}>
+            <ConfettiButton />
           </div>
         </section>
 
