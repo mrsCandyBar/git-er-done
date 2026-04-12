@@ -7,17 +7,29 @@
 	gap: v.$spacing-md;
 }
 
-.hero {
+.cards {
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: 1fr 1fr;
 	gap: v.$spacing-sm;
 	align-items: stretch;
+
+	@media (max-width: v.$breakpoint-sm) {
+		grid-template-columns: 1fr;
+	}
 }
 
 .heroCopy,
 .highlight {
 	border-radius: 20px;
 	padding: v.$spacing-md;
+}
+
+.active {
+	grid-column: 1 / -1;
+}
+
+.secondary {
+	opacity: 0.6;
 }
 
 
