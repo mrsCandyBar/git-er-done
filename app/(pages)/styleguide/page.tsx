@@ -466,7 +466,40 @@ export default function Styleguide() {
             A short celebratory confetti burst for wins, completions, and milestone moments.
           </Text>
           <div className={styles.row}>
-            <ConfettiButton />
+            <ConfettiButton
+              onClick={() =>
+                pushToast({
+                  variant: "success",
+                  title: "Saved",
+                  description: "Your action completed successfully.",
+                })
+              }
+            />
+            <ConfettiButton
+              label="More Confetti"
+              burstCount={3}
+              onClick={() =>
+                pushToast({
+                  variant: "info",
+                  title: "Queued",
+                  description: "Your request has been queued.",
+                })
+              }
+            />
+            <ConfettiButton
+              label="More Confetti (Delayed)"
+              burstCount={3}
+              minBurstDelayMs={200}
+              maxBurstDelayMs={400}
+              burstPattern="finale"
+              onClick={() =>
+                pushToast({
+                  variant: "warning",
+                  title: "Review",
+                  description: "Your change needs one final review.",
+                })
+              }
+            />
           </div>
         </section>
 
