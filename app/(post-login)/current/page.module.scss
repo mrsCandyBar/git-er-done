@@ -97,6 +97,7 @@
 
 .actions {
 	display: flex;
-	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: center;
 	gap: v.$spacing-xs;
 }

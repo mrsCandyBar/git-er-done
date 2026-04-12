@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "../../../components/Button";
 import Text from "../../../components/Text";
 import styles from "./page.module.scss";
@@ -13,7 +17,7 @@ type Column = {
   tasks: Task[];
 };
 
-const columns: Column[] = [
+const initialColumns: Column[] = [
   {
     id: "dance-class-for-beginners",
     eyebrow: "FUN",
@@ -29,6 +33,9 @@ const columns: Column[] = [
 ];
 
 export default function Current() {
+  const [columns, setColumns] = useState<Column[]>(initialColumns);
+  const router = useRouter();
+
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
@@ -43,7 +50,7 @@ export default function Current() {
             <Text as="p">{col.description}</Text>
             <br/>
             <ul className={styles.taskList}>
-              {col.tasks.map((task) => (
+              {col.tasks.map((task, taskIndex) => (
                 <li
                   key={task.label}
                   id={task.id}
@@ -52,7 +59,30 @@ export default function Current() {
                   <label className={styles.taskLabel}>
                     <input
                       type="checkbox"
-                      defaultChecked={task.checked}
+                      checked={Boolean(task.checked)}
+                      onChange={() => {
+                        setColumns((prev) =>
+                          prev.map((existingCol, colIndex) => {
+                            if (colIndex !== i) {
+                              return existingCol;
+                            }
+
+                            return {
+                              ...existingCol,
+                              tasks: existingCol.tasks.map((existingTask, existingTaskIndex) => {
+                                if (existingTaskIndex !== taskIndex) {
+                                  return existingTask;
+                                }
+
+                                return {
+                                  ...existingTask,
+                                  checked: !existingTask.checked,
+                                };
+                              }),
+                            };
+                          })
+                        );
+                      }}
                       className={styles.taskCheckbox}
                     />
                     <span>{task.label}</span>
@@ -63,8 +93,12 @@ export default function Current() {
 
             <br/>
             <div className={styles.actions}>
-              <Button href="/profile" variant="filled">
-                Let's do it! 🚀
+              <Button
+                variant="filled"
+                disabled={!col.tasks.every((task) => Boolean(task.checked))}
+                onClick={() => router.push("/profile")}
+              >
+                We&apos;ve done it! 🚀
               </Button>
               <Button href="/dashboard" variant="ghost">
                 Raincheck?

@@ -13,6 +13,7 @@
   transition: background v.$transition-base, border-color v.$transition-base;
   cursor: pointer;
   font-weight: v.$font-weight-medium;
+  font-size: inherit;
   text-decoration: none;
 
   &:focus-visible {

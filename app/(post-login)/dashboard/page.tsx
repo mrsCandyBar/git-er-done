@@ -37,8 +37,8 @@ const actionContent: Record<
     description: (taskName) => <strong>{taskName}</strong>,
     primaryLabel: () => "Let's Go!",
     primaryHref: (taskHref) => taskHref,
-    secondaryLabel: "Skip for now, no pressure",
-    secondaryHref: "/current",
+    secondaryLabel: "Raincheck! Try another",
+    secondaryHref: "/tasks",
   },
   completedTask: {
     eyebrow: "Got her done! 💪",
@@ -47,8 +47,8 @@ const actionContent: Record<
     description: (taskName) => <strong>{taskName}</strong>,
     primaryLabel: () => "Let’s make it happen again ✨",
     primaryHref: () => "/current",
-    secondaryLabel: "Add another task?",
-    secondaryHref: "/profile",
+    secondaryLabel: "Let's make another!",
+    secondaryHref: "/tasks/new",
   },
   createdNewTask: {
     eyebrow: "Ready to roll! 🙌",
@@ -57,43 +57,43 @@ const actionContent: Record<
     description: (taskName) => <strong>{taskName}</strong>,
     primaryLabel: () => "Give it a look 👀",
     primaryHref: (taskHref) => taskHref,
-    secondaryLabel: "Let's start something new!",
-    secondaryHref: "/current",
+    secondaryLabel: "Let's pick a task",
+    secondaryHref: "/tasks",
   },
 };
 
-const orderedTypes: LastActionType[] = [
-  lastAction.type,
-  ...(Object.keys(actionContent) as LastActionType[]).filter((t) => t !== lastAction.type),
-];
-
 export default function Dashboard() {
+  const card = actionContent[lastAction.type];
+
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
-        {orderedTypes.map((type, i) => {
-          const card = actionContent[type];
-          const isActive = i === 0;
-          return (
-            <article
-              key={type}
-              className={`${styles.highlight} ${isActive ? styles.active : styles.secondary}`}
-            >
-              <Text as="h4">{card.eyebrow}</Text>
-              <span className={styles.icon} aria-hidden="true">{card.icon}</span>
-              <Text as="h2">{card.title}</Text>
-              <Text tone="secondary">{card.description(lastAction.taskName)}</Text>
-              <div className={styles.actions}>
-                <Button href={card.primaryHref(lastAction.taskHref)} variant={isActive ? "filled" : "outline"}>
-                  {card.primaryLabel(lastAction.taskName)}
-                </Button>
-                <Button href={card.secondaryHref} variant="ghost">
-                  {card.secondaryLabel}
-                </Button>
-              </div>
-            </article>
-          );
-        })}
+        <article className={`${styles.highlight} ${styles.active}`}>
+          <Text as="h4">{card.eyebrow}</Text>
+          <span className={styles.icon} aria-hidden="true">{card.icon}</span>
+          <Text as="h2">{card.title}</Text>
+          <Text tone="secondary">{card.description(lastAction.taskName)}</Text>
+          <div className={styles.actions}>
+            <Button href={card.primaryHref(lastAction.taskHref)} variant="filled">
+              {card.primaryLabel(lastAction.taskName)}
+            </Button>
+            <Button href={card.secondaryHref} variant="ghost">
+              {card.secondaryLabel}
+            </Button>
+          </div>
+        </article>
+
+        <article className={`${styles.highlight} ${styles.placeholder}`}>
+          <Text as="h3">Something new, something borrowed...</Text>
+          <Button href="tasks/new" variant="outline">
+              Something new for us to do 😉
+          </Button>
+        </article>
+
+        <article className={`${styles.highlight} ${styles.placeholder}`}>
+          <Text as="h2">3 Tasks Completed!</Text>
+          <Text tone="secondary">Go you 🎉</Text>
+        </article>
       </section>
     </div>
   );
