@@ -42,7 +42,7 @@
 .primary,
 .filled {
   background: var(--color-text-primary);
-  color: var(--color-bg);
+  color: var(--color-bg) !important;
   gap: v.$spacing-xs;
 
   @include m.hover {

@@ -6,7 +6,7 @@ import styles from "./Header.module.scss";
 export default function Header() {
   return (
     <header>
-      <Link href="/login" aria-label="Go to login">
+      <Link href="https://www.brioh.app" aria-label="Go to home">
         <Image
           className={styles.logo}
           src={nextLogo}

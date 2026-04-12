@@ -8,14 +8,6 @@ type FooterProps = {
 export default function Footer({ activePage }: FooterProps) {
   return (
     <footer className={styles.group}>
-      <Button
-        variant="secondary"
-        href="https://www.brioh.app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Home
-      </Button>
       <Button variant={activePage === "support" ? "active" : "secondary"} href="/support">
         Support
       </Button>
