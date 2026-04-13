@@ -39,6 +39,14 @@ const STACK_HEIGHT = 480;
 
 type FlickDirection = "left" | "right";
 
+function isInteractiveTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+
+  return Boolean(target.closest("button, a, input, select, textarea, label, [role='button']"));
+}
+
 export default function CardStack({
   cards,
   emptyLabel = "Bring Back Cards",
@@ -74,6 +82,7 @@ export default function CardStack({
   };
 
   const handlePointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (isInteractiveTarget(e.target)) return;
     if (isAnimating.current || order.length === 0) return;
     activePointerId.current = e.pointerId;
     dragStartX.current = e.clientX;
@@ -114,7 +123,7 @@ export default function CardStack({
     return (
       <div className={styles.emptyState}>
         <Text as="p" tone="secondary">{emptyDescription}</Text>
-        <Button type="button" variant="outline" onClick={restore}>
+        <Button type="button" variant="filled" onClick={restore}>
           {emptyLabel}
         </Button>
       </div>

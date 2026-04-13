@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Button from "../../../components/Button";
-import PostLoginCard from "../../../components/PostLoginCard";
+import Card from "../../../components/Card";
 import Text from "../../../components/Text";
 import styles from "./page.module.scss";
 
@@ -15,7 +15,7 @@ type LastAction = {
 const lastAction: LastAction = {
   type: "completeProfile",
   taskName: "Candice Bar",
-  taskHref: "/current#dance-class-for-beginners",
+  taskHref: "/task#dance-class-for-beginners",
 };
 
 const actionContent: Record<
@@ -43,7 +43,7 @@ const actionContent: Record<
     icon: "🎉",
     title: "Your profile is looking good, let's add a little more to make it shine.",
     primaryLabel: () => "Tiny step, big mood shift ✨",
-    primaryHref: () => "/current",
+    primaryHref: () => "/task",
   },
   completeProfile: {
     eyebrow: () => <p>Profile Complete! 💯!!!</p>,
@@ -60,7 +60,7 @@ export default function Profile() {
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
-        <PostLoginCard
+        <Card
           eyebrow={<Text as="h4">{card.eyebrow(lastAction.taskName)}</Text>}
           icon={card.icon}
           title={<Text as="h2">{card.title}</Text>}
@@ -77,7 +77,7 @@ export default function Profile() {
 
         {lastAction.type === "newUser" && (
           <>
-            <PostLoginCard
+            <Card
               title={<Text as="h2">We're not doing tasking here 🙌</Text>}
               description={<Text as="p">This space is for you to explore your passions and dreams</Text>}
               actions={(
@@ -89,16 +89,16 @@ export default function Profile() {
               <Text as="h1">🙌</Text>
               <Text as="h3">Inspiration & Aspirations</Text>
               <Text as="p">Make space for what lights you up, what gets you going, what makes you feel accomplished.</Text>
-            </PostLoginCard>
+            </Card>
           </>
         )}
 
         {lastAction.type === "incompleteProfile" && (
           <>
-            <PostLoginCard bare>
+            <Card bare>
               <Text as="h3">Is Brioh a task manager?</Text>
               <Text as="p"><b>Absolutely not!</b> and you don't need one. <br/>This is a space to explore <u>YOUR</u> aspirations at <u>YOUR</u> own pace.</Text>
-            </PostLoginCard>
+            </Card>
           </>
         )}
       </section>

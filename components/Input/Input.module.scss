@@ -57,11 +57,17 @@
   min-height: 100px;
 }
 
-.checkboxGroup,
-.radioGroup {
+.checkboxGroup {
   display: flex;
   flex-direction: column;
   gap: v.$spacing-xs;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: row;
+  gap: v.$spacing-md;
+  flex-wrap: wrap;
 }
 
 .optionLabel {

@@ -16,6 +16,7 @@ type ModalProps = {
   onPrimaryAction?: () => void;
   closeLabel?: string;
   showCloseButton?: boolean;
+  showFooterCloseButton?: boolean;
   closeOnOverlayClick?: boolean;
   closeOnEscape?: boolean;
 };
@@ -30,6 +31,7 @@ export default function Modal({
   onPrimaryAction,
   closeLabel = "Close",
   showCloseButton = true,
+  showFooterCloseButton = true,
   closeOnOverlayClick = true,
   closeOnEscape = true,
 }: ModalProps) {
@@ -95,16 +97,20 @@ export default function Modal({
           {children}
         </div>
 
-        <div className={styles.actions}>
-          <Button type="button" variant="outline" onClick={onClose}>
-            {closeLabel}
-          </Button>
-          {primaryActionLabel && (
-            <Button type="button" variant="filled" onClick={onPrimaryAction}>
-              {primaryActionLabel}
-            </Button>
-          )}
-        </div>
+        {(showFooterCloseButton || primaryActionLabel) && (
+          <div className={styles.actions}>
+            {showFooterCloseButton && (
+              <Button type="button" variant="filled" onClick={onClose}>
+                {closeLabel}
+              </Button>
+            )}
+            {primaryActionLabel && (
+              <Button type="button" variant="filled" onClick={onPrimaryAction}>
+                {primaryActionLabel}
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

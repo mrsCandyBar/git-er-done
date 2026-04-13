@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Button from "../../../components/Button";
-import PostLoginCard from "../../../components/PostLoginCard";
+import Card from "../../../components/Card";
 import Text from "../../../components/Text";
 import styles from "./page.module.scss";
 
@@ -15,7 +15,7 @@ type LastAction = {
 const lastAction: LastAction = {
   type: "createdNewTask",
   taskName: "Dance Class for Beginners",
-  taskHref: "/current#dance-class-for-beginners",
+  taskHref: "/task#dance-class-for-beginners",
 };
 
 const actionContent: Record<
@@ -47,7 +47,7 @@ const actionContent: Record<
     title: "Boom. You got this! Last time you nailed",
     description: (taskName) => <strong>{taskName}</strong>,
     primaryLabel: () => "Let’s make it happen again ✨",
-    primaryHref: () => "/current",
+    primaryHref: () => "/task",
     secondaryLabel: "Let's make another!",
     secondaryHref: "/tasks/new",
   },
@@ -69,7 +69,7 @@ export default function Dashboard() {
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
-        <PostLoginCard
+        <Card
           eyebrow={<Text as="h4">{card.eyebrow}</Text>}
           icon={card.icon}
           title={<Text as="h2">{card.title}</Text>}
@@ -86,7 +86,7 @@ export default function Dashboard() {
           )}
         />
 
-        <PostLoginCard
+        <Card
           bare
           title={<Text as="h3" fullWidth>Found something new, <br/>or something borrowed...</Text>}
           actions={(

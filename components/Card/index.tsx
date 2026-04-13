@@ -1,19 +1,22 @@
 'use client';
 
-import { useMemo } from "react";
-import type { CSSProperties, MouseEventHandler } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
 import Button from "../Button";
 import Text from "../Text";
 import styles from "./Card.module.scss";
 
 type CardProps = {
-  title?: string;
-  description?: string;
+  children?: ReactNode;
+  eyebrow?: ReactNode;
+  icon?: ReactNode;
+  title?: ReactNode;
+  description?: ReactNode;
+  actions?: ReactNode;
   imageUrl?: string;
   imageDescription?: string;
+  minHeight?: number | string | false;
   fullWidth?: boolean;
-  stackable?: boolean;
-  stackOrder?: number;
+  bare?: boolean;
   showCloseButton?: boolean;
   onClose?: MouseEventHandler<HTMLButtonElement>;
   ctaLabel?: string;
@@ -23,13 +26,17 @@ type CardProps = {
 };
 
 export default function Card({
+  children,
+  eyebrow,
+  icon,
   title,
   description,
+  actions,
   imageUrl,
   imageDescription,
-  fullWidth = false,
-  stackable = false,
-  stackOrder = 0,
+  minHeight = 360,
+  fullWidth = true,
+  bare = false,
   showCloseButton = false,
   onClose,
   ctaLabel,
@@ -37,24 +44,13 @@ export default function Card({
   onCtaClick,
   className = "",
 }: CardProps) {
-  const tiltStyle = useMemo(() => {
-    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
-    const rotate = randomInRange(-2.4, 2.4);
-    const translateX = randomInRange(-4, 4);
-    const translateY = randomInRange(-3, 3);
-
-    return {
-      "--card-rotate": `${rotate.toFixed(2)}deg`,
-      "--card-translate-x": `${translateX.toFixed(2)}px`,
-      "--card-translate-y": `${translateY.toFixed(2)}px`,
-      "--stack-order": String(stackOrder),
-    } as CSSProperties;
-  }, [stackOrder]);
-
-  const cardClassName = `${styles.card} ${fullWidth ? styles.fullWidth : ""} ${stackable ? styles.stackable : ""} ${className}`.trim();
+  const cardClassName = `${styles.card} ${fullWidth ? styles.fullWidth : ""} ${bare ? styles.bare : ""} ${className}`.trim();
+  const cardStyle = {
+    minHeight: minHeight === false ? undefined : minHeight,
+  };
 
   return (
-    <article className={cardClassName} style={tiltStyle}>
+    <article className={cardClassName} style={cardStyle}>
       {showCloseButton && (
         <Button
           type="button"
@@ -67,26 +63,26 @@ export default function Card({
         </Button>
       )}
 
-      {(title || description) && (
-        <header className={styles.header}>
-          {title && (
-            <Text as="h3" className={styles.title}>
-              {title}
-            </Text>
-          )}
-          {description && (
-            <Text as="p" tone="secondary" className={styles.description}>
-              {description}
-            </Text>
-          )}
-        </header>
+      {eyebrow && <div className={styles.eyebrow}>{eyebrow}</div>}
+      {icon && <span className={styles.icon} aria-hidden="true">{icon}</span>}
+
+      {title && (
+        <div className={styles.title}>
+          {typeof title === "string" ? <Text as="h3">{title}</Text> : title}
+        </div>
+      )}
+
+      {description && (
+        <div className={styles.description}>
+          {typeof description === "string" ? <Text as="p" tone="secondary">{description}</Text> : description}
+        </div>
       )}
 
       {imageUrl && (
         <figure className={styles.figure}>
           <img
             src={imageUrl}
-            alt={imageDescription || title || "Card image"}
+            alt={imageDescription || (typeof title === "string" ? title : "Card image")}
             className={styles.image}
             loading="lazy"
           />
@@ -98,18 +94,24 @@ export default function Card({
         </figure>
       )}
 
-      {ctaLabel && (
-        <div className={styles.actions}>
-          {ctaHref ? (
-            <Button href={ctaHref} variant="filled">
-              {ctaLabel}
-            </Button>
-          ) : (
-            <Button type="button" variant="filled" onClick={onCtaClick}>
-              {ctaLabel}
-            </Button>
-          )}
-        </div>
+      {children}
+
+      {actions ? (
+        <div className={styles.actions}>{actions}</div>
+      ) : (
+        ctaLabel && (
+          <div className={styles.actions}>
+            {ctaHref ? (
+              <Button href={ctaHref} variant="filled">
+                {ctaLabel}
+              </Button>
+            ) : (
+              <Button type="button" variant="filled" onClick={onCtaClick}>
+                {ctaLabel}
+              </Button>
+            )}
+          </div>
+        )
       )}
     </article>
   );

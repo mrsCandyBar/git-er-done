@@ -17,6 +17,17 @@
   font-size: 12px;
 }
 
+.closeButton {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
 .default {
   background: var(--color-btn-secondary-hover);
   border-color: var(--color-btn-secondary-border);

@@ -8,6 +8,7 @@ import styles from "./Form.module.scss";
 export type FormFieldConfig = {
   name: string;
   label: string;
+  hideLabel?: boolean;
   type?: "text" | "email" | "password" | "number" | "textarea" | "select" | "checkbox" | "radio";
   placeholder?: string;
   required?: boolean;
@@ -21,6 +22,7 @@ type FormProps = {
   onSubmit?: (formData: Record<string, FormDataEntryValue>) => void;
   submitLabel?: string;
   children?: ReactNode;
+  footnote?: string;
 };
 
 export default function Form({
@@ -28,6 +30,7 @@ export default function Form({
   onSubmit,
   submitLabel = "Submit",
   children,
+  footnote,
 }: FormProps) {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -37,15 +40,17 @@ export default function Form({
   };
 
   return (
+    <>
     <form className={styles.form} onSubmit={handleSubmit}>
       {fields.map((field) => {
         const key = `${field.name}-${field.type}`;
+        const visibleLabel = field.hideLabel ? undefined : field.label;
 
         if (field.type === "select" && field.options) {
           return (
             <div key={key} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <label htmlFor={field.name}>{field.label}</label>
-              <select id={field.name} name={field.name} required={field.required}>
+              {visibleLabel && <label htmlFor={field.name}>{visibleLabel}</label>}
+              <select id={field.name} name={field.name} required={field.required} aria-label={field.hideLabel ? field.label : undefined}>
                 <option value="">Choose an option</option>
                 {field.options.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -63,7 +68,7 @@ export default function Form({
               <Input
                 name={field.name}
                 type={field.type}
-                label={field.label}
+                label={visibleLabel}
                 options={field.options}
                 required={field.required}
               />
@@ -74,7 +79,8 @@ export default function Form({
 
         const inputProps = {
           name: field.name,
-          label: field.label,
+          label: visibleLabel,
+          "aria-label": field.hideLabel ? field.label : undefined,
           placeholder: field.placeholder,
           required: field.required,
         };
@@ -111,5 +117,7 @@ export default function Form({
         </Button>
       </div>
     </form>
+    {footnote && <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", marginTop: "0.5rem" }}>{footnote}</p>}
+    </>
   );
 }

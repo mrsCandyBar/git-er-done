@@ -17,7 +17,7 @@ export default function PostLoginLayout({
         </Button>
       </div>
 
-      <section className={styles.content}>{children}</section>
+      {children}
 
       <PostLoginNav />
     </div>
