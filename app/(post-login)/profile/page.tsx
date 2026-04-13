@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Button from "../../../components/Button";
+import PostLoginCard from "../../../components/PostLoginCard";
 import Text from "../../../components/Text";
 import styles from "./page.module.scss";
 
@@ -59,41 +60,45 @@ export default function Profile() {
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
-        <article className={`${styles.highlight} ${styles.active}`}>
-          <Text as="h4">{card.eyebrow(lastAction.taskName)}</Text>
-          <span className={styles.icon} aria-hidden="true">{card.icon}</span>
-          <Text as="h2">{card.title}</Text>
-          <div className={styles.actions}>
+        <PostLoginCard
+          eyebrow={<Text as="h4">{card.eyebrow(lastAction.taskName)}</Text>}
+          icon={card.icon}
+          title={<Text as="h2">{card.title}</Text>}
+          actions={(
+            <>
             <br/>
             <Button href={card.primaryHref(lastAction.taskHref)} variant="filled">
               {card.primaryLabel(lastAction.taskName)}
             </Button>
             <br/>
-          </div>
-        </article>
+            </>
+          )}
+        />
 
         {lastAction.type === "newUser" && (
           <>
-            <article className={`${styles.highlight} ${styles.active}`}>
-              <Text as="h2">We're not doing tasking here 🙌</Text>
-              <Text as="p">This space is for you to explore your passions and dreams</Text>
+            <PostLoginCard
+              title={<Text as="h2">We're not doing tasking here 🙌</Text>}
+              description={<Text as="p">This space is for you to explore your passions and dreams</Text>}
+              actions={(
+                <Button href={card.secondaryHref} variant="outline">
+                  Let's make it happen! 🎉
+                </Button>
+              )}
+            >
               <Text as="h1">🙌</Text>
               <Text as="h3">Inspiration & Aspirations</Text>
               <Text as="p">Make space for what lights you up, what gets you going, what makes you feel accomplished.</Text>
-
-              <Button href={card.secondaryHref} variant="outline">
-                Let's make it happen! 🎉
-              </Button>
-            </article>
+            </PostLoginCard>
           </>
         )}
 
         {lastAction.type === "incompleteProfile" && (
           <>
-            <article className={`${styles.highlight} ${styles.active} ${styles.bare}`}>
+            <PostLoginCard bare>
               <Text as="h3">Is Brioh a task manager?</Text>
               <Text as="p"><b>Absolutely not!</b> and you don't need one. <br/>This is a space to explore <u>YOUR</u> aspirations at <u>YOUR</u> own pace.</Text>
-            </article>
+            </PostLoginCard>
           </>
         )}
       </section>

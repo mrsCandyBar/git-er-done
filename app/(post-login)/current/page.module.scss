@@ -18,36 +18,8 @@
 	}
 }
 
-.highlight {
-	border-radius: 20px;
-	padding: v.$spacing-md;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: v.$spacing-sm;
-	text-align: center;
-	border: 1px solid var(--color-border-subtle);
-	background: var(--color-fg);
-}
-
-.active {
-	grid-column: 1 / -1;
-}
-
 .secondary {
 	opacity: 0.6;
-}
-
-@keyframes float {
-	0%, 100% { transform: translateY(0); }
-	50% { transform: translateY(-8px); }
-}
-
-.icon {
-	font-size: 3rem;
-	line-height: 1;
-	animation: float 2.8s ease-in-out infinite;
-	display: block;
 }
 
 .taskList {
@@ -93,11 +65,4 @@
 
 .taskTarget {
 	scroll-margin-top: v.$spacing-lg;
-}
-
-.actions {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: v.$spacing-xs;
 }

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Button from "../../../components/Button";
+import PostLoginCard from "../../../components/PostLoginCard";
 import Text from "../../../components/Text";
 import styles from "./page.module.scss";
 
@@ -68,27 +69,32 @@ export default function Dashboard() {
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
-        <article className={`${styles.highlight} ${styles.active}`}>
-          <Text as="h4">{card.eyebrow}</Text>
-          <span className={styles.icon} aria-hidden="true">{card.icon}</span>
-          <Text as="h2">{card.title}</Text>
-          <Text tone="secondary">{card.description(lastAction.taskName)}</Text>
-          <div className={styles.actions}>
+        <PostLoginCard
+          eyebrow={<Text as="h4">{card.eyebrow}</Text>}
+          icon={card.icon}
+          title={<Text as="h2">{card.title}</Text>}
+          description={<Text tone="secondary">{card.description(lastAction.taskName)}</Text>}
+          actions={(
+            <>
             <Button href={card.primaryHref(lastAction.taskHref)} variant="filled">
               {card.primaryLabel(lastAction.taskName)}
             </Button>
             <Button href={card.secondaryHref} variant="ghost">
               {card.secondaryLabel}
             </Button>
-          </div>
-        </article>
+            </>
+          )}
+        />
 
-        <article className={`${styles.highlight} ${styles.active} ${styles.bare}`}>
-          <Text as="h3" fullWidth>Found something new, <br/>or something borrowed...</Text>
-          <Button href="tasks/new" variant="outline">
-              add that something for us to do 😉
-          </Button>
-        </article>
+        <PostLoginCard
+          bare
+          title={<Text as="h3" fullWidth>Found something new, <br/>or something borrowed...</Text>}
+          actions={(
+            <Button href="tasks/new" variant="outline">
+                add that something for us to do 😉
+            </Button>
+          )}
+        />
       </section>
     </div>
   );

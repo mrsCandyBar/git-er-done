@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "../../../components/Button";
+import PostLoginCard from "../../../components/PostLoginCard";
 import Text from "../../../components/Text";
 import styles from "./page.module.scss";
 
@@ -40,14 +41,28 @@ export default function Current() {
     <div className={styles.page}>
       <section className={styles.cards}>
         {columns.map((col, i) => (
-          <article
+          <PostLoginCard
             key={col.id}
-            className={`${styles.highlight} ${i === 0 ? styles.active : styles.secondary}`}
+            className={i === 0 ? "" : styles.secondary}
+            eyebrow={<Text as="h4">{col.eyebrow}</Text>}
+            icon={col.icon}
+            title={<Text as="h2">{col.title}</Text>}
+            description={<Text as="p">{col.description}</Text>}
+            actions={(
+              <>
+                <Button
+                  variant="filled"
+                  disabled={!col.tasks.every((task) => Boolean(task.checked))}
+                  onClick={() => router.push("/profile")}
+                >
+                  We&apos;ve done it! 🚀
+                </Button>
+                <Button href="/dashboard" variant="ghost">
+                  Raincheck?
+                </Button>
+              </>
+            )}
           >
-            <Text as="h4">{col.eyebrow}</Text>
-            <span className={styles.icon} aria-hidden="true">{col.icon}</span>
-            <Text as="h2">{col.title}</Text>
-            <Text as="p">{col.description}</Text>
             <br/>
             <ul className={styles.taskList}>
               {col.tasks.map((task, taskIndex) => (
@@ -92,19 +107,7 @@ export default function Current() {
             </ul>
 
             <br/>
-            <div className={styles.actions}>
-              <Button
-                variant="filled"
-                disabled={!col.tasks.every((task) => Boolean(task.checked))}
-                onClick={() => router.push("/profile")}
-              >
-                We&apos;ve done it! 🚀
-              </Button>
-              <Button href="/dashboard" variant="ghost">
-                Raincheck?
-              </Button>
-            </div>
-          </article>
+          </PostLoginCard>
         ))}
       </section>
     </div>
