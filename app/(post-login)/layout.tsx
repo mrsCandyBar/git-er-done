@@ -1,5 +1,6 @@
 import Header from "../../components/Header";
 import Button from "../../components/Button";
+import PostLoginNav from "./PostLoginNav";
 import styles from "./layout.module.scss";
 
 export default function PostLoginLayout({
@@ -18,17 +19,7 @@ export default function PostLoginLayout({
 
       <section className={styles.content}>{children}</section>
 
-      <nav className={styles.nav} aria-label="Post-login pages">
-        <Button href="/dashboard" variant="secondary">
-          Dashboard
-        </Button>
-        <Button href="/current" variant="secondary">
-          Current
-        </Button>
-        <Button href="/profile" variant="secondary">
-          Profile
-        </Button>
-      </nav>
+      <PostLoginNav />
     </div>
   );
 }

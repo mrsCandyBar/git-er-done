@@ -83,14 +83,14 @@ export default function Dashboard() {
           </div>
         </article>
 
-        <article className={`${styles.highlight} ${styles.placeholder}`}>
+        <article className={`${styles.highlight}`}>
           <Text as="h3">Something new, something borrowed...</Text>
           <Button href="tasks/new" variant="outline">
               Something new for us to do 😉
           </Button>
         </article>
 
-        <article className={`${styles.highlight} ${styles.placeholder}`}>
+        <article className={`${styles.highlight} ${styles.bare}`}>
           <Text as="h2">3 Tasks Completed!</Text>
           <Text tone="secondary">Go you 🎉</Text>
         </article>

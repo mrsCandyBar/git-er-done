@@ -33,6 +33,11 @@
 	border-style: dashed;
 }
 
+.bare {
+	border-color: transparent !important;
+	background: transparent !important;
+}
+
 
 .heroCopy {
 	display: flex;
