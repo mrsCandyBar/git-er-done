@@ -12,7 +12,7 @@ type LastAction = {
 };
 
 const lastAction: LastAction = {
-  type: "startedNewTask",
+  type: "createdNewTask",
   taskName: "Dance Class for Beginners",
   taskHref: "/current#dance-class-for-beginners",
 };
@@ -57,7 +57,7 @@ const actionContent: Record<
     description: (taskName) => <strong>{taskName}</strong>,
     primaryLabel: () => "Give it a look 👀",
     primaryHref: (taskHref) => taskHref,
-    secondaryLabel: "Let's pick a task",
+    secondaryLabel: "Raincheck! Try another",
     secondaryHref: "/tasks",
   },
 };
@@ -83,16 +83,11 @@ export default function Dashboard() {
           </div>
         </article>
 
-        <article className={`${styles.highlight}`}>
-          <Text as="h3">Something new, something borrowed...</Text>
+        <article className={`${styles.highlight} ${styles.active} ${styles.bare}`}>
+          <Text as="h3" fullWidth>Found something new, <br/>or something borrowed...</Text>
           <Button href="tasks/new" variant="outline">
-              Something new for us to do 😉
+              add that something for us to do 😉
           </Button>
-        </article>
-
-        <article className={`${styles.highlight} ${styles.bare}`}>
-          <Text as="h2">3 Tasks Completed!</Text>
-          <Text tone="secondary">Go you 🎉</Text>
         </article>
       </section>
     </div>

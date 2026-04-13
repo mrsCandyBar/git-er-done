@@ -7,6 +7,7 @@ type TextProps<T extends TextTag = "p"> = {
   as?: T;
   children: ReactNode;
   tone?: "primary" | "secondary";
+  fullWidth?: boolean;
   className?: string;
 } & ComponentPropsWithoutRef<T>;
 
@@ -14,12 +15,13 @@ export default function Text<T extends TextTag = "p">({
   as,
   children,
   tone = "primary",
+  fullWidth = false,
   className = "",
   ...props
 }: TextProps<T>) {
   const tag = (as ?? "p") as TextTag;
   const Component = tag as ElementType;
-  const textClassName = `${styles.base} ${styles[tag]} ${styles[tone]} ${className}`.trim();
+  const textClassName = `${styles.base} ${styles[tag]} ${styles[tone]} ${fullWidth ? styles.fullWidth : ""} ${className}`.trim();
 
   return (
     <Component className={textClassName} {...props}>

@@ -13,6 +13,10 @@
 	gap: v.$spacing-sm;
 	align-items: stretch;
 
+	> article {
+		grid-column: 1 / -1;
+	}
+
 	@media (max-width: v.$breakpoint-sm) {
 		grid-template-columns: 1fr;
 	}

@@ -40,18 +40,16 @@ const actionContent: Record<
   incompleteProfile: {
     eyebrow: (taskName) => <p>Hello again, {taskName} ✨</p>,
     icon: "🎉",
-    title: "Your profile is looking good, let's add a little more info to make it shine.",
+    title: "Your profile is looking good, let's add a little more to make it shine.",
     primaryLabel: () => "Tiny step, big mood shift ✨",
     primaryHref: () => "/current",
   },
   completeProfile: {
-    eyebrow: () => <p>Achievement Update! 🙌</p>,
+    eyebrow: () => <p>Profile Complete! 💯!!!</p>,
     icon: "✨",
-    title: "We've added a little something new to your profile...",
-    primaryLabel: () => "Give it a look 👀",
+    title: "Thank you for sharing a bit about yourself 🎉 Here's a little 🎁 for you",
+    primaryLabel: () => "Accept Gift 👀",
     primaryHref: (taskHref) => taskHref,
-    secondaryLabel: "Set up progress notifications",
-    secondaryHref: "/tasks",
   },
 };
 
@@ -66,72 +64,35 @@ export default function Profile() {
           <span className={styles.icon} aria-hidden="true">{card.icon}</span>
           <Text as="h2">{card.title}</Text>
           <div className={styles.actions}>
+            <br/>
             <Button href={card.primaryHref(lastAction.taskHref)} variant="filled">
               {card.primaryLabel(lastAction.taskName)}
             </Button>
-            {card.secondaryLabel && card.secondaryHref && (
-              <Button href={card.secondaryHref} variant="ghost">
-                {card.secondaryLabel}
-              </Button>
-            )}
+            <br/>
           </div>
         </article>
 
         {lastAction.type === "newUser" && (
           <>
-            <article className={`${styles.highlight}`}>
-              <Text as="h3">Inspiration <br/>& Aspirations</Text>
-              <Button href="tasks/new" variant="outline">
-                  What are you aspiring to do?
-              </Button>
+            <article className={`${styles.highlight} ${styles.active}`}>
+              <Text as="h2">We're not doing tasking here 🙌</Text>
+              <Text as="p">This space is for you to explore your passions and dreams</Text>
+              <Text as="h1">🙌</Text>
+              <Text as="h3">Inspiration & Aspirations</Text>
               <Text as="p">Make space for what lights you up, what gets you going, what makes you feel accomplished.</Text>
-            </article>
 
-            <article className={`${styles.highlight} ${styles.bare}`}>
-              <Text as="h2">Profile Complete!</Text>
-              <Text tone="secondary">Thank you 🙏</Text>
+              <Button href={card.secondaryHref} variant="outline">
+                Let's make it happen! 🎉
+              </Button>
             </article>
           </>
         )}
 
         {lastAction.type === "incompleteProfile" && (
           <>
-            <article className={`${styles.highlight}`}>
-              <Text as="h3">Is this a task manager?</Text>
-              <Text as="p">Nope, you don't need one. This is a space to explore your aspirations.</Text>
-              <Button href="tasks/new" variant="outline">
-                Be more you, friend 🎉
-              </Button>
-            </article>
-
-            <article className={`${styles.highlight} ${styles.bare}`}>
-              <Text as="h2">Profile 75% Complete!</Text>
-              <Button href="tasks/new" variant="outline">
-                  Unlock your potential 🎉
-              </Button>
-            </article>
-          </>
-        )}
-
-        {lastAction.type === "completeProfile" && (
-          <>
-            <article className={`${styles.highlight}`}>
-              <Text as="p"><small>I'm currently inspired by:</small></Text>
-              <Text as="h2">Vivienne Westwood</Text>
-              <Text as="p">Because, I want to be bold and fearless in my pursuits.</Text>
-              <Button href="tasks/new" variant="filled">
-                  Track progress 🎉
-              </Button>
-            </article>
-
-            <article className={`${styles.highlight} ${styles.bare}`}>
-              <Text as="h2">Profile 100% Complete!</Text>
-              <Button href="tasks/new" variant="filled">
-                  Celebrate your wins 🎉
-              </Button>
-              <Button href="tasks/new" variant="outline">
-                  See global impact 🎉
-              </Button>
+            <article className={`${styles.highlight} ${styles.active} ${styles.bare}`}>
+              <Text as="h3">Is Brioh a task manager?</Text>
+              <Text as="p"><b>Absolutely not!</b> and you don't need one. <br/>This is a space to explore <u>YOUR</u> aspirations at <u>YOUR</u> own pace.</Text>
             </article>
           </>
         )}

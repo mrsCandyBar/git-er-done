@@ -12,6 +12,11 @@
   color: var(--color-text-secondary);
 }
 
+.fullWidth {
+  width: 100%;
+  max-width: 100% !important;
+}
+
 .h1,
 .h2,
 .h3,
