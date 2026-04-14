@@ -43,6 +43,14 @@ export default function NewTaskPage() {
 
   const fields: FormFieldConfig[] = [
     {
+      label: "Tag it!",
+      name: "category",
+      type: "radio",
+      hideLabel: true,
+      options: categoryOptions,
+      required: true,
+    },
+    {
       name: "title",
       label: "Name it!",
       type: "text",
@@ -58,15 +66,7 @@ export default function NewTaskPage() {
       hideLabel: true,
       placeholder: "What will you do? Where? When?",
       required: true,
-    },
-    {
-      label: "Tag it!",
-      name: "category",
-      type: "radio",
-      hideLabel: true,
-      options: categoryOptions,
-      required: true,
-    },
+    }
   ];
 
   const addChecklistItem = () => {

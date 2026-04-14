@@ -4,7 +4,7 @@ import Card from "../../../components/Card";
 import Text from "../../../components/Text";
 import styles from "./page.module.scss";
 
-type LastActionType = "newUser" | "incompleteProfile" | "completeProfile";
+type LastActionType = "friend" | "friend_new" | "friend_dear" | "friend_old";
 
 type LastAction = {
   type: LastActionType;
@@ -13,9 +13,9 @@ type LastAction = {
 };
 
 const lastAction: LastAction = {
-  type: "completeProfile",
+  type: "friend_old",
   taskName: "Candice Bar",
-  taskHref: "/task#dance-class-for-beginners",
+  taskHref: "/tasks/new",
 };
 
 const actionContent: Record<
@@ -31,21 +31,28 @@ const actionContent: Record<
     secondaryHref?: string;
   }
 > = {
-  newUser: {
+  friend: {
     eyebrow: () => <p>Hello there friend!👋</p>,
     icon: "🏃",
     title: "You're new here, let's get you set up with your first task!",
     primaryLabel: () => "Let's Go!",
     primaryHref: (taskHref) => taskHref
   },
-  incompleteProfile: {
+  friend_new: {
     eyebrow: (taskName) => <p>Hello again, {taskName} ✨</p>,
     icon: "🎉",
     title: "Your profile is looking good, let's add a little more to make it shine.",
     primaryLabel: () => "Tiny step, big mood shift ✨",
     primaryHref: () => "/task",
   },
-  completeProfile: {
+  friend_dear: {
+    eyebrow: () => <p>Profile Complete! 💯!!!</p>,
+    icon: "✨",
+    title: "Thank you for sharing a bit about yourself 🎉 Here's a little 🎁 for you",
+    primaryLabel: () => "Accept Gift 👀",
+    primaryHref: (taskHref) => taskHref,
+  },
+  friend_old: {
     eyebrow: () => <p>Profile Complete! 💯!!!</p>,
     icon: "✨",
     title: "Thank you for sharing a bit about yourself 🎉 Here's a little 🎁 for you",
@@ -75,29 +82,39 @@ export default function Profile() {
           )}
         />
 
-        {lastAction.type === "newUser" && (
+        {lastAction.type === "friend" && (
           <>
             <Card
-              title={<Text as="h2">We're not doing tasking here 🙌</Text>}
-              description={<Text as="p">This space is for you to explore your passions and dreams</Text>}
+              bare
+              title={
+                <>
+                  <br/>
+                  <Text as="h3" fullWidth>We're not doing <i>'tasking'</i> here</Text>
+                </>
+              }
+              description={<Text as="p" tone="secondary">This space is for you to explore your passions and dreams</Text>}
               actions={(
-                <Button href={card.secondaryHref} variant="outline">
+                <>
+                <Button href={card.primaryHref(lastAction.taskHref)} variant="filled">
                   Let's make it happen! 🎉
                 </Button>
+                <br/>
+                </>
               )}
             >
-              <Text as="h1">🙌</Text>
+              <Text as="h1">💃🏰🚞</Text>
               <Text as="h3">Inspiration & Aspirations</Text>
-              <Text as="p">Make space for what lights you up, what gets you going, what makes you feel accomplished.</Text>
+              <Text as="p" tone="secondary">Make space for what lights you up, what gets you going, what makes you feel accomplished.</Text>
             </Card>
           </>
         )}
 
-        {lastAction.type === "incompleteProfile" && (
+        {lastAction.type === "friend_new" && (
           <>
             <Card bare>
               <Text as="h3">Is Brioh a task manager?</Text>
-              <Text as="p"><b>Absolutely not!</b> and you don't need one. <br/>This is a space to explore <u>YOUR</u> aspirations at <u>YOUR</u> own pace.</Text>
+              <Text as="h1">🙈🙉🙊</Text>
+              <Text as="p"><b>Absolutely not!</b> because 🫵 don't need one. <br/>This is a space to explore 👏<b><u>your</u></b>👏 aspirations 🦄</Text>
             </Card>
           </>
         )}

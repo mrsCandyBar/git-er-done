@@ -69,6 +69,15 @@ export default function UpdateTaskPage() {
 
   const fields: FormFieldConfig[] = [
     {
+      label: "Tag it!",
+      name: "category",
+      type: "radio",
+      hideLabel: true,
+      options: categoryOptions,
+      defaultValue: "fun",
+      required: true,
+    },
+    {
       name: "title",
       label: "Let's give your quest a title! 🏷️",
       hideLabel: true,
@@ -85,15 +94,6 @@ export default function UpdateTaskPage() {
       rows: 4,
       defaultValue: payload?.description ?? "",
       placeholder: "What will you do? Where? When?",
-      required: true,
-    },
-    {
-      label: "Tag it!",
-      name: "category",
-      type: "radio",
-      hideLabel: true,
-      options: categoryOptions,
-      defaultValue: "fun",
       required: true,
     },
   ];
