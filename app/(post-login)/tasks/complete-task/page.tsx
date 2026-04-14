@@ -67,7 +67,7 @@ export default function CompleteTaskPage() {
     {
       name: "mood",
       label: (
-        <Text as="p" align="center">
+        <Text as="span" align="center">
           How did this task make you feel?
         </Text>
       ),
@@ -78,7 +78,7 @@ export default function CompleteTaskPage() {
     {
       name: "finalNotes",
       label: (
-        <Text as="p" align="center">
+        <Text as="span" align="center">
           Final Notes
         </Text>
       ),
@@ -89,7 +89,7 @@ export default function CompleteTaskPage() {
     {
       name: "keepsake",
       label: (
-        <Text as="p" align="center">
+        <Text as="span" align="center">
           Add a link to a post, photo, journal entry, or anything else that helps you remember the journey!
         </Text>
       ),

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEventHandler, ReactNode } from "react";
 import Input from "../Input";
 import Button from "../Button";
+import Text from "../Text";
 import styles from "./Form.module.scss";
 
 export type FormFieldConfig = {
@@ -169,6 +170,12 @@ export default function Form({
       })}
 
       {children}
+      
+      {footnote && (
+        <Text as="p" align="center" tone="secondary" className={styles.footnote}>
+          {footnote}
+        </Text>
+      )}
 
       {(showSubmitButton || renderSubmitButton) && (
         <div className={styles.actions}>
@@ -182,7 +189,6 @@ export default function Form({
         </div>
       )}
     </form>
-    {footnote && <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", marginTop: "0.5rem" }}>{footnote}</p>}
     </>
   );
 }

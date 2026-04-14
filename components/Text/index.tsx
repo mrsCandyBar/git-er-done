@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import styles from "./Text.module.scss";
 
-type TextTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "strong" | "em" | "blockquote" | "ul" | "ol" | "li" | "a";
+type TextTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "strong" | "em" | "blockquote" | "ul" | "ol" | "li" | "a" | "span" | "div";
 
 type TextProps<T extends TextTag = "p"> = {
   as?: T;

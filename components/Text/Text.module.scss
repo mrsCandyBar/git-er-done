@@ -71,9 +71,13 @@
   line-height: v.$line-height-base;
 }
 
-.p {
+.p, .span {
   max-width: 70ch;
   line-height: 1.7em;
+}
+
+.span {
+  display: block;
 }
 
 .strong {
