@@ -1,34 +1,34 @@
 'use client';
 
 import { useId } from "react";
-import type { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import styles from "./Input.module.scss";
 
-type Option = { value: string; label: string };
+type Option = { value: string; label: ReactNode };
 
 type InputProps = ComponentPropsWithoutRef<"input"> & {
   isTextarea?: false;
-  label?: string;
+  label?: ReactNode;
   options?: never;
 };
 
 type CheckboxProps = ComponentPropsWithoutRef<"input"> & {
   type: "checkbox";
-  label?: string;
+  label?: ReactNode;
   options?: Option[];
   isTextarea?: never;
 };
 
 type RadioProps = ComponentPropsWithoutRef<"input"> & {
   type: "radio";
-  label?: string;
+  label?: ReactNode;
   options: Option[];
   isTextarea?: never;
 };
 
 type TextareaProps = ComponentPropsWithoutRef<"textarea"> & {
   isTextarea: true;
-  label?: string;
+  label?: ReactNode;
 };
 
 type Props = InputProps | CheckboxProps | RadioProps | TextareaProps;
@@ -55,6 +55,7 @@ export default function Input(props: Props) {
   if ((rest.type === "checkbox" || rest.type === "radio") && options) {
     const fieldType = rest.type;
     const optionsArray = options as Option[];
+    const selectedValue = typeof rest.defaultValue === "string" ? rest.defaultValue : undefined;
     return (
       <div className={styles.wrapper}>
         {label && <p style={{ fontWeight: "500" }}>{label}</p>}
@@ -68,6 +69,7 @@ export default function Input(props: Props) {
                   value={option.value}
                   id={optionId}
                   {...rest}
+                  defaultChecked={fieldType === "radio" ? selectedValue === option.value : undefined}
                   className={styles.optionInput}
                 />
                 <span>{option.label}</span>

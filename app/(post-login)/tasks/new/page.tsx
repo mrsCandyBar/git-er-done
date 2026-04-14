@@ -56,7 +56,7 @@ export default function NewTaskPage() {
       type: "textarea",
       rows: 4,
       hideLabel: true,
-      placeholder: "What will you do? Who with? Where? When? Why?",
+      placeholder: "What will you do? Where? When?",
       required: true,
     },
     {

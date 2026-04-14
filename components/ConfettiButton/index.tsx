@@ -9,6 +9,7 @@ type ConfettiButtonProps = {
   label?: string;
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  type?: "button" | "submit" | "reset";
   disabled?: boolean;
   burstCount?: number;
   minBurstDelayMs?: number;
@@ -22,6 +23,7 @@ export default function ConfettiButton({
   label = "Celebrate Success",
   className = "",
   onClick,
+  type = "button",
   disabled = false,
   burstCount = 1,
   minBurstDelayMs = 40,
@@ -189,7 +191,7 @@ export default function ConfettiButton({
 
   return (
     <Button
-      type="button"
+      type={type}
       variant="filled"
       className={`${styles.button} ${className}`.trim()}
       disabled={disabled}

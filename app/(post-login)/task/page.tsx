@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Button from "../../../components/Button";
 import Card from "../../../components/Card";
-import ConfettiButton from "../../../components/ConfettiButton";
 import Text from "../../../components/Text";
 import styles from "./page.module.scss";
 
@@ -18,6 +18,13 @@ type Column = {
   description: string;
   tasks: Task[];
   status: "waiting" | "busy" | "complete";
+};
+
+type UpdatedTaskPayload = {
+  id?: string;
+  title?: string;
+  description?: string;
+  checklist?: string[];
 };
 
 const initialColumns: Column[] = [
@@ -39,6 +46,7 @@ const initialColumns: Column[] = [
 export default function Task() {
   const [columns, setColumns] = useState<Column[]>(initialColumns);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const setColumnStatus = (columnId: string, status: Column["status"]) => {
     setColumns((prev) =>
@@ -54,6 +62,51 @@ export default function Task() {
       })
     );
   };
+
+  useEffect(() => {
+    const shouldMarkComplete = searchParams.get("status") === "complete";
+    const rawUpdatedTask = searchParams.get("updatedTask");
+
+    let updatedTask: UpdatedTaskPayload | null = null;
+
+    if (rawUpdatedTask) {
+      try {
+        updatedTask = JSON.parse(rawUpdatedTask) as UpdatedTaskPayload;
+      } catch {
+        updatedTask = null;
+      }
+    }
+
+    if (!shouldMarkComplete && !updatedTask) {
+      return;
+    }
+
+    setColumns((prev) =>
+      prev.map((column, index) => {
+        const matchesUpdatedTask = updatedTask && (updatedTask.id ? column.id === updatedTask.id : index === 0);
+
+        const nextTasks = matchesUpdatedTask && updatedTask?.checklist
+          ? updatedTask.checklist.map((label) => {
+              const existingTask = column.tasks.find((task) => task.label === label);
+              return {
+                label,
+                checked: existingTask?.checked ?? false,
+              };
+            })
+          : column.tasks;
+
+        return {
+          ...column,
+          title: matchesUpdatedTask && updatedTask?.title ? updatedTask.title : column.title,
+          description: matchesUpdatedTask && updatedTask?.description ? updatedTask.description : column.description,
+          tasks: nextTasks,
+          status: shouldMarkComplete ? "complete" : column.status,
+        };
+      })
+    );
+
+    router.replace("/task");
+  }, [searchParams, router]);
 
   return (
     <div className={styles.page}>
@@ -73,14 +126,23 @@ export default function Task() {
                     <Button variant="filled" onClick={() => setColumnStatus(col.id, "busy")}>
                       Let's do this! 🚀
                     </Button>
-                      <Button variant="ghost" onClick={() => router.push("/tasks/new")}>
+                      <Button variant="ghost" onClick={() => {
+                        const taskPayload = {
+                          id: col.id,
+                          title: col.title,
+                          description: col.description,
+                          checklist: col.tasks.map((task) => task.label),
+                        };
+                        const params = new URLSearchParams({ task: JSON.stringify(taskPayload) });
+                        router.push(`/tasks/update-task?${params.toString()}`);
+                      }}>
                         Hmmmm... let's rework this plot
                       </Button>
                   </>
                 )}
                 {col.status === "busy" && (
                   <>
-                    <Button variant="filled" onClick={() => setColumnStatus(col.id, "complete")}>
+                    <Button variant="filled" onClick={() => router.push("/tasks/complete-task")}>
                       I've done it! 💪
                     </Button>
                     <Button variant="ghost" onClick={() => setColumnStatus(col.id, "waiting")}>
@@ -90,7 +152,6 @@ export default function Task() {
                 )}
                 {col.status === "complete" && (
                   <>
-                    <ConfettiButton label="Celebrate your win 🎉" />
                     <Button href="/tasks" variant="ghost">
                       Great Questing! Wanna go on another adventure?
                     </Button>
