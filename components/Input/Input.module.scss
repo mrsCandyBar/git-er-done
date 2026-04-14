@@ -67,8 +67,10 @@
 .radioGroup {
   display: flex;
   flex-direction: row;
-  gap: v.$spacing-md;
+  gap: v.$spacing-xs;
   flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .optionLabel {
@@ -91,4 +93,51 @@
     outline: 2px solid var(--color-text-primary);
     outline-offset: 2px;
   }
+}
+
+.radioOptionLabel {
+  position: relative;
+}
+
+.radioOptionInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radioOptionText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 7px 12px;
+  gap: 6px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 999px;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  transition: border-color v.$transition-base, background-color v.$transition-base, box-shadow v.$transition-base;
+}
+
+.radioOptionText::first-letter {
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+.radioOptionLabel:hover .radioOptionText {
+  border-color: var(--color-text-primary);
+  background: var(--color-btn-secondary-hover);
+}
+
+.radioOptionInput:checked + .radioOptionText {
+  border-color: var(--color-text-primary);
+  background: var(--color-btn-secondary-hover);
+  box-shadow: inset 0 0 0 1px var(--color-text-primary);
+}
+
+.radioOptionInput:focus-visible + .radioOptionText {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
 }

@@ -5,6 +5,7 @@ import { faCircleCheck, faClock, faTriangleExclamation } from "@fortawesome/free
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import Button from "../../../components/Button";
+import Badge from "../../../components/Badge";
 import Input from "../../../components/Input";
 import Form from "../../../components/Form";
 import Text from "../../../components/Text";
@@ -117,6 +118,20 @@ export default function Styleguide() {
             <Button type="button" variant="filled" disabled>
               Disabled
             </Button>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <Text as="h2">Badges</Text>
+          <Text as="p" tone="secondary">
+            Reusable motivational and reward badges. Mix variants to fit context and mood.
+          </Text>
+          <div className={styles.badgeGrid}>
+            <Badge label="You got this" variant="sunshine" />
+            <Badge label="You did it!" subtitle="Started Apr 14, 2026" variant="mint" />
+            <Badge label="Keep going" variant="coral" />
+            <Badge label="Level up" subtitle="Reward unlocked" variant="sky" />
+            <Badge label="Focus mode" variant="slate" />
           </div>
         </section>
 

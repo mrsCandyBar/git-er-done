@@ -12,6 +12,13 @@
   color: var(--color-text-secondary);
 }
 
+.quote {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  border-left: 3px solid var(--color-border-subtle);
+  padding-left: v.$spacing-sm;
+}
+
 .fullWidth {
   width: 100%;
   max-width: 100% !important;
@@ -66,7 +73,7 @@
 
 .p {
   max-width: 70ch;
-  line-height: 1.75em;
+  line-height: 1.7em;
 }
 
 .strong {

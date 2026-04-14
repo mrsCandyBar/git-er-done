@@ -63,6 +63,13 @@
   width: 100%;
 }
 
+.badgeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: v.$spacing-sm;
+}
+
 .form {
   display: flex;
   flex-direction: column;

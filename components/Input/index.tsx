@@ -63,16 +63,19 @@ export default function Input(props: Props) {
           {optionsArray.map((option: Option) => {
             const optionId = `${inputId}-${option.value}`;
             return (
-              <label key={option.value} className={styles.optionLabel}>
+              <label
+                key={option.value}
+                className={`${styles.optionLabel} ${fieldType === "radio" ? styles.radioOptionLabel : ""}`.trim()}
+              >
                 <input
                   type={fieldType}
                   value={option.value}
                   id={optionId}
                   {...rest}
                   defaultChecked={fieldType === "radio" ? selectedValue === option.value : undefined}
-                  className={styles.optionInput}
+                  className={`${styles.optionInput} ${fieldType === "radio" ? styles.radioOptionInput : ""}`.trim()}
                 />
-                <span>{option.label}</span>
+                <span className={fieldType === "radio" ? styles.radioOptionText : ""}>{option.label}</span>
               </label>
             );
           })}

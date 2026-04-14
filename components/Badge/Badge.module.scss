@@ -1,0 +1,65 @@
+@use '../../assets/styles/variables' as v;
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: 2px solid var(--color-text-primary);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transform: rotate(-6deg);
+  box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.sunshine {
+  background: #ffe36e;
+  color: #2a1f00;
+}
+
+.mint {
+  background: #b8f2c1;
+  color: #09340f;
+}
+
+.coral {
+  background: #ffc2b8;
+  color: #4a1306;
+}
+
+.sky {
+  background: #b9e5ff;
+  color: #082f48;
+}
+
+.slate {
+  background: #d9dde4;
+  color: #1b2430;
+}
+
+@media (max-width: v.$breakpoint-sm) {
+  .badge {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+  }
+}

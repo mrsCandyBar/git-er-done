@@ -1,30 +1,29 @@
 "use client";
 
-import { useState } from "react";
 import { useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Button from "../../../components/Button";
-import Card from "../../../components/Card";
-import Text from "../../../components/Text";
+import TaskBusyPage from "./TaskBusyPage";
+import TaskCompletePage from "./TaskCompletePage";
+import TaskWaitingPage from "./TaskWaitingPage";
+import type { Column, Mood } from "./types";
 import styles from "./page.module.scss";
-
-type Task = { id?: string; label: string; checked?: boolean };
-
-type Column = {
-  id: string;
-  eyebrow: string;
-  icon: string;
-  title: string;
-  description: string;
-  tasks: Task[];
-  status: "waiting" | "busy" | "complete";
-};
 
 type UpdatedTaskPayload = {
   id?: string;
   title?: string;
   description?: string;
   checklist?: string[];
+};
+
+type CompletedTaskPayload = {
+  id?: string;
+  startedAt?: string;
+  completedAt?: string;
+  mood?: Mood;
+  finalNotes?: string;
+  recur?: boolean;
+  keepsakeUrl?: string;
 };
 
 const initialColumns: Column[] = [
@@ -48,6 +47,13 @@ export default function Task() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const formatUpdatedDate = () =>
+    new Date().toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
   const setColumnStatus = (columnId: string, status: Column["status"]) => {
     setColumns((prev) =>
       prev.map((column) => {
@@ -63,11 +69,75 @@ export default function Task() {
     );
   };
 
+  const startTask = (columnId: string) => {
+    const updatedAt = formatUpdatedDate();
+
+    setColumns((prev) =>
+      prev.map((column) => {
+        if (column.id !== columnId) {
+          return column;
+        }
+
+        return {
+          ...column,
+          status: "busy",
+          updatedAt,
+        };
+      })
+    );
+  };
+
+  const toggleTaskCheck = (columnId: string, taskIndex: number) => {
+    setColumns((prev) =>
+      prev.map((column) => {
+        if (column.id !== columnId) {
+          return column;
+        }
+
+        return {
+          ...column,
+          tasks: column.tasks.map((task, existingTaskIndex) => {
+            if (existingTaskIndex !== taskIndex) {
+              return task;
+            }
+
+            return {
+              ...task,
+              checked: !task.checked,
+            };
+          }),
+        };
+      })
+    );
+  };
+
+  const openUpdateTask = (column: Column) => {
+    const taskPayload = {
+      id: column.id,
+      title: column.title,
+      description: column.description,
+      checklist: column.tasks.map((task) => task.label),
+    };
+    const params = new URLSearchParams({ task: JSON.stringify(taskPayload) });
+    router.push(`/tasks/update-task?${params.toString()}`);
+  };
+
+  const openCompleteTask = (column: Column) => {
+    const completionPayload = {
+      id: column.id,
+      startedAt: column.updatedAt,
+    };
+    const params = new URLSearchParams({ task: JSON.stringify(completionPayload) });
+    router.push(`/tasks/complete-task?${params.toString()}`);
+  };
+
   useEffect(() => {
     const shouldMarkComplete = searchParams.get("status") === "complete";
     const rawUpdatedTask = searchParams.get("updatedTask");
+    const rawCompletedTask = searchParams.get("completedTask");
 
     let updatedTask: UpdatedTaskPayload | null = null;
+    let completedTask: CompletedTaskPayload | null = null;
 
     if (rawUpdatedTask) {
       try {
@@ -77,13 +147,22 @@ export default function Task() {
       }
     }
 
-    if (!shouldMarkComplete && !updatedTask) {
+    if (rawCompletedTask) {
+      try {
+        completedTask = JSON.parse(rawCompletedTask) as CompletedTaskPayload;
+      } catch {
+        completedTask = null;
+      }
+    }
+
+    if (!shouldMarkComplete && !updatedTask && !completedTask) {
       return;
     }
 
     setColumns((prev) =>
       prev.map((column, index) => {
         const matchesUpdatedTask = updatedTask && (updatedTask.id ? column.id === updatedTask.id : index === 0);
+        const matchesCompletedTask = completedTask && (completedTask.id ? column.id === completedTask.id : index === 0);
 
         const nextTasks = matchesUpdatedTask && updatedTask?.checklist
           ? updatedTask.checklist.map((label) => {
@@ -100,7 +179,13 @@ export default function Task() {
           title: matchesUpdatedTask && updatedTask?.title ? updatedTask.title : column.title,
           description: matchesUpdatedTask && updatedTask?.description ? updatedTask.description : column.description,
           tasks: nextTasks,
-          status: shouldMarkComplete ? "complete" : column.status,
+          updatedAt: matchesCompletedTask && completedTask?.startedAt ? completedTask.startedAt : column.updatedAt,
+          completedAt: matchesCompletedTask && completedTask?.completedAt ? completedTask.completedAt : column.completedAt,
+          mood: matchesCompletedTask && completedTask?.mood ? completedTask.mood : column.mood,
+          finalNote: matchesCompletedTask && completedTask?.finalNotes ? completedTask.finalNotes : column.finalNote,
+          recur: matchesCompletedTask ? Boolean(completedTask?.recur) : column.recur,
+          keepsakeUrl: matchesCompletedTask && completedTask?.keepsakeUrl ? completedTask.keepsakeUrl : column.keepsakeUrl,
+          status: shouldMarkComplete || matchesCompletedTask ? "complete" : column.status,
         };
       })
     );
@@ -111,103 +196,41 @@ export default function Task() {
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
-        {columns.map((col, i) => (
-          <Card
-            key={col.id}
-            className={i === 0 ? "" : styles.secondary}
-            eyebrow={<Text as="h4">{col.eyebrow}</Text>}
-            icon={col.icon}
-            title={<Text as="h2" fullWidth>{col.title}</Text>}
-            description={<Text as="p">{col.description}</Text>}
-            actions={(
-              <>
-                {col.status === "waiting" && (
-                  <>
-                    <Button variant="filled" onClick={() => setColumnStatus(col.id, "busy")}>
-                      Let's do this! 🚀
-                    </Button>
-                      <Button variant="ghost" onClick={() => {
-                        const taskPayload = {
-                          id: col.id,
-                          title: col.title,
-                          description: col.description,
-                          checklist: col.tasks.map((task) => task.label),
-                        };
-                        const params = new URLSearchParams({ task: JSON.stringify(taskPayload) });
-                        router.push(`/tasks/update-task?${params.toString()}`);
-                      }}>
-                        Hmmmm... let's rework this plot
-                      </Button>
-                  </>
-                )}
-                {col.status === "busy" && (
-                  <>
-                    <Button variant="filled" onClick={() => router.push("/tasks/complete-task")}>
-                      I've done it! 💪
-                    </Button>
-                    <Button variant="ghost" onClick={() => setColumnStatus(col.id, "waiting")}>
-                      Raincheck? Let's return to the roadmap
-                    </Button>
-                  </>
-                )}
-                {col.status === "complete" && (
-                  <>
-                    <Button href="/tasks" variant="ghost">
-                      Great Questing! Wanna go on another adventure?
-                    </Button>
-                  </>
-                )}
-                <br/>
-              </>
-            )}
-          >
-            <br/>
-            <Text as="h3" fullWidth>Roadmap, do it for the plot! 🚒</Text>
-            <ul className={styles.taskList}>
-              {col.tasks.map((task, taskIndex) => (
-                <li
-                  key={task.label}
-                  id={task.id}
-                  className={`${styles.taskItem}${task.id ? ` ${styles.taskTarget}` : ""}${task.checked ? ` ${styles.taskChecked}` : ""}`}
-                >
-                  <label className={styles.taskLabel}>
-                    <input
-                      type="checkbox"
-                      checked={Boolean(task.checked)}
-                      onChange={() => {
-                        setColumns((prev) =>
-                          prev.map((existingCol, colIndex) => {
-                            if (colIndex !== i) {
-                              return existingCol;
-                            }
+        {columns.map((column, index) => {
+          if (column.status === "waiting") {
+            return (
+              <TaskWaitingPage
+                key={column.id}
+                column={column}
+                isSecondary={index !== 0}
+                onStartTask={startTask}
+                onOpenUpdateTask={openUpdateTask}
+                onToggleTask={toggleTaskCheck}
+              />
+            );
+          }
 
-                            return {
-                              ...existingCol,
-                              tasks: existingCol.tasks.map((existingTask, existingTaskIndex) => {
-                                if (existingTaskIndex !== taskIndex) {
-                                  return existingTask;
-                                }
+          if (column.status === "busy") {
+            return (
+              <TaskBusyPage
+                key={column.id}
+                column={column}
+                isSecondary={index !== 0}
+                onOpenCompleteTask={openCompleteTask}
+                onSetWaiting={(columnId) => setColumnStatus(columnId, "waiting")}
+                onToggleTask={toggleTaskCheck}
+              />
+            );
+          }
 
-                                return {
-                                  ...existingTask,
-                                  checked: !existingTask.checked,
-                                };
-                              }),
-                            };
-                          })
-                        );
-                      }}
-                      className={styles.taskCheckbox}
-                    />
-                    <span>{task.label}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-
-            <br/>
-          </Card>
-        ))}
+          return (
+            <TaskCompletePage
+              key={column.id}
+              column={column}
+              isSecondary={index !== 0}
+            />
+          );
+        })}
       </section>
     </div>
   );

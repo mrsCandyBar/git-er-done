@@ -1,0 +1,19 @@
+@use '../../../../assets/styles/variables' as v;
+
+.page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-md;
+}
+
+.quoteList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-sm;
+}
+
+.quoteItem {
+  margin: 0;
+}

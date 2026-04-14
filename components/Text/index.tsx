@@ -6,7 +6,7 @@ type TextTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "strong" | "em" |
 type TextProps<T extends TextTag = "p"> = {
   as?: T;
   children: ReactNode;
-  tone?: "primary" | "secondary";
+  tone?: "primary" | "secondary" | "quote";
   align?: "left" | "center" | "right";
   fullWidth?: boolean;
   className?: string;
