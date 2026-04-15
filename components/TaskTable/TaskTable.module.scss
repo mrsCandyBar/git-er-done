@@ -1,0 +1,68 @@
+@use '../../assets/styles/variables' as v;
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: v.$spacing-xs;
+}
+
+.table th,
+.table td {
+  padding: v.$spacing-xs;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.table th {
+  font-weight: 700;
+}
+
+.row {
+  text-align: left;
+}
+
+.nameCell {
+  color: var(--color-text-secondary);
+}
+
+.statusCell {
+  width: 180px;
+}
+
+.statusLabel {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: v.$spacing-xs;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.checkbox {
+  accent-color: var(--color-text-primary);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.statusText {
+  color: var(--color-text-secondary);
+}
+
+.checkedRow {
+  .nameCell,
+  .statusText {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+}
+
+.iconUnCheckedRow {
+  td {
+    background-color: var(--color-border-subtle);
+    opacity: 0.6
+  }
+}
+
+.targetRow {
+  scroll-margin-top: v.$spacing-lg;
+}

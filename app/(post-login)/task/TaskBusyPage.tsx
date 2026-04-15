@@ -1,6 +1,7 @@
 import Badge from "../../../components/Badge";
 import Button from "../../../components/Button";
 import Card from "../../../components/Card";
+import TaskTable from "../../../components/TaskTable";
 import Text from "../../../components/Text";
 import type { Column } from "./types";
 import styles from "./page.module.scss";
@@ -44,25 +45,12 @@ export default function TaskBusyPage({
     >
       <br/>
       <Text as="h3" fullWidth>Roadmap, do it for the plot! 🚒</Text>
-      <ul className={styles.taskList}>
-        {column.tasks.map((task, taskIndex) => (
-          <li
-            key={task.label}
-            id={task.id}
-            className={`${styles.taskItem}${task.id ? ` ${styles.taskTarget}` : ""}${task.checked ? ` ${styles.taskChecked}` : ""}`}
-          >
-            <label className={styles.taskLabel}>
-              <input
-                type="checkbox"
-                checked={Boolean(task.checked)}
-                onChange={() => onToggleTask(column.id, taskIndex)}
-                className={styles.taskCheckbox}
-              />
-              <span>{task.label}</span>
-            </label>
-          </li>
-        ))}
-      </ul>
+      <TaskTable
+        tasks={column.tasks}
+        showCheckbox
+        taskHeader="Task"
+        onToggleTask={(taskIndex) => onToggleTask(column.id, taskIndex)}
+      />
       <br/>
     </Card>
   );

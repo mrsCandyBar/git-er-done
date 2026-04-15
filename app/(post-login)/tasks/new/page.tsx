@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "../../../../components/Button";
 import Card from "../../../../components/Card";
@@ -8,6 +8,9 @@ import Form, { FormFieldConfig } from "../../../../components/Form";
 import InfoChip from "../../../../components/InfoChip";
 import Modal from "../../../../components/Modal";
 import Text from "../../../../components/Text";
+import ToastRegion from "../../../../components/Toast";
+import { useToastSystem } from "../../../../components/Toast/useToast";
+import { USER_PROFILE_STORAGE_KEY } from "../../../../models/userProfile";
 import styles from "./page.module.scss";
 
 type Category = "fun" | "new" | "quest";
@@ -27,10 +30,26 @@ const categoryOptions: Array<{ value: Category; label: string }> = [
 
 export default function NewTaskPage() {
   const router = useRouter();
+  const { toasts, pushToast, dismissToast } = useToastSystem();
+  const submitIntentRef = useRef<"save" | "saveAndMakeAnother">("save");
+  const [formVersion, setFormVersion] = useState(0);
   const [checklistEnabled, setChecklistEnabled] = useState(false);
   const [checklistDraft, setChecklistDraft] = useState("");
   const [checklist, setChecklist] = useState<string[]>([]);
   const [submittedTask, setSubmittedTask] = useState<DraftTask | null>(null);
+  const [isFriendClose, setIsFriendClose] = useState(false);
+
+  useEffect(() => {
+    try {
+      const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
+      if (storedProfile) {
+        const parsedProfile = JSON.parse(storedProfile) as { status?: string };
+        setIsFriendClose(parsedProfile.status === "friend_close");
+      }
+    } catch {
+      // Ignore malformed local storage and continue with defaults.
+    }
+  }, []);
 
   const closeModal = () => {
     if (window.history.length > 1) {
@@ -95,6 +114,16 @@ export default function NewTaskPage() {
       checklist,
     });
 
+    if (submitIntentRef.current === "saveAndMakeAnother") {
+      submitIntentRef.current = "save";
+      setChecklistEnabled(false);
+      setChecklistDraft("");
+      setChecklist([]);
+      setFormVersion((prev) => prev + 1);
+      pushToast({ title: "Quest Created!", description: "Your quest has been successfully created.", variant: "success" });
+      return;
+    }
+
     router.push("/task");
   };
 
@@ -106,10 +135,36 @@ export default function NewTaskPage() {
       title="Embark on a new quest 🚞">
       <Card bare minHeight={false}>
         <Form
+          key={formVersion}
           fields={fields}
-          submitLabel="Save this adventure! 💾"
           onSubmit={handleSubmit}
-          footnote={!checklistEnabled ? "psssst, you can update your quest anytime 🦄" : undefined}
+          footnote={!checklistEnabled && !isFriendClose ? "psssst, you can update your quest anytime 🦄" : undefined}
+          renderSubmitButton={({ disabled }) => (
+            <div className={styles.actions}>
+              <Button
+                type="submit"
+                variant={isFriendClose ? "outline" : "filled"}
+                disabled={disabled}
+                onClick={() => {
+                  submitIntentRef.current = "save";
+                }}
+              >
+                Save adventure! 💾
+              </Button>
+              {isFriendClose && (
+                <Button
+                  type="submit"
+                  variant="filled"
+                  disabled={disabled}
+                  onClick={() => {
+                    submitIntentRef.current = "saveAndMakeAnother";
+                  }}
+                >
+                  Save and make another! 😄
+                </Button>
+              )}
+            </div>
+          )}
         >
 
         <div className={styles.fieldGroup}>
@@ -152,6 +207,7 @@ export default function NewTaskPage() {
         )}
         </Form>
       </Card>
+      <ToastRegion toasts={toasts} onDismiss={dismissToast} />
     </Modal>
   );
 }

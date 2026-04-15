@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import TaskTable from "@/components/TaskTable";
 import Text from "@/components/Text";
 import styles from "./page.module.scss";
 import Card from "../../../components/Card";
@@ -69,22 +70,7 @@ export default function SingleTaskCompletionInsights({ task }: SingleTaskComplet
             🫵 completed {completedChecklistCount} out of {task.tasks.length} goals
           </Text>
 
-          <table className={styles.taskTable}>
-            <thead>
-              <tr>
-                <th>Goal</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {task.tasks.map((item) => (
-                <tr key={item.label}>
-                  <td>{item.label}</td>
-                  <td>{item.checked ? "✔️" : "-"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TaskTable tasks={task.tasks} useIcons />
           <Badge label={`${Math.floor((completedChecklistCount / task.tasks.length) * 100)}% complete!`} variant="sunshine" />
 
           {task.completed.keepsakeUrl && (
