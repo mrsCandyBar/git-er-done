@@ -1,42 +1,77 @@
 import Badge from "@/components/Badge";
 import Text from "@/components/Text";
+import type { UserProfile } from "@/models/userProfile";
 import styles from "./page.module.scss";
 
-type AspirationCounts = {
-  new: number;
-  fun: number;
-  quest: number;
-};
-
-type Inspiration = {
-  inspiration?: string;
-  reason?: string;
-};
-
-type AchievementTotals = {
-  completed: number;
-  recognized: number;
-};
-
 type MultiTaskCompletionInsightsProps = {
-  aspirationCounts: AspirationCounts;
-  primaryInspiration?: Inspiration;
-  mindsetSummary: string;
-  achievementTotals: AchievementTotals;
-  elapsedHours: number;
-  reasonFitPercent: number;
-  completionProgressPercent: number;
+  currentUserProfile: UserProfile;
 };
 
 export default function MultiTaskCompletionInsights({
-  aspirationCounts,
-  primaryInspiration,
-  mindsetSummary,
-  achievementTotals,
-  elapsedHours,
-  reasonFitPercent,
-  completionProgressPercent,
+  currentUserProfile,
 }: MultiTaskCompletionInsightsProps) {
+  const aspirationCounts = {
+    new: currentUserProfile.aspirations.new.length,
+    fun: currentUserProfile.aspirations.fun.length,
+    quest: currentUserProfile.aspirations.quest.length,
+  };
+
+  const achievementTotals = currentUserProfile.achievements.reduce(
+    (acc, entry) => {
+      const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.quest.length;
+      const recognizedCount = entry.recognized.length;
+
+      return {
+        completed: acc.completed + completedCount,
+        recognized: acc.recognized + recognizedCount,
+      };
+    },
+    { completed: 0, recognized: 0 }
+  );
+
+  if (achievementTotals.completed < 2) {
+    return null;
+  }
+
+  const dominantAspirationCategory =
+    aspirationCounts.new >= aspirationCounts.fun && aspirationCounts.new >= aspirationCounts.quest
+      ? "new"
+      : aspirationCounts.quest >= aspirationCounts.fun
+        ? "quest"
+        : "fun";
+
+  const mindsetSummary =
+    dominantAspirationCategory === "new"
+      ? "You are leaning into growth mode and choosing fresh experiences to motivate positive change."
+      : dominantAspirationCategory === "quest"
+        ? "You are in momentum mode, focused on getting ahead of your day-to-day commitments."
+        : "You are signaling a healthy need for personal time, joy, and restorative space.";
+
+  const primaryInspiration = currentUserProfile.inspirations[0];
+  const totalAspirations = aspirationCounts.new + aspirationCounts.fun + aspirationCounts.quest;
+
+  const inspirationReason = (primaryInspiration?.reason ?? "").toLowerCase();
+  const reasonTargetCategory =
+    /(bold|new|learn|growth|change|challenge)/.test(inspirationReason)
+      ? "new"
+      : /(ahead|discipline|focus|routine|momentum|productive|progress)/.test(inspirationReason)
+        ? "quest"
+        : "fun";
+
+  const reasonFitPercent = totalAspirations > 0
+    ? Math.round((aspirationCounts[reasonTargetCategory] / totalAspirations) * 100)
+    : 0;
+
+  const completionProgressPercent = totalAspirations > 0
+    ? Math.min(100, Math.round((achievementTotals.completed / totalAspirations) * 100))
+    : 0;
+
+  const startedAt = new Date(currentUserProfile.startedDate).getTime();
+  const updatedAt = new Date(currentUserProfile.updatedDate).getTime();
+  const elapsedHours = Number.isFinite(startedAt) && Number.isFinite(updatedAt)
+    ? Math.max(0, Math.ceil((updatedAt - startedAt) / (1000 * 60 * 60)))
+    : 0;
+
   return (
     <>
       <Text as="p" tone="secondary">

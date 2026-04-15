@@ -1,6 +1,8 @@
 import Button from "@/components/Button";
 import Text from "@/components/Text";
 import styles from "./page.module.scss";
+import Card from "../../../components/Card";
+import Badge from "../../../components/Badge";
 
 type TaskChecklistItem = {
   label: string;
@@ -36,55 +38,74 @@ export default function SingleTaskCompletionInsights({ task }: SingleTaskComplet
 
   return (
     <>
+      <br/>
       <Text as="h3" align="center" fullWidth>
-        Your first completed task milestone
+        Congratulations on having <br/>
+        completed your first quest! 🎉
       </Text>
-      <div className={styles.insightRow}>
-        <div className={styles.insightBox}>
-          <Text as="h1" align="center" fullWidth>{task.icon}</Text>
-          <Text as="h4" align="center" fullWidth>{task.title}</Text>
-          <Text as="p" tone="secondary">{task.description}</Text>
-        </div>
-        <div className={styles.insightBox}>
-          <Text as="p" tone="secondary">
-            Category: <b>{task.category}</b><br/>
-            Status: <b>complete</b><br/>
-            Completed: <b>{task.completed.completedDate}</b>
-          </Text>
-          <Text as="p" tone="secondary">
-            Checklist done: <b>{completedChecklistCount}/{task.tasks.length}</b><br/>
-            Mood: <b>{task.completed.mood}</b>
-          </Text>
-        </div>
-      </div>
 
-      <Text as="h4" align="center" fullWidth>What you completed</Text>
-      <div className={styles.insightRow}>
-        <div className={styles.insightBox}>
-          <Text as="p" tone="secondary">
-            {task.tasks.map((item) => `${item.checked ? "[x]" : "[ ]"} ${item.label}`).join("\n")}
+      <br/>
+      <br/>
+      <Card
+        title={task.title}
+        description={task.description}
+        icon={task.icon}
+      >
+        <>
+          <Badge label="Mission Complete!" variant="sunshine" />
+          <Text as="p">
+            This was: <b>{task.category}</b>, {task?.tasks? "and had a list of goals that could be achieved" : "and easy to accomplish"}<br/><br/>
           </Text>
-        </div>
-        <div className={styles.insightBox}>
+
+          
+          <Text as="h3" align="center" fullWidth>What 🫵 have achieved</Text>
           <Text as="p" tone="secondary">
-            Started: <b>{task.startedDate}</b><br/>
-            Last updated: <b>{task.updatedDate}</b><br/>
-            Recurs: <b>{task.completed.recur ? "Yes" : "No"}</b>
+            I did this on: <b>{task.completed.completedDate}</b> for 1 hour.<br/>
+            it made me feel: <b>😊 {task.completed.mood}</b><br/>
           </Text>
-          {task.completed.finalNotes && (
-            <Text as="p" tone="secondary">
-              <b>Final notes:</b> {task.completed.finalNotes}
-            </Text>
-          )}
+          <Badge label="Mood Check" variant="sunshine" />
+
+          <Text as="h4">
+            🫵 completed {completedChecklistCount} out of {task.tasks.length} goals
+          </Text>
+
+          <table className={styles.taskTable}>
+            <thead>
+              <tr>
+                <th>Goal</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {task.tasks.map((item) => (
+                <tr key={item.label}>
+                  <td>{item.label}</td>
+                  <td>{item.checked ? "✔️" : "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Badge label={`${Math.floor((completedChecklistCount / task.tasks.length) * 100)}% complete!`} variant="sunshine" />
+
           {task.completed.keepsakeUrl && (
-            <Button href={task.completed.keepsakeUrl} target="_blank" rel="noreferrer noopener" variant="outline">
-              Open keepsake
-            </Button>
-          )}
-        </div>
-      </div>
+            <>
+              <br/>
+              <Text as="blockquote" tone="quote">
+                {task.completed.finalNotes}
+              </Text>
 
-      <br />
+              <Text as="h4">
+                Relive that moment
+              </Text>
+              <Button href={task.completed.keepsakeUrl} target="_blank" rel="noreferrer noopener" variant="outline">
+                Open keepsake
+              </Button>
+            </>
+          )}
+        </>
+      </Card>
+
+      <br/>
       <br />
     </>
   );

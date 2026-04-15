@@ -2,9 +2,8 @@ import type { ReactNode } from "react";
 import Button from "../../../components/Button";
 import Card from "../../../components/Card";
 import Text from "../../../components/Text";
+import { dashboardActionContent, type LastActionType } from "../../../models/actionContent";
 import styles from "./page.module.scss";
-
-type LastActionType = "startedNewTask" | "completedTask" | "createdNewTask";
 
 type LastAction = {
   type: LastActionType;
@@ -18,53 +17,8 @@ const lastAction: LastAction = {
   taskHref: "/task#dance-class-for-beginners",
 };
 
-const actionContent: Record<
-  LastActionType,
-  {
-    eyebrow: string;
-    icon: string;
-    title: string;
-    description: (taskName: string) => ReactNode;
-    primaryLabel: (taskName: string) => string;
-    primaryHref: (taskHref: string) => string;
-    secondaryLabel: string;
-    secondaryHref: string;
-  }
-> = {
-  startedNewTask: {
-    eyebrow: "You got this! 🚀",
-    icon: "🏃",
-    title: "Shall we kick off where we last dropped off?",
-    description: (taskName) => <strong>{taskName}</strong>,
-    primaryLabel: () => "Let's Go!",
-    primaryHref: (taskHref) => taskHref,
-    secondaryLabel: "Raincheck! Try another",
-    secondaryHref: "/tasks",
-  },
-  completedTask: {
-    eyebrow: "Got her done! 💪",
-    icon: "🎉",
-    title: "Boom. You got this! Last time you nailed",
-    description: (taskName) => <strong>{taskName}</strong>,
-    primaryLabel: () => "Let’s make it happen again ✨",
-    primaryHref: () => "/task",
-    secondaryLabel: "Let's make another!",
-    secondaryHref: "/tasks/new",
-  },
-  createdNewTask: {
-    eyebrow: "Ready to roll! 🙌",
-    icon: "✨",
-    title: "We added a little something new...",
-    description: (taskName) => <strong>{taskName}</strong>,
-    primaryLabel: () => "Give it a look 👀",
-    primaryHref: (taskHref) => taskHref,
-    secondaryLabel: "Raincheck! Try another",
-    secondaryHref: "/tasks",
-  },
-};
-
 export default function Dashboard() {
-  const card = actionContent[lastAction.type];
+  const card = dashboardActionContent[lastAction.type];
 
   return (
     <div className={styles.page}>

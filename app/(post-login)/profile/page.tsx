@@ -9,92 +9,26 @@ import Text from "../../../components/Text";
 import UpdateProfile from "./update-profile";
 import MultiTaskCompletionInsights from "./MultiTaskCompletionInsights";
 import SingleTaskCompletionInsights from "./SingleTaskCompletionInsights";
+import { closeProfileActionContent } from "../../../models/actionContent";
 import { defaultUserProfile, USER_PROFILE_STORAGE_KEY } from "../../../models/userProfile";
 import type { UserProfile } from "../../../models/userProfile";
 import styles from "./page.module.scss";
-
-const actionContent: {
-    eyebrow: () => ReactNode;
-    profileImage: (profilePicture?: string) => ReactNode;
-    title: (profileName: string) => ReactNode;
-    description: (profileAbout: string) => ReactNode;
-    primaryLabel: (profileName: string) => string;
-    primaryHref: () => string;
-    secondaryLabel?: string;
-    secondaryHref?: string;
-  } = {
-  eyebrow: () => <p>Welcome back friend 💖</p>,
-  profileImage: (profilePicture) => <img src={profilePicture} alt="Profile" />,
-  title: (profileName) => <>{profileName}</>,
-  description: (profileAbout) => <>{profileAbout}</>,
-  primaryLabel: () => "Keep Exploring 🌍",
-  primaryHref: () => "/tasks/new",
-};
 
 export default function Profile() {
   const router = useRouter();
   const [isUpdateProfileOpen, setIsUpdateProfileOpen] = useState(false);
   const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>(defaultUserProfile);
   const [isHydrated, setIsHydrated] = useState(false);
-  const card = actionContent;
-
-  const aspirationCounts = {
-    new: currentUserProfile.aspirations.new.length,
-    fun: currentUserProfile.aspirations.fun.length,
-    quest: currentUserProfile.aspirations.quest.length,
-  };
-
-  const dominantAspirationCategory =
-    aspirationCounts.new >= aspirationCounts.fun && aspirationCounts.new >= aspirationCounts.quest
-      ? "new"
-      : aspirationCounts.quest >= aspirationCounts.fun
-        ? "quest"
-        : "fun";
-
-  const mindsetSummary =
-    dominantAspirationCategory === "new"
-      ? "You are leaning into growth mode and choosing fresh experiences to motivate positive change."
-      : dominantAspirationCategory === "quest"
-        ? "You are in momentum mode, focused on getting ahead of your day-to-day commitments."
-        : "You are signaling a healthy need for personal time, joy, and restorative space."
-  ;
-
-  const achievementTotals = currentUserProfile.achievements.reduce(
+  const card = closeProfileActionContent;
+  const completedTasksCount = currentUserProfile.achievements.reduce(
     (acc, entry) => {
       const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.quest.length;
-      const recognizedCount = entry.recognized.length;
-
-      return {
-        completed: acc.completed + completedCount,
-        recognized: acc.recognized + recognizedCount,
-      };
+      return acc + completedCount;
     },
-    { completed: 0, recognized: 0 }
+    0
   );
 
-  const primaryInspiration = currentUserProfile.inspirations[0];
-  const totalAspirations = aspirationCounts.new + aspirationCounts.fun + aspirationCounts.quest;
-  const dominantCount = aspirationCounts[dominantAspirationCategory];
-  const alignmentPercent = totalAspirations > 0 ? Math.round((dominantCount / totalAspirations) * 100) : 0;
-
-  const inspirationReason = (primaryInspiration?.reason ?? "").toLowerCase();
-  const reasonTargetCategory =
-    /(bold|new|learn|growth|change|challenge)/.test(inspirationReason)
-      ? "new"
-      : /(ahead|discipline|focus|routine|momentum|productive|progress)/.test(inspirationReason)
-        ? "quest"
-        : "fun";
-
-  const reasonFitPercent = totalAspirations > 0
-    ? Math.round((aspirationCounts[reasonTargetCategory] / totalAspirations) * 100)
-    : 0;
-
-  const completionProgressPercent = totalAspirations > 0
-    ? Math.min(100, Math.round((achievementTotals.completed / totalAspirations) * 100))
-    : 0;
-
-  const hasCompletedSingleTask = achievementTotals.completed === 1;
-  const hasCompletedMultipleTasks = achievementTotals.completed >= 2;
+  const hasCompletedSingleTask = completedTasksCount === 1;
 
   const singleCompletedTask = {
     id: "dance-class-for-beginners",
@@ -119,20 +53,6 @@ export default function Profile() {
       keepsakeUrl: "https://www.test.com/keepsake/dance-class-for-beginners",
     },
   };
-
-  const elapsedHours = Math.ceil(
-    (new Date(currentUserProfile.updatedDate).getTime() - new Date(currentUserProfile.startedDate).getTime())
-    / (1000 * 60 * 60)
-  );
-
-  const measuredAlignmentScore = Math.round((reasonFitPercent * 0.6) + (completionProgressPercent * 0.4));
-
-  const alignmentSummary =
-    dominantAspirationCategory === "new"
-      ? "Most of your aspirations focus on trying new things and stretching your comfort zone."
-      : dominantAspirationCategory === "quest"
-        ? "By prioritizing quests, you are building structure and momentum to back your intention with action."
-        : "By prioritizing fun, you are protecting personal joy and recovery.";
 
   useEffect(() => {
     try {
@@ -190,17 +110,7 @@ export default function Profile() {
                   {hasCompletedSingleTask && (
                     <SingleTaskCompletionInsights task={singleCompletedTask} />
                   )}
-                  {hasCompletedMultipleTasks && (
-                    <MultiTaskCompletionInsights
-                      aspirationCounts={aspirationCounts}
-                      primaryInspiration={primaryInspiration}
-                      mindsetSummary={mindsetSummary}
-                      achievementTotals={achievementTotals}
-                      elapsedHours={elapsedHours}
-                      reasonFitPercent={reasonFitPercent}
-                      completionProgressPercent={completionProgressPercent}
-                    />
-                  )}
+                  <MultiTaskCompletionInsights currentUserProfile={currentUserProfile} />
 
                   
                   

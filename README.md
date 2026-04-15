@@ -13,6 +13,8 @@ DONE:
 - show profile state based off status type in profile 04/14
 - update profile 04/14
 - complete profile (basic - flesh it out in the AM) 04/14
+- achievements task 
+- achievements multiple-tasks
 
 TODO:
 
@@ -21,7 +23,7 @@ TODO:
   - It should summarise with an overall mood for this task, how often it is completed, it should show a basic timeline from when the user started the initial task until the last completed task in a timeline fashion with the mood emojis.
   - it should then end off with the latest task to start being available for the user to start if they want to, or to cancel if they wish to.
 
-- Use the completed task data to determine general moods for the completed tasks
+- achievements over given time frame
 - achievements page overview
 - achievements calendar
 - set achievement notification settings
