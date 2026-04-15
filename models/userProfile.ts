@@ -49,12 +49,12 @@ export const defaultUserProfile: UserProfile = {
       url: "",
     },
   ],
-  achievements: [
+  /*achievements: [
     {
       completed: {
         new: ["1","2","3","4","5"],
         fun: ["6","7","8"],
-        quest: ["9","10"],
+        quest: ["9"],
       },
       recognized: ["11","12"],
     },
@@ -62,6 +62,21 @@ export const defaultUserProfile: UserProfile = {
   aspirations: {
     new: ["1","2","3","4","5"],
     fun: ["6","7","8"],
-    quest: ["9","10"],
+    quest: ["9"],
+  },*/
+  achievements: [
+    {
+      completed: {
+        new: [],
+        fun: [],
+        quest: ["9"],
+      },
+      recognized: ["11","12"],
+    },
+  ],
+  aspirations: {
+    new: [],
+    fun: [],
+    quest: ["9"],
   },
 };

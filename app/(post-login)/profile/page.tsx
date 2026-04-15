@@ -7,10 +7,11 @@ import Button from "../../../components/Button";
 import Card from "../../../components/Card";
 import Text from "../../../components/Text";
 import UpdateProfile from "./update-profile";
+import MultiTaskCompletionInsights from "./MultiTaskCompletionInsights";
+import SingleTaskCompletionInsights from "./SingleTaskCompletionInsights";
 import { defaultUserProfile, USER_PROFILE_STORAGE_KEY } from "../../../models/userProfile";
 import type { UserProfile } from "../../../models/userProfile";
 import styles from "./page.module.scss";
-import Badge from "@/components/Badge";
 
 const actionContent: {
     eyebrow: () => ReactNode;
@@ -92,6 +93,38 @@ export default function Profile() {
     ? Math.min(100, Math.round((achievementTotals.completed / totalAspirations) * 100))
     : 0;
 
+  const hasCompletedSingleTask = achievementTotals.completed === 1;
+  const hasCompletedMultipleTasks = achievementTotals.completed >= 2;
+
+  const singleCompletedTask = {
+    id: "dance-class-for-beginners",
+    icon: "💃",
+    status: "waiting" as const,
+    title: "Dance Class for Beginners",
+    description: "Let's get those feet moving! This beginner-friendly dance class is perfect for anyone looking to have fun.",
+    tasks: [
+      { label: "Book an appointment", checked: true },
+      { label: "Make arrangements for alternative transportation", checked: true },
+      { label: "Take a picture for memory", checked: false },
+    ],
+    category: "fun" as const,
+    createdDate: new Date().toLocaleDateString(),
+    startedDate: new Date().toLocaleDateString(),
+    updatedDate: new Date().toLocaleDateString(),
+    completed: {
+      completedDate: new Date().toLocaleDateString(),
+      mood: "Happy",
+      finalNotes: "Had a great time learning new moves!",
+      recur: true,
+      keepsakeUrl: "https://www.test.com/keepsake/dance-class-for-beginners",
+    },
+  };
+
+  const elapsedHours = Math.ceil(
+    (new Date(currentUserProfile.updatedDate).getTime() - new Date(currentUserProfile.startedDate).getTime())
+    / (1000 * 60 * 60)
+  );
+
   const measuredAlignmentScore = Math.round((reasonFitPercent * 0.6) + (completionProgressPercent * 0.4));
 
   const alignmentSummary =
@@ -154,83 +187,23 @@ export default function Profile() {
               description={
                 <>
                   <Text as="p">{card.description(currentUserProfile.about)}</Text>
-                  <Text as="p" tone="secondary">
-                    Your current aspirations are mapped across <br/>
-                    <b>new</b> ({aspirationCounts.new}), <b>fun</b> ({aspirationCounts.fun}), and <b>quest</b> ({aspirationCounts.quest}). <br/>
-                  </Text>
+                  {hasCompletedSingleTask && (
+                    <SingleTaskCompletionInsights task={singleCompletedTask} />
+                  )}
+                  {hasCompletedMultipleTasks && (
+                    <MultiTaskCompletionInsights
+                      aspirationCounts={aspirationCounts}
+                      primaryInspiration={primaryInspiration}
+                      mindsetSummary={mindsetSummary}
+                      achievementTotals={achievementTotals}
+                      elapsedHours={elapsedHours}
+                      reasonFitPercent={reasonFitPercent}
+                      completionProgressPercent={completionProgressPercent}
+                    />
+                  )}
 
-
-
-                  <br />
-                  <br />
-                  <Text as="h3" align="center" fullWidth>
-                    How well do your aspirations compare <br/>
-                    against the inspiration you gave us?
-                  </Text>
-                  <div className={styles.insightRow}>
-                    <div className={styles.insightBox}>
-                      <Text as="p" tone="secondary">
-                        You are inspired by <b>{primaryInspiration?.inspiration ?? "still being defined"}</b>, 
-                        because you want <b>{primaryInspiration?.reason ?? "still being defined"}</b></Text>
-                    </div>
-                    <div className={styles.insightBox}>
-                      <br/>
-                      <Text as="p" tone="secondary">{mindsetSummary}</Text>
-                    </div>
-                  </div>
-
-
-
-                  <br />
-                  <br />
-                  <Text as="h4" align="center" fullWidth>Progress & Wins</Text>
-                  <Text as="p" tone="secondary">
-                    You have completed <b>{achievementTotals.completed}</b> self-prioritized time slots<br/> 
-                    within the timespan of {Math.ceil((new Date(currentUserProfile.updatedDate).getTime() - new Date(currentUserProfile.startedDate).getTime()) / (1000 * 60 * 60))} hours, <br/>
-                    and earned <b>{achievementTotals.recognized}</b> badges of recognition so far.
-                  </Text>
-
-                  <div className={styles.badgeRow}>
-                    <Badge label="Level up" subtitle="Reward unlocked" variant="sky" />
-                    <Badge label="Focus mode" variant="slate" />
-                  </div>
-
-                  <Text as="p" tone="secondary">
-                    These wins are proof that a little dedicated time<br/>
-                     can create meaningful progress.
-                  </Text>
-
-                  <br />
-                  <br />
-                  <Text as="h3" align="center" fullWidth>
-                    How well do your completed quests compare <br/>
-                    against the inspiration you gave us?
-                  </Text>
-                  <div className={styles.insightRow}>
-                    <div className={styles.insightBox}>
-                      <Text as="h1">⚖️</Text>
-                      <Text as="p"><b>{reasonFitPercent}% reason-fit</b></Text>
-                      <small>
-                        <Text as="span" tone="secondary">
-                          ( how well does your aspirations match <br/>
-                          your reason for choosing your inspiration )
-                        </Text>
-                      </small>
-                    </div>
-                    <div className={styles.insightBox}>
-                      <Text as="h1">🏆</Text>
-                      <Text as="p">
-                        <b>{completionProgressPercent}% quest execution</b></Text>
-                      <small>
-                        <Text as="span" tone="secondary">
-                          (how much of what you <br/>planned you completed)
-                        </Text>
-                      </small>
-                    </div>
-                  </div>
-
-                  <br />
-                  <br />
+                  
+                  
                   <Text as="h3" align="center" fullWidth>So... what is Brioh again?</Text>
                   <br/>
                   <Text as="p" tone="secondary">
