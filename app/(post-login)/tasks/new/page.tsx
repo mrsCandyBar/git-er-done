@@ -171,7 +171,6 @@ export default function NewTaskPage() {
         onClose={closeModal}
         fields={fields}
         onSubmit={handleSubmit}
-        footnote={!canCreateMultipleTasks ? "psssst, you can update your quest anytime 🦄" : undefined}
         isTaskCreationBlocked={isTaskCreationBlocked}
         canCreateMultipleTasks={canCreateMultipleTasks}
         createdTaskCount={createdTaskCount}
