@@ -1,26 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "../../../../components/Button";
-import Card from "../../../../components/Card";
-import Form, { FormFieldConfig } from "../../../../components/Form";
-import InfoChip from "../../../../components/InfoChip";
-import Modal from "../../../../components/Modal";
-import Text from "../../../../components/Text";
-import ToastRegion from "../../../../components/Toast";
+import { FormFieldConfig } from "../../../../components/Form";
 import { useToastSystem } from "../../../../components/Toast/useToast";
 import { USER_PROFILE_STORAGE_KEY } from "../../../../models/userProfile";
-import styles from "./page.module.scss";
+import CreateTaskModal, { CreateTaskSubmitPayload, CreateTaskSubmitResult } from "./CreateTaskModal";
+import SlowDownModal from "./SlowDownModal";
+
+const TASK_CREATE_COUNT_KEY = "brioh-task-create-count";
+const MAX_TASKS_ALLOWED = 2;
 
 type Category = "fun" | "new" | "quest";
-
-type DraftTask = {
-  title: string;
-  description: string;
-  category: Category;
-  checklist: string[];
-};
 
 const categoryOptions: Array<{ value: Category; label: string }> = [
   { value: "new", label: "Something New" },
@@ -31,32 +22,34 @@ const categoryOptions: Array<{ value: Category; label: string }> = [
 export default function NewTaskPage() {
   const router = useRouter();
   const { toasts, pushToast, dismissToast } = useToastSystem();
-  const submitIntentRef = useRef<"save" | "saveAndMakeAnother">("save");
-  const [formVersion, setFormVersion] = useState(0);
-  const [checklistEnabled, setChecklistEnabled] = useState(false);
-  const [checklistDraft, setChecklistDraft] = useState("");
-  const [checklist, setChecklist] = useState<string[]>([]);
-  const [submittedTask, setSubmittedTask] = useState<DraftTask | null>(null);
-  const [isFriendClose, setIsFriendClose] = useState(false);
+  const [canCreateMultipleTasks, setCanCreateMultipleTasks] = useState(false);
+  const [createdTaskCount, setCreatedTaskCount] = useState(0);
+  const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(true);
+  const [isSlowDownOpen, setIsSlowDownOpen] = useState(false);
+  const isFinalAllowedCreate = createdTaskCount === MAX_TASKS_ALLOWED - 1;
 
   useEffect(() => {
     try {
       const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
       if (storedProfile) {
         const parsedProfile = JSON.parse(storedProfile) as { status?: string };
-        setIsFriendClose(parsedProfile.status === "friend_close");
+        setCanCreateMultipleTasks(parsedProfile.status !== "friend");
       }
+
+      const rawCreatedTaskCount = window.localStorage.getItem(TASK_CREATE_COUNT_KEY);
+      const parsedCreatedTaskCount = Number.parseInt(rawCreatedTaskCount ?? "0", 10);
+      setCreatedTaskCount(Number.isFinite(parsedCreatedTaskCount) ? parsedCreatedTaskCount : 0);
     } catch {
       // Ignore malformed local storage and continue with defaults.
     }
   }, []);
 
-  const closeModal = () => {
-    if (window.history.length > 1) {
-      router.back();
-      return;
-    }
+  const closeSlowDownModal = () => {
+    setIsSlowDownOpen(false);
+  };
 
+  const closeModal = () => {
+    setIsCreateTaskModalOpen(false);
     router.push("/tasks");
   };
 
@@ -88,126 +81,64 @@ export default function NewTaskPage() {
     }
   ];
 
-  const addChecklistItem = () => {
-    const nextItem = checklistDraft.trim();
-    if (!nextItem) return;
-    setChecklist((prev) => [...prev, nextItem]);
-    setChecklistDraft("");
-  };
-
-  const removeChecklistItem = (indexToRemove: number) => {
-    setChecklist((prev) => prev.filter((_, index) => index !== indexToRemove));
-  };
-
-  const handleSubmit = (formData: Record<string, FormDataEntryValue>) => {
+  const handleSubmit = ({ formData, checklist, submitIntent }: CreateTaskSubmitPayload): CreateTaskSubmitResult => {
     const title = String(formData.title ?? "").trim();
     const description = String(formData.description ?? "").trim();
     const rawCategory = String(formData.category ?? "fun");
     const category: Category = rawCategory === "new" || rawCategory === "quest" ? rawCategory : "fun";
 
-    if (!title || !description) return;
+    if (!title || !description) return "noop";
 
-    setSubmittedTask({
-      title,
-      description,
-      category,
-      checklist,
-    });
+    const nextCreatedTaskCount = createdTaskCount + 1;
+    setCreatedTaskCount(nextCreatedTaskCount);
+    window.localStorage.setItem(TASK_CREATE_COUNT_KEY, String(nextCreatedTaskCount));
 
-    if (submitIntentRef.current === "saveAndMakeAnother") {
-      submitIntentRef.current = "save";
-      setChecklistEnabled(false);
-      setChecklistDraft("");
-      setChecklist([]);
-      setFormVersion((prev) => prev + 1);
+    if (submitIntent === "saveAndMakeAnother") {
+      if (nextCreatedTaskCount >= MAX_TASKS_ALLOWED) {
+        setCreatedTaskCount(1);
+        window.localStorage.setItem(TASK_CREATE_COUNT_KEY, "1");
+        setIsCreateTaskModalOpen(false);
+        setIsSlowDownOpen(true);
+        return "noop";
+      }
+
       pushToast({ title: "Quest Created!", description: "Your quest has been successfully created.", variant: "success" });
-      return;
+      return "reset";
+    }
+
+    if (nextCreatedTaskCount >= MAX_TASKS_ALLOWED) {
+      setCreatedTaskCount(1);
+      window.localStorage.setItem(TASK_CREATE_COUNT_KEY, "1");
+      setIsCreateTaskModalOpen(false);
+      setIsSlowDownOpen(true);
+      return "noop";
     }
 
     router.push("/task");
+    return "noop";
   };
 
   return (
-    <Modal 
-      isOpen={true} 
-      onClose={closeModal} 
-      showFooterCloseButton={false}
-      title="Embark on a new quest 🚞">
-      <Card bare minHeight={false}>
-        <Form
-          key={formVersion}
-          fields={fields}
-          onSubmit={handleSubmit}
-          footnote={!checklistEnabled && !isFriendClose ? "psssst, you can update your quest anytime 🦄" : undefined}
-          renderSubmitButton={({ disabled }) => (
-            <div className={styles.actions}>
-              <Button
-                type="submit"
-                variant={isFriendClose ? "outline" : "filled"}
-                disabled={disabled}
-                onClick={() => {
-                  submitIntentRef.current = "save";
-                }}
-              >
-                Save adventure! 💾
-              </Button>
-              {isFriendClose && (
-                <Button
-                  type="submit"
-                  variant="filled"
-                  disabled={disabled}
-                  onClick={() => {
-                    submitIntentRef.current = "saveAndMakeAnother";
-                  }}
-                >
-                  Save and make another! 😄
-                </Button>
-              )}
-            </div>
-          )}
-        >
+    <>
+      <CreateTaskModal
+        isOpen={isCreateTaskModalOpen && !isSlowDownOpen}
+        onClose={closeModal}
+        fields={fields}
+        onSubmit={handleSubmit}
+        footnote={!canCreateMultipleTasks ? "psssst, you can update your quest anytime 🦄" : undefined}
+        canCreateMultipleTasks={canCreateMultipleTasks}
+        createdTaskCount={createdTaskCount}
+        maxTasksAllowed={MAX_TASKS_ALLOWED}
+        isFinalAllowedCreate={isFinalAllowedCreate}
+        toasts={toasts}
+        onDismissToast={dismissToast}
+      />
 
-        <div className={styles.fieldGroup}>
-          {!checklistEnabled && <Text as="p" fullWidth>This next step is <b><u>optional</u></b></Text>}
-          <Text as="p" fullWidth><input
-            type="checkbox"
-            checked={checklistEnabled}
-            onChange={(e) => setChecklistEnabled(e.target.checked)}
-          />&nbsp;&nbsp;Add a roadmap?<br/></Text>
-        </div>
-
-        {checklistEnabled && (
-          <div className={styles.fieldGroup}>
-            {checklist.length > 0 && (
-
-              <ul className={styles.checklistList}>
-                {checklist.map((item, index) => (
-                  <li key={`${item}-${index}`} className={styles.checklistItem}>
-                    <InfoChip label={item} variant="outline" onClose={() => removeChecklistItem(index)} />
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <br/>
-            <div className={styles.checklistAddRow}>
-              <input
-                id="checklist-item"
-                type="text"
-                className={styles.checklistInput}
-                placeholder="research, buy supplies, invite friends, etc..."
-                value={checklistDraft}
-                onChange={(event) => setChecklistDraft(event.target.value)}
-              />
-              <Button type="button" variant="filled" onClick={addChecklistItem}>
-                ➕Add
-              </Button>
-            </div>
-          </div>
-        )}
-        </Form>
-      </Card>
-      <ToastRegion toasts={toasts} onDismiss={dismissToast} />
-    </Modal>
+      <SlowDownModal
+        isOpen={isSlowDownOpen}
+        onClose={closeSlowDownModal}
+        maxTasksAllowed={MAX_TASKS_ALLOWED}
+      />
+    </>
   );
 }

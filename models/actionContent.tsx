@@ -61,15 +61,15 @@ export type FriendStatusActionCardContent = {
 export const friendStatusActionContent: Record<UserStatusType, FriendStatusActionCardContent> = {
   friend: {
     eyebrow: () => "Hello there friend!👋",
-    icon: "🏃",
-    title: "You're new here, let's get you set up with your first milestone!",
+    icon: "🎴",
+    title: "You're new here, let's get you set up with your first quest!",
     primaryLabel: () => "Let's Go!",
     primaryHref: () => "/tasks/new",
   },
   friend_new: {
-    eyebrow: (profileName) => `Hello again, ${profileName} ✨`,
+    eyebrow: () => `Time to shift gears ✨`,
     icon: "🎉",
-    title: "Your profile is looking good, let's add a little more to make it shine.",
+    title: "Mind over Matter",
     primaryLabel: () => "Tiny step, big mood shift ✨",
     primaryHref: () => "/task",
   },
@@ -101,10 +101,10 @@ export type CloseProfileActionCardContent = {
 };
 
 export const closeProfileActionContent: CloseProfileActionCardContent = {
-  eyebrow: () => "Welcome back friend 💖",
+  eyebrow: () => "You did it! 💖",
   profileImage: (profilePicture) => <img src={profilePicture} alt="Profile" />,
   title: (profileName) => <>{profileName}</>,
   description: (profileAbout) => <>{profileAbout}</>,
-  primaryLabel: () => "Keep Exploring 🌍",
+  primaryLabel: () => "What shall we do next? 🏅",
   primaryHref: () => "/tasks/new",
 };

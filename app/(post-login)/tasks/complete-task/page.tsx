@@ -9,6 +9,7 @@ import Form, { FormFieldConfig } from "../../../../components/Form";
 import InfoChip from "../../../../components/InfoChip";
 import Modal from "../../../../components/Modal";
 import Text from "../../../../components/Text";
+import { USER_PROFILE_STORAGE_KEY } from "../../../../models/userProfile";
 import styles from "./page.module.scss";
 
 type Mood = "love" | "happy" | "not-sure" | "confused" | "not-for-me";
@@ -24,6 +25,10 @@ type DraftTask = {
 type CompleteTaskPayload = {
   id?: string;
   startedAt?: string;
+};
+
+type StoredProfile = {
+  status?: string;
 };
 
 const moodOptions: Array<{ value: Mood; label: string }> = [
@@ -145,6 +150,23 @@ export default function CompleteTaskPage() {
       keepsakeUrl: keepsake || undefined,
     };
     const params = new URLSearchParams({ completedTask: JSON.stringify(completedTaskPayload) });
+
+    let shouldRedirectToProfile = false;
+    try {
+      const rawProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
+      if (rawProfile) {
+        const parsedProfile = JSON.parse(rawProfile) as StoredProfile;
+        shouldRedirectToProfile = parsedProfile.status === "friend";
+      }
+    } catch {
+      // Ignore malformed local storage and use default redirect.
+    }
+
+    if (shouldRedirectToProfile) {
+      router.push("/profile");
+      return;
+    }
+
     router.push(`/task?${params.toString()}`);
   };
 

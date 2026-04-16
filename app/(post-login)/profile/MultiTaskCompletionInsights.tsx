@@ -147,8 +147,33 @@ export default function MultiTaskCompletionInsights({
         </div>
       </div>
 
-      <br />
-      <br />
+      <Card
+        bare
+        title={<Text as="h3" align="center" fullWidth>So... what is Brioh again?</Text>}
+        description={
+          <>
+            <Text as="p" tone="secondary">
+              Brioh is designed to help 🫵 reconnect with 🫵.<br/>
+              🫵 have achieved all this since we met<br/>
+              Let's turn 🫵 aspirations & goals into reality!
+            </Text>
+              <br/>
+            <Text as="h1" align="center" fullWidth> 🧙‍♀️🚞🤴🏰💂</Text>
+            <br/>
+            <Text as="h4" align="center" fullWidth>
+              One glorious 'QUEST' at a time
+            </Text>
+          </>
+        }
+        /*actions={(
+          <>
+            <Button href={card.primaryHref()} variant="filled">
+              {card.primaryLabel(currentUserProfile.name)}
+            </Button>
+            <br/>
+          </>
+        )}*/
+      />
     </>
   );
 }

@@ -7,6 +7,7 @@ type StatusCardContent = {
   eyebrow: (profileName?: string) => ReactNode;
   icon: string;
   title: string;
+  description?: (profileName: string) => ReactNode;
   primaryLabel: (profileName: string) => string;
   primaryHref: () => string;
 };
@@ -16,9 +17,7 @@ type SharedViewProps = {
   card: StatusCardContent;
 };
 
-type FriendNewViewProps = SharedViewProps & {
-  onOpenUpdateProfile: () => void;
-};
+type FriendNewViewProps = SharedViewProps;
 
 type FriendDearViewProps = SharedViewProps & {
   onAcceptGift: () => void;
@@ -72,32 +71,55 @@ export function FriendView({ profileName, card }: SharedViewProps) {
   );
 }
 
-export function FriendNewView({ profileName, card, onOpenUpdateProfile }: FriendNewViewProps) {
+export function FriendNewView({ profileName, card }: FriendNewViewProps) {
   return (
     <>
       <Card
         eyebrow={<Text as="h4">{card.eyebrow(profileName)}</Text>}
-        icon={card.icon}
         title={<Text as="h2">{card.title}</Text>}
         actions={(
           <>
-            <br />
-            <Button variant="filled" onClick={onOpenUpdateProfile}>
+            <br/>
+             <Text as="p" fullWidth>
+              <b>Inspiration</b> can be anything!<br/> 
+            </Text>
+
+            <Text as="h1" tone="secondary" fullWidth>
+              <big>
+               🧙‍♀️🐉 </big>
+            </Text>
+
+            <br/>
+            <Text as="p" fullWidth>
+              <b>Quest</b> do <b>NOT</b> have to be 'big'
+            </Text>
+            <Text as="h1" tone="secondary" fullWidth>
+              🏫_🚗&nbsp;&nbsp; = &nbsp;&nbsp;🏰_🐎
+            </Text>
+            <Text as="p" fullWidth>
+              Taking kids to school <i>(can be)</i> embarking on adventure!
+            </Text>
+
+           
+
+            <br/>
+            <Text as="h1" tone="secondary">
+              <big>💁 = 🦹‍♂️</big>
+            </Text>
+
+            <Text as="p" fullWidth>
+              Do any quest, <br/>
+              big or small, <br/>
+              just do it with 🫵 as the hero
+            </Text>
+            <br/>
+            <Button variant="filled" href="/tasks/new">
               {card.primaryLabel(profileName)}
             </Button>
             <br />
           </>
         )}
       />
-
-      <Card bare>
-        <Text as="h3">Is Brioh a task manager?</Text>
-        <Text as="h1">🙈🙉🙊</Text>
-        <Text as="p">
-          <b>Absolutely not!</b> because 🫵 don&apos;t need one. <br />This is a space to explore 👏<b><u>your</u></b>
-          👏 aspirations 🦄
-        </Text>
-      </Card>
     </>
   );
 }

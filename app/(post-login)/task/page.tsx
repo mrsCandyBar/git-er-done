@@ -7,6 +7,7 @@ import TaskBusyPage from "./TaskBusyPage";
 import TaskCompletePage from "./TaskCompletePage";
 import TaskWaitingPage from "./TaskWaitingPage";
 import type { Column, Mood } from "./types";
+import { USER_PROFILE_STORAGE_KEY } from "../../../models/userProfile";
 import styles from "./page.module.scss";
 
 type UpdatedTaskPayload = {
@@ -192,6 +193,27 @@ export default function Task() {
 
     router.replace("/task");
   }, [searchParams, router]);
+
+  useEffect(() => {
+    const hasCompletedTask = columns.some((column) => column.status === "complete");
+    if (!hasCompletedTask) {
+      return;
+    }
+
+    try {
+      const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
+      if (!storedProfile) {
+        return;
+      }
+
+      const parsedProfile = JSON.parse(storedProfile) as { status?: string };
+      if (parsedProfile.status === "friend") {
+        router.replace("/profile");
+      }
+    } catch {
+      // Ignore malformed local storage data.
+    }
+  }, [columns, router]);
 
   return (
     <div className={styles.page}>

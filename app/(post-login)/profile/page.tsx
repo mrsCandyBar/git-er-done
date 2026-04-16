@@ -2,14 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { ReactNode } from "react";
-import Button from "../../../components/Button";
-import Card from "../../../components/Card";
-import Text from "../../../components/Text";
 import UpdateProfile from "./update-profile";
 import MultiTaskCompletionInsights from "./MultiTaskCompletionInsights";
 import SingleTaskCompletionInsights from "./SingleTaskCompletionInsights";
-import { closeProfileActionContent } from "../../../models/actionContent";
 import { defaultUserProfile, USER_PROFILE_STORAGE_KEY } from "../../../models/userProfile";
 import type { UserProfile } from "../../../models/userProfile";
 import styles from "./page.module.scss";
@@ -19,7 +14,6 @@ export default function Profile() {
   const [isUpdateProfileOpen, setIsUpdateProfileOpen] = useState(false);
   const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>(defaultUserProfile);
   const [isHydrated, setIsHydrated] = useState(false);
-  const card = closeProfileActionContent;
   const completedTasksCount = currentUserProfile.achievements.reduce(
     (acc, entry) => {
       const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.quest.length;
@@ -86,68 +80,21 @@ export default function Profile() {
     }
   }, [currentUserProfile.status, isHydrated, router]);
 
-  const handleSaveInspiration = () => {
-    setCurrentUserProfile((prev) => ({
-      ...prev,
-      status: "friend_dear",
-      updatedDate: new Date().toISOString().slice(0, 10),
-    }));
-    setIsUpdateProfileOpen(false);
-  };
-
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
         {currentUserProfile.status === "friend_close" && (
-          <>
-            <Card
-              eyebrow={<Text as="h4">{card.eyebrow()}</Text>}
-              icon={card.profileImage(currentUserProfile.profilePicture)}
-              title={<Text as="h2">{card.title(currentUserProfile.name)}</Text>}
-              description={
-                <>
-                  <Text as="p">{card.description(currentUserProfile.about)}</Text>
-                  {hasCompletedSingleTask && (
-                    <SingleTaskCompletionInsights task={singleCompletedTask} />
-                  )}
-                  <MultiTaskCompletionInsights currentUserProfile={currentUserProfile} />
-
-                  
-                  
-                  <Text as="h3" align="center" fullWidth>So... what is Brioh again?</Text>
-                  <br/>
-                  <Text as="p" tone="secondary">
-                    Brioh is designed to help 🫵 reconnect with 🫵.<br/>
-                    🫵 have achieved all this since we met<br/>
-                    Let's turn 🫵 aspirations and goals into reality!
-                  </Text>
-
-                  <br/>
-                  <Text as="h1" align="center" fullWidth> 🧙‍♀️🚞🤴🏰💂</Text>
-                  <br/>
-                  <Text as="h4" align="center" fullWidth>
-                    One glorious quest at a time
-                  </Text>
-                </>
-              }
-              actions={(
-                <>
-                  <Button href={card.primaryHref()} variant="filled">
-                    {card.primaryLabel(currentUserProfile.name)}
-                  </Button>
-                  <br/>
-                </>
-              )}
-            />
-          </>
+          <SingleTaskCompletionInsights
+            task={singleCompletedTask}
+            profileName={currentUserProfile.name}
+            profilePicture={currentUserProfile.profilePicture}
+            onOpenUpdateProfile={() => setIsUpdateProfileOpen(true)}
+            showSingleTaskInsights={hasCompletedSingleTask}
+          >
+            <MultiTaskCompletionInsights currentUserProfile={currentUserProfile} />
+          </SingleTaskCompletionInsights>
         )}
       </section>
-
-      <UpdateProfile
-        isOpen={isUpdateProfileOpen}
-        onClose={() => setIsUpdateProfileOpen(false)}
-        onSaveInspiration={handleSaveInspiration}
-      />
     </div>
   );
 }

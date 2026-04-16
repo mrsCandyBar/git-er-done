@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardStack from "../../../components/CardStack";
 import type { CardStackItem } from "../../../components/CardStack";
 import Button from "../../../components/Button";
@@ -8,6 +8,7 @@ import Card from "../../../components/Card";
 import Modal from "../../../components/Modal";
 import Tabs from "../../../components/Tabs";
 import Text from "../../../components/Text";
+import { USER_PROFILE_STORAGE_KEY } from "../../../models/userProfile";
 import styles from "./page.module.scss";
 
 type TaskCard = {
@@ -110,7 +111,21 @@ function createStackCards(cards: TaskCard[]): CardStackItem[] {
 }
 
 export default function TasksPage() {
-  const [isWelcomeOpen, setIsWelcomeOpen] = useState(true);
+  const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
+      if (!storedProfile) {
+        return;
+      }
+
+      const parsedProfile = JSON.parse(storedProfile) as { status?: string };
+      setIsWelcomeOpen(parsedProfile.status === "friend");
+    } catch {
+      // Ignore malformed local storage and continue with defaults.
+    }
+  }, []);
 
   const tabs = [
     {
