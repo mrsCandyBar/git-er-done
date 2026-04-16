@@ -3,6 +3,9 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Button from "../../../components/Button";
+import Card from "../../../components/Card";
+import Text from "../../../components/Text";
 import TaskBusyPage from "./TaskBusyPage";
 import TaskCompletePage from "./TaskCompletePage";
 import TaskWaitingPage from "./TaskWaitingPage";
@@ -37,7 +40,23 @@ function toColumn(task: TaskRecord): Column {
 
 export default function Task() {
   const [columns, setColumns] = useState<Column[]>([]);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [isTaskNotFound, setIsTaskNotFound] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const syncSelectedTaskFromHash = () => {
+      const hashValue = window.location.hash.replace(/^#/, "").trim();
+      setSelectedTaskId(hashValue || null);
+    };
+
+    syncSelectedTaskFromHash();
+    window.addEventListener("hashchange", syncSelectedTaskFromHash);
+
+    return () => {
+      window.removeEventListener("hashchange", syncSelectedTaskFromHash);
+    };
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -45,11 +64,35 @@ export default function Task() {
     async function loadTasks() {
       try {
         const tasks = await taskStore.listTasks();
+        const mappedColumns = tasks.map(toColumn);
+
+        if (selectedTaskId) {
+          const hashSelectedColumn = mappedColumns.find((column) => column.id === selectedTaskId) ?? null;
+          if (isMounted) {
+            setIsTaskNotFound(!hashSelectedColumn);
+            setColumns(hashSelectedColumn ? [hashSelectedColumn] : []);
+          }
+          return;
+        }
+
+        let resolvedColumn: Column | null = null;
+
+        if (!resolvedColumn) {
+          const cachedSelectedTask = taskStore.getSelectedTask();
+          resolvedColumn = cachedSelectedTask ? toColumn(cachedSelectedTask) : null;
+        }
+
+        if (!resolvedColumn) {
+          resolvedColumn = mappedColumns[0] ?? null;
+        }
+
         if (isMounted) {
-          setColumns(tasks.map(toColumn));
+          setIsTaskNotFound(false);
+          setColumns(resolvedColumn ? [resolvedColumn] : []);
         }
       } catch {
         if (isMounted) {
+          setIsTaskNotFound(false);
           setColumns([]);
         }
       }
@@ -60,7 +103,7 @@ export default function Task() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [selectedTaskId]);
 
   const formatUpdatedDate = () =>
     new Date().toLocaleDateString("en-US", {
@@ -180,6 +223,19 @@ export default function Task() {
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
+        {isTaskNotFound && (
+          <Card
+            title={<Text as="h2" fullWidth>Oh no, the quest is lost!</Text>}
+            description={<Text as="p">We could not find the map 🗺️ <br/>Try another, we'll track this one down.</Text>}
+            actions={(
+              <>
+                <br/>
+                <Button href="/tasks" variant="filled">Back to quests</Button>
+              </>
+            )}
+          />
+        )}
+
         {columns.map((column, index) => {
           if (column.status === "waiting") {
             return (

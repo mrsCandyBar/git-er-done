@@ -166,12 +166,15 @@ export default function CreateTaskModal({
             )}
             >
             <div className={styles.fieldGroup}>
-                {!checklistEnabled && <Text as="p" fullWidth>This next step is <b><u>optional</u></b></Text>}
+                {!checklistEnabled && <Text as="p" fullWidth>This next step is <b><u>optional</u></b>.</Text>}
                 <Text as="p" fullWidth><input
                 type="checkbox"
                 checked={checklistEnabled}
                 onChange={(event) => setChecklistEnabled(event.target.checked)}
-                />&nbsp;&nbsp;Add a roadmap?<br/></Text>
+                />&nbsp;&nbsp;Add some guides?<br/></Text>
+                {!checklistEnabled && <Text as="p" fullWidth tone="secondary">
+                    <small><br/>Break down your quest into smaller steps, <br/>or helpful tips to recall this quest later on ✨</small>
+                </Text>}
             </div>
 
             {checklistEnabled && (

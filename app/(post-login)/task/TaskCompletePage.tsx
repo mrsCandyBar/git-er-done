@@ -2,16 +2,9 @@ import Badge from "../../../components/Badge";
 import Button from "../../../components/Button";
 import Card from "../../../components/Card";
 import Text from "../../../components/Text";
+import { getTaskMoodLabel } from "../../../models/taskMood";
 import type { Column } from "./types";
 import styles from "./page.module.scss";
-
-const moodBadgeByMood = {
-  love: "😍 Love",
-  happy: "😊 Happy",
-  "not-sure": "🤔 Not sure",
-  confused: "😵 Confused",
-  "not-for-me": "🙅 Not for me",
-} as const;
 
 type TaskCompletePageProps = {
   column: Column;
@@ -34,7 +27,7 @@ export default function TaskCompletePage({ column, isSecondary }: TaskCompletePa
               subtitle={column.updatedAt ? `Started ${column.updatedAt}` : undefined}
               variant="mint"
             />
-            {column.mood && <Badge label={moodBadgeByMood[column.mood]} variant="coral" />}
+            {column.mood && <Badge label={getTaskMoodLabel(column.mood)} variant="coral" />}
             {column.recur && (
               <>
                 <Badge label="We're doing this one again!" variant="sky" />

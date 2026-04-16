@@ -41,6 +41,12 @@ body {
   flex-direction: column;
   color: var(--color-text-primary);
   background: var(--color-bg);
+  line-height: 1.4em;
+}
+
+small {
+  line-height: 1.4em;
+  display: inline-block;
 }
 
 h1, h2, h3, h4, h5, h6 {

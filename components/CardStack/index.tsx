@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import Card from "../Card";
 import Button from "../Button";
@@ -59,6 +59,15 @@ export default function CardStack({
   const isAnimating = useRef(false);
   const activePointerId = useRef<number | null>(null);
   const dragStartX = useRef(0);
+
+  useEffect(() => {
+    setOrder(cards.map((_, i) => i));
+    setFlicking(null);
+    setIsDragging(false);
+    setDragX(0);
+    activePointerId.current = null;
+    isAnimating.current = false;
+  }, [cards]);
 
   // Empty once the last card has finished flying off
   const isEmpty = order.length === 0 && flicking === null;

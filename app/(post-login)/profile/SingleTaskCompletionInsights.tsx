@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Button from "@/components/Button";
 import TaskTable from "@/components/TaskTable";
 import Text from "@/components/Text";
+import { getTaskMoodLabel, type TaskMood } from "@/models/taskMood";
 import Card from "../../../components/Card";
 import Badge from "../../../components/Badge";
 import { closeProfileActionContent } from "../../../models/actionContent";
@@ -21,10 +22,12 @@ type SingleCompletedTask = {
   category: "new" | "fun" | "quest";
   createdDate: string;
   startedDate: string;
+  startedAt?: string;
   updatedDate: string;
   completed: {
     completedDate: string;
-    mood: string;
+    completedAt?: string;
+    mood: TaskMood;
     finalNotes?: string;
     recur: boolean;
     keepsakeUrl?: string;
@@ -40,6 +43,38 @@ type SingleTaskCompletionInsightsProps = {
   children?: ReactNode;
 };
 
+function getDurationLabel(startValue?: string, endValue?: string) {
+  if (!startValue || !endValue) {
+    return null;
+  }
+
+  const start = new Date(startValue).getTime();
+  const end = new Date(endValue).getTime();
+
+  if (Number.isNaN(start) || Number.isNaN(end) || end <= start) {
+    return null;
+  }
+
+  const durationMs = end - start;
+  const totalMinutes = Math.floor(durationMs / (1000 * 60));
+  const days = Math.floor(totalMinutes / (60 * 24));
+  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const minutes = totalMinutes % 60;
+
+  const parts: string[] = [];
+  if (days > 0) {
+    parts.push(`${days} day${days === 1 ? "" : "s"}`);
+  }
+  if (hours > 0) {
+    parts.push(`${hours} hour${hours === 1 ? "" : "s"}`);
+  }
+  if (minutes > 0) {
+    parts.push(`${minutes} minute${minutes === 1 ? "" : "s"}`);
+  }
+
+  return parts.length > 0 ? parts.join(" ") : "less than 1 minute";
+}
+
 export default function SingleTaskCompletionInsights({
   task,
   profileName,
@@ -50,6 +85,11 @@ export default function SingleTaskCompletionInsights({
 }: SingleTaskCompletionInsightsProps) {
   const card = closeProfileActionContent;
   const completedChecklistCount = task.tasks.filter((item) => item.checked).length;
+  const durationLabel = getDurationLabel(
+    task.startedAt ?? task.startedDate,
+    task.completed.completedAt ?? task.completed.completedDate
+  );
+    console.log("task", task);
 
   return (
     <Card
@@ -81,25 +121,33 @@ export default function SingleTaskCompletionInsights({
                   
                   <Text as="h3" align="center" fullWidth>What 🫵 have achieved</Text>
                   <Text as="p" tone="secondary">
-                    I did this on: <b>{task.completed.completedDate}</b> for 1 hour.<br/>
-                    it made you feel: <b>😊 {task.completed.mood}</b><br/>
+                    You did this on <b>{task.completed.completedDate}</b>{durationLabel ? <> over <b>{durationLabel}</b></> : null}.<br/>
+                    it made you feel <b>{getTaskMoodLabel(task.completed.mood)}</b><br/>
                   </Text>
                   <Badge label="Mood Check" variant="sunshine" />
 
-                  <Text as="h4">
-                    🫵 completed {completedChecklistCount} out of {task.tasks.length} goals
-                  </Text>
+                  {task.tasks.length > 0 && (
+                    <>
+                      <Text as="h4">
+                        🫵 completed {completedChecklistCount} out of {task.tasks.length} goals
+                      </Text>
 
-                  <TaskTable tasks={task.tasks} useIcons />
-                  <Badge label={`${Math.floor((completedChecklistCount / task.tasks.length) * 100)}% complete!`} variant="sunshine" />
+                      <TaskTable tasks={task.tasks} useIcons />
+                      <Badge label={`${Math.floor((completedChecklistCount / task.tasks.length) * 100)}% complete!`} variant="sunshine" />
+                    </>
+                  )}
+                  
 
-                  {task.completed.keepsakeUrl && (
+                  {task.completed.finalNotes && (
                     <>
                       <br/>
                       <Text as="blockquote" tone="quote">
                         {task.completed.finalNotes}
                       </Text>
-
+                    </>
+                  )}
+                  {task.completed.keepsakeUrl && (
+                    <>
                       <Text as="h4">
                         Relive that moment
                       </Text>

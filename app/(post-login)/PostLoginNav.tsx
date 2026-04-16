@@ -5,7 +5,7 @@ import Button from "../../components/Button";
 import styles from "./layout.module.scss";
 
 const links = [
-  { href: "/dashboard", label: "Dashboard" },
+  //{ href: "/dashboard", label: "Dashboard" },
   { href: "/tasks", label: "Tasks" },
   { href: "/profile", label: "Profile" },
 ];

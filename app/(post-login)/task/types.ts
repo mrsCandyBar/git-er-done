@@ -1,6 +1,8 @@
+import type { TaskMood } from "../../../models/taskMood";
+
 export type Task = { id?: string; label: string; checked?: boolean };
 
-export type Mood = "love" | "happy" | "not-sure" | "confused" | "not-for-me";
+export type Mood = TaskMood;
 
 export type Column = {
   id: string;

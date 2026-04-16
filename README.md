@@ -3,6 +3,12 @@ Git-er-done is a task manager for serial procrastinators. Got unfinished busines
 
 Use emoji-pedia for icon ideas : 🚞 https://emojipedia.org/
 
+## Environment Flags
+
+- `NEXT_PUBLIC_USE_DUMMY_DATA=true`
+  - When enabled, `userStore` and `taskStore` return in-memory dummy objects and skip all HTTP request calls.
+  - Useful for UI-only development without backend dependencies.
+
 DONE:
 - tasks list page 04/13
 - create tasks 04/13
@@ -15,6 +21,8 @@ DONE:
 - complete profile (basic - flesh it out in the AM) 04/14
 - achievements task  04/15
 - achievements multiple-tasks 04/15
+- add page flow to slow introduce the user to the states of how everything fits together 04/16
+- add stores and state and dummy data 04/16
 
 TODO:
 
@@ -23,11 +31,11 @@ TODO:
   - It should summarise with an overall mood for this task, how often it is completed, it should show a basic timeline from when the user started the initial task until the last completed task in a timeline fashion with the mood emojis.
   - it should then end off with the latest task to start being available for the user to start if they want to, or to cancel if they wish to.
 
+- pagement page
 - achievements over given time frame
 - achievements page overview
 - achievements calendar
 - set achievement notification settings
-- add a repofactory
 
 
 BE TODOS:

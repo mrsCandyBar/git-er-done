@@ -80,9 +80,11 @@ export default function Profile() {
           category: latestTask.category,
           createdDate: toDisplayDate(latestTask.updatedAt),
           startedDate: toDisplayDate(latestTask.startedAt),
+          startedAt: latestTask.startedAt,
           updatedDate: toDisplayDate(latestTask.updatedAt),
           completed: {
             completedDate: toDisplayDate(latestTask.completedAt),
+            completedAt: latestTask.completedAt,
             mood: latestTask.mood ?? "happy",
             finalNotes: latestTask.finalNotes,
             recur: Boolean(latestTask.recur),

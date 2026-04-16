@@ -43,15 +43,19 @@ export default function TaskBusyPage({
         </>
       )}
     >
-      <br/>
-      <Text as="h3" fullWidth>Roadmap, do it for the plot! 🚒</Text>
-      <TaskTable
-        tasks={column.tasks}
-        showCheckbox
-        taskHeader="Task"
-        onToggleTask={(taskIndex) => onToggleTask(column.id, taskIndex)}
-      />
-      <br/>
+      {column.tasks.length > 0 && (
+        <>
+          <br/>
+          <Text as="h3" fullWidth>Guides: make it memorable</Text>
+          <TaskTable
+            tasks={column.tasks}
+            showCheckbox
+            taskHeader="Task"
+            onToggleTask={(taskIndex) => onToggleTask(column.id, taskIndex)}
+          />
+          <br/>
+        </>
+      )}
     </Card>
   );
 }

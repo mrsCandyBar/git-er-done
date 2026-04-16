@@ -8,13 +8,12 @@ import ConfettiButton from "../../../../components/ConfettiButton";
 import Form, { FormFieldConfig } from "../../../../components/Form";
 import Modal from "../../../../components/Modal";
 import Text from "../../../../components/Text";
+import { TASK_MOOD_OPTIONS, isTaskMood, type TaskMood } from "../../../../models/taskMood";
 import { taskStore, userStore } from "../../../../stores";
 import styles from "./page.module.scss";
 
-type Mood = "love" | "happy" | "not-sure" | "confused" | "not-for-me";
-
 type DraftTask = {
-  mood: Mood;
+  mood: TaskMood;
   finalNotes: string;
   keepsake?: string;
   recur: boolean;
@@ -25,14 +24,6 @@ type CompleteTaskPayload = {
   id?: string;
   startedAt?: string;
 };
-
-const moodOptions: Array<{ value: Mood; label: string }> = [
-  { value: "love", label: "😍 Love" },
-  { value: "happy", label: "😊 Happy" },
-  { value: "not-sure", label: "🤔 Not sure" },
-  { value: "confused", label: "😵 Confused" },
-  { value: "not-for-me", label: "🙅 Not for me" },
-];
 
 function CompleteTaskPageContent() {
   const router = useRouter();
@@ -70,7 +61,7 @@ function CompleteTaskPageContent() {
         </Text>
       ),
       type: "radio",
-      options: moodOptions,
+      options: TASK_MOOD_OPTIONS,
       required: true,
     },
     {
@@ -105,14 +96,7 @@ function CompleteTaskPageContent() {
       day: "numeric",
       year: "numeric",
     });
-    const mood: Mood =
-      rawMood === "love" ||
-      rawMood === "happy" ||
-      rawMood === "not-sure" ||
-      rawMood === "confused" ||
-      rawMood === "not-for-me"
-        ? rawMood
-        : "happy";
+    const mood: TaskMood = isTaskMood(rawMood) ? rawMood : "happy";
 
     setSubmittedTask({
       mood,
