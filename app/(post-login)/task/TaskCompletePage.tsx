@@ -68,8 +68,12 @@ export default function TaskCompletePage({ column, isSecondary }: TaskCompletePa
                 </Button>
             </>
         )}
+
+        <br/>
+        <Button href="/tasks" variant="filled">
+          How about another one? 🎴
+        </Button>
       </div>
-      <br/>
     </Card>
   );
 }

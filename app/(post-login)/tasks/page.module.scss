@@ -9,19 +9,6 @@
   gap: v.$spacing-md;
 }
 
-.page :global([class*="Tabs_wrapper"]) {
-  flex: 1;
-}
-
-.page :global([role="tablist"]) {
-  width: 100%;
-  justify-content: center;
-}
-
-.page :global([class*="Tabs_panel"]) {
-  min-height: 560px;
-}
-
 .newQuestCard {
   width: 100%;
 }
@@ -55,10 +42,6 @@
 @media (max-width: v.$breakpoint-sm) {
   .page {
     min-height: 60dvh;
-  }
-
-  .page :global([class*="Tabs_panel"]) {
-    min-height: 460px;
   }
 
   .stackArea {

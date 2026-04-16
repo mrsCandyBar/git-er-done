@@ -6,14 +6,33 @@ import UpdateProfile from "../update-profile";
 import SingleTaskCompletionInsights from "../SingleTaskCompletionInsights";
 import { FriendDearView, FriendNewView, FriendView } from "./status-views";
 import { friendStatusActionContent } from "../../../../models/actionContent";
-import { defaultUserProfile, USER_PROFILE_STORAGE_KEY } from "../../../../models/userProfile";
+import { defaultUserProfile } from "../../../../models/userProfile";
 import type { UserProfile } from "../../../../models/userProfile";
+import { taskStore, userStore } from "../../../../stores";
 import styles from "./page.module.scss";
+
+type SingleCompletedTask = Parameters<typeof SingleTaskCompletionInsights>[0]["task"];
+
+const taskIconByCategory = {
+  new: "🌱",
+  fun: "🎉",
+  quest: "🗺️",
+} as const;
+
+function toDisplayDate(value?: string) {
+  if (!value) {
+    return new Date().toLocaleDateString();
+  }
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleDateString();
+}
 
 export default function Profile() {
   const router = useRouter();
   const [isUpdateProfileOpen, setIsUpdateProfileOpen] = useState(false);
   const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>(defaultUserProfile);
+  const [singleCompletedTask, setSingleCompletedTask] = useState<SingleCompletedTask | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const card = friendStatusActionContent[currentUserProfile.status];
   const completedTasksCount = currentUserProfile.achievements.reduce(
@@ -25,51 +44,69 @@ export default function Profile() {
   );
   const hasCompletedTask = completedTasksCount > 0;
 
-  const singleCompletedTask = {
-    id: "dance-class-for-beginners",
-    icon: "💃",
-    status: "waiting" as const,
-    title: "Dance Class for Beginners",
-    description: "Let's get those feet moving! This beginner-friendly dance class is perfect for anyone looking to have fun.",
-    tasks: [
-      { label: "Book an appointment", checked: true },
-      { label: "Make arrangements for alternative transportation", checked: true },
-      { label: "Take a picture for memory", checked: false },
-    ],
-    category: "fun" as const,
-    createdDate: new Date().toLocaleDateString(),
-    startedDate: new Date().toLocaleDateString(),
-    updatedDate: new Date().toLocaleDateString(),
-    completed: {
-      completedDate: new Date().toLocaleDateString(),
-      mood: "Happy",
-      finalNotes: "Had a great time learning new moves!",
-      recur: true,
-      keepsakeUrl: "https://www.test.com/keepsake/dance-class-for-beginners",
-    },
-  };
-
   useEffect(() => {
-    try {
-      const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
-      if (storedProfile) {
-        const parsedProfile = JSON.parse(storedProfile) as UserProfile;
-        setCurrentUserProfile(parsedProfile);
+    let isMounted = true;
+
+    async function loadData() {
+      try {
+        const [profile, completedTasks] = await Promise.all([
+          userStore.getCurrentProfile(),
+          taskStore.listTasks({ status: "complete", limit: 1 }),
+        ]);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setCurrentUserProfile(profile);
+
+        const latestTask = completedTasks[0];
+        if (!latestTask) {
+          setSingleCompletedTask(null);
+          return;
+        }
+
+        setSingleCompletedTask({
+          id: latestTask.id,
+          icon: taskIconByCategory[latestTask.category],
+          status: latestTask.status,
+          title: latestTask.title,
+          description: latestTask.description,
+          tasks: latestTask.tasks.map((task, index) => ({
+            label: task.label,
+            checked: Boolean(task.checked),
+            id: task.id ?? `${latestTask.id}-${index}`,
+          })),
+          category: latestTask.category,
+          createdDate: toDisplayDate(latestTask.updatedAt),
+          startedDate: toDisplayDate(latestTask.startedAt),
+          updatedDate: toDisplayDate(latestTask.updatedAt),
+          completed: {
+            completedDate: toDisplayDate(latestTask.completedAt),
+            mood: latestTask.mood ?? "happy",
+            finalNotes: latestTask.finalNotes,
+            recur: Boolean(latestTask.recur),
+            keepsakeUrl: latestTask.keepsakeUrl,
+          },
+        });
+      } catch {
+        if (isMounted) {
+          setCurrentUserProfile(defaultUserProfile);
+          setSingleCompletedTask(null);
+        }
+      } finally {
+        if (isMounted) {
+          setIsHydrated(true);
+        }
       }
-    } catch {
-      // Ignore malformed local storage and continue with defaults.
-    } finally {
-      setIsHydrated(true);
     }
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
-
-  useEffect(() => {
-    if (!isHydrated) {
-      return;
-    }
-
-    window.localStorage.setItem(USER_PROFILE_STORAGE_KEY, JSON.stringify(currentUserProfile));
-  }, [currentUserProfile, isHydrated]);
 
   useEffect(() => {
     if (!isHydrated) {
@@ -81,28 +118,67 @@ export default function Profile() {
     }
   }, [currentUserProfile.status, isHydrated, router]);
 
-  const handleSaveInspiration = () => {
-    setCurrentUserProfile((prev) => ({
-      ...prev,
+  const handleSaveInspiration = async (formData: Record<string, FormDataEntryValue>) => {
+    const about = String(formData.about ?? "").trim();
+    const inspiration = String(formData.inspiration ?? "").trim();
+    const reason = String(formData["inspiration-why"] ?? "").trim();
+    const url = String(formData["inspiration-url"] ?? "").trim();
+
+    const nextProfile: UserProfile = {
+      ...currentUserProfile,
       status: "friend_new",
       updatedDate: new Date().toISOString().slice(0, 10),
-    }));
+      about: about || currentUserProfile.about,
+      inspirations: inspiration
+        ? [{ inspiration, reason, url }]
+        : currentUserProfile.inspirations,
+    };
+
+    setCurrentUserProfile(nextProfile);
     setIsUpdateProfileOpen(false);
+
+    try {
+      await userStore.updateCurrentProfile({
+        status: nextProfile.status,
+        updatedDate: nextProfile.updatedDate,
+        about: nextProfile.about,
+        inspirations: nextProfile.inspirations,
+      });
+      userStore.setSelectedUser(nextProfile, "me");
+    } catch {
+      // Keep local optimistic state for responsiveness if network update fails.
+    }
   };
 
-  const handleAcceptGift = () => {
-    setCurrentUserProfile((prev) => ({
-      ...prev,
+  const handleAcceptGift = async () => {
+    const nextProfile: UserProfile = {
+      ...currentUserProfile,
       status: "friend_close",
       updatedDate: new Date().toISOString().slice(0, 10),
+    };
+
+    setCurrentUserProfile(nextProfile);
+
+    try {
+      await userStore.updateCurrentProfile({
+        status: "friend_close",
+        updatedDate: nextProfile.updatedDate,
+      });
+      userStore.setSelectedUser(nextProfile, "me");
+    } catch {
+      setCurrentUserProfile((prev) => ({
+      ...prev,
+      status: "friend",
+      updatedDate: nextProfile.updatedDate,
     }));
+    }
   };
 
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
         {currentUserProfile.status === "friend" && (
-          hasCompletedTask
+          hasCompletedTask && singleCompletedTask
             ? (
               <SingleTaskCompletionInsights
                 task={singleCompletedTask}

@@ -2,18 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import UpdateProfile from "./update-profile";
+import Card from "../../../components/Card";
+import Text from "../../../components/Text";
 import MultiTaskCompletionInsights from "./MultiTaskCompletionInsights";
-import SingleTaskCompletionInsights from "./SingleTaskCompletionInsights";
-import { defaultUserProfile, USER_PROFILE_STORAGE_KEY } from "../../../models/userProfile";
+import { closeProfileActionContent } from "../../../models/actionContent";
+import { defaultUserProfile } from "../../../models/userProfile";
 import type { UserProfile } from "../../../models/userProfile";
+import { userStore } from "../../../stores";
 import styles from "./page.module.scss";
 
 export default function Profile() {
   const router = useRouter();
-  const [isUpdateProfileOpen, setIsUpdateProfileOpen] = useState(false);
   const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>(defaultUserProfile);
   const [isHydrated, setIsHydrated] = useState(false);
+  const card = closeProfileActionContent;
   const completedTasksCount = currentUserProfile.achievements.reduce(
     (acc, entry) => {
       const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.quest.length;
@@ -22,53 +24,32 @@ export default function Profile() {
     0
   );
 
-  const hasCompletedSingleTask = completedTasksCount === 1;
-
-  const singleCompletedTask = {
-    id: "dance-class-for-beginners",
-    icon: "💃",
-    status: "waiting" as const,
-    title: "Dance Class for Beginners",
-    description: "Let's get those feet moving! This beginner-friendly dance class is perfect for anyone looking to have fun.",
-    tasks: [
-      { label: "Book an appointment", checked: true },
-      { label: "Make arrangements for alternative transportation", checked: true },
-      { label: "Take a picture for memory", checked: false },
-    ],
-    category: "fun" as const,
-    createdDate: new Date().toLocaleDateString(),
-    startedDate: new Date().toLocaleDateString(),
-    updatedDate: new Date().toLocaleDateString(),
-    completed: {
-      completedDate: new Date().toLocaleDateString(),
-      mood: "Happy",
-      finalNotes: "Had a great time learning new moves!",
-      recur: true,
-      keepsakeUrl: "https://www.test.com/keepsake/dance-class-for-beginners",
-    },
-  };
-
   useEffect(() => {
-    try {
-      const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
-      if (storedProfile) {
-        const parsedProfile = JSON.parse(storedProfile) as UserProfile;
-        setCurrentUserProfile(parsedProfile);
+    let isMounted = true;
+
+    async function loadProfile() {
+      try {
+        const profile = await userStore.getCurrentProfile();
+        if (isMounted) {
+          setCurrentUserProfile(profile);
+        }
+      } catch {
+        if (isMounted) {
+          setCurrentUserProfile(defaultUserProfile);
+        }
+      } finally {
+        if (isMounted) {
+          setIsHydrated(true);
+        }
       }
-    } catch {
-      // Ignore malformed local storage and continue with defaults.
-    } finally {
-      setIsHydrated(true);
     }
+
+    loadProfile();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
-
-  useEffect(() => {
-    if (!isHydrated) {
-      return;
-    }
-
-    window.localStorage.setItem(USER_PROFILE_STORAGE_KEY, JSON.stringify(currentUserProfile));
-  }, [currentUserProfile, isHydrated]);
 
   useEffect(() => {
     if (!isHydrated) {
@@ -84,15 +65,13 @@ export default function Profile() {
     <div className={styles.page}>
       <section className={styles.cards}>
         {currentUserProfile.status === "friend_close" && (
-          <SingleTaskCompletionInsights
-            task={singleCompletedTask}
-            profileName={currentUserProfile.name}
-            profilePicture={currentUserProfile.profilePicture}
-            onOpenUpdateProfile={() => setIsUpdateProfileOpen(true)}
-            showSingleTaskInsights={hasCompletedSingleTask}
+          <Card
+            eyebrow={<Text as="h4">{card.eyebrow()}</Text>}
+            icon={card.profileImage(currentUserProfile.profilePicture)}
+            title={<Text as="h2">{card.title(currentUserProfile.name)}</Text>}
           >
             <MultiTaskCompletionInsights currentUserProfile={currentUserProfile} />
-          </SingleTaskCompletionInsights>
+          </Card>
         )}
       </section>
     </div>

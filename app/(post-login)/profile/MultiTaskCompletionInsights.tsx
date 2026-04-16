@@ -1,7 +1,10 @@
 import Badge from "@/components/Badge";
+import Card from "@/components/Card";
+import TaskTable from "@/components/TaskTable";
 import Text from "@/components/Text";
 import type { UserProfile } from "@/models/userProfile";
 import styles from "./page.module.scss";
+import Button from "@/components/Button";
 
 type MultiTaskCompletionInsightsProps = {
   currentUserProfile: UserProfile;
@@ -48,29 +51,20 @@ export default function MultiTaskCompletionInsights({
         : "You are signaling a healthy need for personal time, joy, and restorative space.";
 
   const primaryInspiration = currentUserProfile.inspirations[0];
-  const totalAspirations = aspirationCounts.new + aspirationCounts.fun + aspirationCounts.quest;
-
-  const inspirationReason = (primaryInspiration?.reason ?? "").toLowerCase();
-  const reasonTargetCategory =
-    /(bold|new|learn|growth|change|challenge)/.test(inspirationReason)
-      ? "new"
-      : /(ahead|discipline|focus|routine|momentum|productive|progress)/.test(inspirationReason)
-        ? "quest"
-        : "fun";
-
-  const reasonFitPercent = totalAspirations > 0
-    ? Math.round((aspirationCounts[reasonTargetCategory] / totalAspirations) * 100)
-    : 0;
-
-  const completionProgressPercent = totalAspirations > 0
-    ? Math.min(100, Math.round((achievementTotals.completed / totalAspirations) * 100))
-    : 0;
 
   const startedAt = new Date(currentUserProfile.startedDate).getTime();
   const updatedAt = new Date(currentUserProfile.updatedDate).getTime();
   const elapsedHours = Number.isFinite(startedAt) && Number.isFinite(updatedAt)
     ? Math.max(0, Math.ceil((updatedAt - startedAt) / (1000 * 60 * 60)))
     : 0;
+
+  const fantasyQuestTasks = [
+    { label: "Forge a moonsteel dagger", checked: true },
+    { label: "Map the Whispering Woods", checked: false },
+    { label: "Negotiate peace with the dragon envoy", checked: true },
+    { label: "Recover the Crystal of Dawn", checked: false },
+    { label: "Defend the keep at first light", checked: true },
+  ];
 
   return (
     <>
@@ -79,27 +73,6 @@ export default function MultiTaskCompletionInsights({
         <b>new</b> ({aspirationCounts.new}), <b>fun</b> ({aspirationCounts.fun}), and <b>quest</b> ({aspirationCounts.quest}). <br/>
       </Text>
 
-      <br />
-      <br />
-      <Text as="h3" align="center" fullWidth>
-        How well do your aspirations compare <br/>
-        against the inspiration you gave us?
-      </Text>
-      <div className={styles.insightRow}>
-        <div className={styles.insightBox}>
-          <Text as="p" tone="secondary">
-            You are inspired by <b>{primaryInspiration?.inspiration ?? "still being defined"}</b>,
-            because you want <b>{primaryInspiration?.reason ?? "still being defined"}</b>
-          </Text>
-        </div>
-        <div className={styles.insightBox}>
-          <br/>
-          <Text as="p" tone="secondary">{mindsetSummary}</Text>
-        </div>
-      </div>
-
-      <br />
-      <br />
       <Text as="h4" align="center" fullWidth>Progress & Wins</Text>
       <Text as="p" tone="secondary">
         You have completed <b>{achievementTotals.completed}</b> self-prioritized time slots<br/>
@@ -120,59 +93,73 @@ export default function MultiTaskCompletionInsights({
       <br />
       <br />
       <Text as="h3" align="center" fullWidth>
-        How well do your completed quests compare <br/>
+        How well do your aspirations compare <br/>
         against the inspiration you gave us?
       </Text>
-      <div className={styles.insightRow}>
-        <div className={styles.insightBox}>
-          <Text as="h1">⚖️</Text>
-          <Text as="p"><b>{reasonFitPercent}% reason-fit</b></Text>
-          <small>
-            <Text as="span" tone="secondary">
-              ( how well does your aspirations match <br/>
-              your reason for choosing your inspiration )
-            </Text>
-          </small>
-        </div>
-        <div className={styles.insightBox}>
-          <Text as="h1">🏆</Text>
-          <Text as="p">
-            <b>{completionProgressPercent}% quest execution</b>
-          </Text>
-          <small>
-            <Text as="span" tone="secondary">
-              (how much of what you <br/>planned you completed)
-            </Text>
-          </small>
-        </div>
-      </div>
-
+      <br/>
       <Card
-        bare
-        title={<Text as="h3" align="center" fullWidth>So... what is Brioh again?</Text>}
+        title={<Text as="h2" align="center" fullWidth>Let's take a closer look 👀</Text>}
         description={
           <>
             <Text as="p" tone="secondary">
-              Brioh is designed to help 🫵 reconnect with 🫵.<br/>
-              🫵 have achieved all this since we met<br/>
-              Let's turn 🫵 aspirations & goals into reality!
+              You are inspired by <b>{primaryInspiration?.inspiration ?? "still being defined"}</b>,
+              because you want <b>{primaryInspiration?.reason ?? "still being defined"}</b>
             </Text>
-              <br/>
+          </>}
+      >
+        <br/>
+        <Text as="p">
+          The type of quests you create counts, it tells us:
+        </Text>
+        <Text as="blockquote" tone="secondary">
+          {mindsetSummary}
+        </Text>
+
+        <TaskTable
+          tasks={fantasyQuestTasks}
+          taskHeader="The Quests You have Acknowledged"
+          statusHeader="Status"
+          useIcons
+          completedLabel="Completed"
+          pendingLabel=""
+        />
+
+        <br/>
+        <Text as="p" tone="secondary">
+          When you look at the titles of these quests,<br/>
+          do they feel like something your inspiration would say?
+        </Text>
+        <br/>
+
+      </Card>
+
+      <br/>
+      <Card
+        bare
+        title={<Text as="h3" align="center" fullWidth>Incredible work so far, so now... <br/>we can finally answer <u>What is Brioh?</u></Text>}
+        description={
+          <>
+            <Text as="p" tone="secondary">
+              Brioh is designed to help 🫵 reconnect with yourself.
+            </Text>
+            <br/>
             <Text as="h1" align="center" fullWidth> 🧙‍♀️🚞🤴🏰💂</Text>
             <br/>
-            <Text as="h4" align="center" fullWidth>
-              One glorious 'QUEST' at a time
+            <Text as="p" tone="secondary">
+              You have achieved all this since we met<br/>
+              Let's turn 🫵 aspirations & goals into reality!
             </Text>
           </>
         }
-        /*actions={(
+        actions={(
           <>
-            <Button href={card.primaryHref()} variant="filled">
-              {card.primaryLabel(currentUserProfile.name)}
+            <br/>
+            <Button href="" variant="filled">
+              Shall we continue questing together?
             </Button>
             <br/>
           </>
-        )}*/
+        )}
       />
     </>
   );

@@ -1,15 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Button from "../../../../components/Button";
 import Card from "../../../../components/Card";
 import ConfettiButton from "../../../../components/ConfettiButton";
 import Form, { FormFieldConfig } from "../../../../components/Form";
-import InfoChip from "../../../../components/InfoChip";
 import Modal from "../../../../components/Modal";
 import Text from "../../../../components/Text";
-import { USER_PROFILE_STORAGE_KEY } from "../../../../models/userProfile";
+import { taskStore, userStore } from "../../../../stores";
 import styles from "./page.module.scss";
 
 type Mood = "love" | "happy" | "not-sure" | "confused" | "not-for-me";
@@ -27,10 +26,6 @@ type CompleteTaskPayload = {
   startedAt?: string;
 };
 
-type StoredProfile = {
-  status?: string;
-};
-
 const moodOptions: Array<{ value: Mood; label: string }> = [
   { value: "love", label: "😍 Love" },
   { value: "happy", label: "😊 Happy" },
@@ -39,7 +34,7 @@ const moodOptions: Array<{ value: Mood; label: string }> = [
   { value: "not-for-me", label: "🙅 Not for me" },
 ];
 
-export default function CompleteTaskPage() {
+function CompleteTaskPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const payload = useMemo<CompleteTaskPayload | null>(() => {
@@ -55,8 +50,6 @@ export default function CompleteTaskPage() {
     }
   }, [searchParams]);
   const [recur, setRecur] = useState(false);
-  const [checklistDraft, setChecklistDraft] = useState("");
-  const [checklist, setChecklist] = useState<string[]>([]);
   const [submittedTask, setSubmittedTask] = useState<DraftTask | null>(null);
 
   const closeModal = () => {
@@ -103,18 +96,7 @@ export default function CompleteTaskPage() {
     }
   ];
 
-  const addChecklistItem = () => {
-    const nextItem = checklistDraft.trim();
-    if (!nextItem) return;
-    setChecklist((prev) => [...prev, nextItem]);
-    setChecklistDraft("");
-  };
-
-  const removeChecklistItem = (indexToRemove: number) => {
-    setChecklist((prev) => prev.filter((_, index) => index !== indexToRemove));
-  };
-
-  const handleSubmit = (formData: Record<string, FormDataEntryValue>) => {
+  const handleSubmit = async (formData: Record<string, FormDataEntryValue>) => {
     const rawMood = String(formData.mood ?? "").trim();
     const finalNotes = String(formData.finalNotes ?? "").trim();
     const keepsake = String(formData.keepsake ?? "").trim();
@@ -137,29 +119,58 @@ export default function CompleteTaskPage() {
       finalNotes,
       keepsake: keepsake || undefined,
       recur,
-      checklist,
+      checklist: [],
     });
 
-    const completedTaskPayload = {
-      id: payload?.id,
-      startedAt: payload?.startedAt,
-      completedAt,
-      mood,
-      finalNotes,
-      recur,
-      keepsakeUrl: keepsake || undefined,
-    };
-    const params = new URLSearchParams({ completedTask: JSON.stringify(completedTaskPayload) });
+    if (!payload?.id) {
+      router.push("/task");
+      return;
+    }
+
+    try {
+      await taskStore.completeTask(payload.id, {
+        completedAt: new Date().toISOString(),
+        mood,
+        finalNotes,
+        recur,
+        keepsakeUrl: keepsake || undefined,
+      });
+    } catch {
+      router.push("/task");
+      return;
+    }
 
     let shouldRedirectToProfile = false;
     try {
-      const rawProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
-      if (rawProfile) {
-        const parsedProfile = JSON.parse(rawProfile) as StoredProfile;
-        shouldRedirectToProfile = parsedProfile.status === "friend";
-      }
+      const parsedProfile = await userStore.getCurrentProfile();
+        const completedTasksCount = Array.isArray(parsedProfile.achievements)
+          ? parsedProfile.achievements.reduce((acc, achievement) => {
+              const completed = achievement?.completed;
+              const completedCount =
+                (completed?.new?.length ?? 0) +
+                (completed?.fun?.length ?? 0) +
+                (completed?.quest?.length ?? 0);
+              return acc + completedCount;
+            }, 0)
+          : 0;
+
+        const completedTasksAfterSubmit = completedTasksCount + 1;
+        if (completedTasksAfterSubmit >= 4 && parsedProfile.status === "friend_new") {
+          const updatedProfile = {
+            ...parsedProfile,
+            status: "friend_dear" as const,
+            updatedDate: new Date().toISOString().slice(0, 10),
+          };
+
+          await userStore.updateCurrentProfile({
+            status: "friend_dear",
+            updatedDate: updatedProfile.updatedDate,
+          });
+          userStore.setSelectedUser(updatedProfile, "me");
+          shouldRedirectToProfile = true;
+        }
     } catch {
-      // Ignore malformed local storage and use default redirect.
+      // Ignore profile update failures and continue default redirect.
     }
 
     if (shouldRedirectToProfile) {
@@ -167,7 +178,7 @@ export default function CompleteTaskPage() {
       return;
     }
 
-    router.push(`/task?${params.toString()}`);
+    router.push("/task");
   };
 
   return (
@@ -201,5 +212,13 @@ export default function CompleteTaskPage() {
         </Form>
       </Card>
     </Modal>
+  );
+}
+
+export default function CompleteTaskPage() {
+  return (
+    <Suspense fallback={null}>
+      <CompleteTaskPageContent />
+    </Suspense>
   );
 }

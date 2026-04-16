@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Button from "../../../../components/Button";
 import Card from "../../../../components/Card";
@@ -8,6 +8,7 @@ import Form, { FormFieldConfig } from "../../../../components/Form";
 import InfoChip from "../../../../components/InfoChip";
 import Modal from "../../../../components/Modal";
 import Text from "../../../../components/Text";
+import { taskStore } from "../../../../stores";
 import styles from "./page.module.scss";
 
 type Category = "fun" | "new" | "quest";
@@ -32,7 +33,7 @@ const categoryOptions: Array<{ value: Category; label: string }> = [
   { value: "quest", label: "Quest!" },
 ];
 
-export default function UpdateTaskPage() {
+function UpdateTaskPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const payload = useMemo<UpdateTaskPayload | null>(() => {
@@ -109,13 +110,13 @@ export default function UpdateTaskPage() {
     setChecklist((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  const handleSubmit = (formData: Record<string, FormDataEntryValue>) => {
+  const handleSubmit = async (formData: Record<string, FormDataEntryValue>) => {
     const title = String(formData.title ?? "").trim();
     const description = String(formData.description ?? "").trim();
     const rawCategory = String(formData.category ?? "fun");
     const category: Category = rawCategory === "new" || rawCategory === "quest" ? rawCategory : "fun";
 
-    if (!title || !description) return;
+    if (!title || !description || !payload?.id) return;
 
     setSubmittedTask({
       title,
@@ -124,15 +125,22 @@ export default function UpdateTaskPage() {
       checklist,
     });
 
-    const updatedTaskPayload = {
-      id: payload?.id,
-      title,
-      description,
-      checklist,
-      category,
-    };
-    const params = new URLSearchParams({ updatedTask: JSON.stringify(updatedTaskPayload) });
-    router.push(`/task?${params.toString()}`);
+    try {
+      await taskStore.updateTask(payload.id, {
+        title,
+        description,
+        category,
+        tasks: checklist.map((label, index) => ({
+          label,
+          checked: false,
+          id: `${payload.id}-${index}`,
+        })),
+      });
+    } catch {
+      // Keep UX simple; users can retry from the task page.
+    }
+
+    router.push("/task");
   };
 
   return (
@@ -189,5 +197,13 @@ export default function UpdateTaskPage() {
         </Form>
       </Card>
     </Modal>
+  );
+}
+
+export default function UpdateTaskPage() {
+  return (
+    <Suspense fallback={null}>
+      <UpdateTaskPageContent />
+    </Suspense>
   );
 }

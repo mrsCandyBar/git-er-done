@@ -7,7 +7,6 @@ import styles from "./layout.module.scss";
 const links = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/tasks", label: "Tasks" },
-  { href: "/task", label: "Task" },
   { href: "/profile", label: "Profile" },
 ];
 

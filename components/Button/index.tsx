@@ -27,15 +27,11 @@ type NativeButtonProps = CommonButtonProps & {
 
 type ButtonProps = LinkButtonProps | NativeButtonProps;
 
-export default function Button({
-  children,
-  variant = "outline",
-  className = "",
-  ...props
-}: ButtonProps) {
+export default function Button(props: ButtonProps) {
+  const { children, variant = "outline", className = "" } = props;
   const buttonClassName = `${styles.button} ${styles[variant]} ${className}`.trim();
 
-  if ("href" in props && props.href) {
+  if (typeof props.href === "string") {
     const isExternal = props.href.startsWith("http");
 
     if (isExternal) {

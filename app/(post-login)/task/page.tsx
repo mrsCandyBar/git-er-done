@@ -2,51 +2,65 @@
 
 import { useEffect } from "react";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import TaskBusyPage from "./TaskBusyPage";
 import TaskCompletePage from "./TaskCompletePage";
 import TaskWaitingPage from "./TaskWaitingPage";
 import type { Column, Mood } from "./types";
-import { USER_PROFILE_STORAGE_KEY } from "../../../models/userProfile";
+import type { TaskRecord } from "../../../stores/taskStore";
+import { taskStore, userStore } from "../../../stores";
 import styles from "./page.module.scss";
 
-type UpdatedTaskPayload = {
-  id?: string;
-  title?: string;
-  description?: string;
-  checklist?: string[];
-};
+const taskIconByCategory = {
+  new: "🌱",
+  fun: "🎉",
+  quest: "🗺️",
+} as const;
 
-type CompletedTaskPayload = {
-  id?: string;
-  startedAt?: string;
-  completedAt?: string;
-  mood?: Mood;
-  finalNotes?: string;
-  recur?: boolean;
-  keepsakeUrl?: string;
-};
-
-const initialColumns: Column[] = [
-  {
-    id: "dance-class-for-beginners",
-    eyebrow: "FUN",
-    icon: "💃",
-    status: "waiting", // "waiting" | "busy" | "complete"
-    title: "Dance Class for Beginners",
-    description: "Let's get those feet moving! This beginner-friendly dance class is perfect for anyone looking to have fun.",
-    tasks: [
-      { label: "Book an appointment", checked: true },
-      { label: "Make arrangements for alternative transportation", checked: true },
-      { label: "Take a picture for memory", checked: false },
-    ],
-  }
-];
+function toColumn(task: TaskRecord): Column {
+  return {
+    id: task.id,
+    eyebrow: task.category.toUpperCase(),
+    icon: taskIconByCategory[task.category],
+    status: task.status,
+    title: task.title,
+    description: task.description,
+    tasks: task.tasks,
+    updatedAt: task.updatedAt,
+    completedAt: task.completedAt,
+    mood: task.mood,
+    finalNote: task.finalNotes,
+    recur: task.recur,
+    keepsakeUrl: task.keepsakeUrl,
+  };
+}
 
 export default function Task() {
-  const [columns, setColumns] = useState<Column[]>(initialColumns);
+  const [columns, setColumns] = useState<Column[]>([]);
   const router = useRouter();
-  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadTasks() {
+      try {
+        const tasks = await taskStore.listTasks();
+        if (isMounted) {
+          setColumns(tasks.map(toColumn));
+        }
+      } catch {
+        if (isMounted) {
+          setColumns([]);
+        }
+      }
+    }
+
+    loadTasks();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const formatUpdatedDate = () =>
     new Date().toLocaleDateString("en-US", {
@@ -68,6 +82,10 @@ export default function Task() {
         };
       })
     );
+
+    void taskStore.updateTask(columnId, { status }).catch(() => {
+      // Keep optimistic local state if network update fails.
+    });
   };
 
   const startTask = (columnId: string) => {
@@ -86,30 +104,42 @@ export default function Task() {
         };
       })
     );
+
+    void taskStore.updateTask(columnId, { status: "busy", startedAt: new Date().toISOString() }).catch(() => {
+      // Keep optimistic local state if network update fails.
+    });
   };
 
   const toggleTaskCheck = (columnId: string, taskIndex: number) => {
+    let nextTasks: Column["tasks"] = [];
+
     setColumns((prev) =>
       prev.map((column) => {
         if (column.id !== columnId) {
           return column;
         }
 
+        nextTasks = column.tasks.map((task, existingTaskIndex) => {
+          if (existingTaskIndex !== taskIndex) {
+            return task;
+          }
+
+          return {
+            ...task,
+            checked: !task.checked,
+          };
+        });
+
         return {
           ...column,
-          tasks: column.tasks.map((task, existingTaskIndex) => {
-            if (existingTaskIndex !== taskIndex) {
-              return task;
-            }
-
-            return {
-              ...task,
-              checked: !task.checked,
-            };
-          }),
+          tasks: nextTasks,
         };
       })
     );
+
+    void taskStore.updateTask(columnId, { tasks: nextTasks }).catch(() => {
+      // Keep optimistic local state if network update fails.
+    });
   };
 
   const openUpdateTask = (column: Column) => {
@@ -133,86 +163,18 @@ export default function Task() {
   };
 
   useEffect(() => {
-    const shouldMarkComplete = searchParams.get("status") === "complete";
-    const rawUpdatedTask = searchParams.get("updatedTask");
-    const rawCompletedTask = searchParams.get("completedTask");
-
-    let updatedTask: UpdatedTaskPayload | null = null;
-    let completedTask: CompletedTaskPayload | null = null;
-
-    if (rawUpdatedTask) {
-      try {
-        updatedTask = JSON.parse(rawUpdatedTask) as UpdatedTaskPayload;
-      } catch {
-        updatedTask = null;
-      }
-    }
-
-    if (rawCompletedTask) {
-      try {
-        completedTask = JSON.parse(rawCompletedTask) as CompletedTaskPayload;
-      } catch {
-        completedTask = null;
-      }
-    }
-
-    if (!shouldMarkComplete && !updatedTask && !completedTask) {
-      return;
-    }
-
-    setColumns((prev) =>
-      prev.map((column, index) => {
-        const matchesUpdatedTask = updatedTask && (updatedTask.id ? column.id === updatedTask.id : index === 0);
-        const matchesCompletedTask = completedTask && (completedTask.id ? column.id === completedTask.id : index === 0);
-
-        const nextTasks = matchesUpdatedTask && updatedTask?.checklist
-          ? updatedTask.checklist.map((label) => {
-              const existingTask = column.tasks.find((task) => task.label === label);
-              return {
-                label,
-                checked: existingTask?.checked ?? false,
-              };
-            })
-          : column.tasks;
-
-        return {
-          ...column,
-          title: matchesUpdatedTask && updatedTask?.title ? updatedTask.title : column.title,
-          description: matchesUpdatedTask && updatedTask?.description ? updatedTask.description : column.description,
-          tasks: nextTasks,
-          updatedAt: matchesCompletedTask && completedTask?.startedAt ? completedTask.startedAt : column.updatedAt,
-          completedAt: matchesCompletedTask && completedTask?.completedAt ? completedTask.completedAt : column.completedAt,
-          mood: matchesCompletedTask && completedTask?.mood ? completedTask.mood : column.mood,
-          finalNote: matchesCompletedTask && completedTask?.finalNotes ? completedTask.finalNotes : column.finalNote,
-          recur: matchesCompletedTask ? Boolean(completedTask?.recur) : column.recur,
-          keepsakeUrl: matchesCompletedTask && completedTask?.keepsakeUrl ? completedTask.keepsakeUrl : column.keepsakeUrl,
-          status: shouldMarkComplete || matchesCompletedTask ? "complete" : column.status,
-        };
-      })
-    );
-
-    router.replace("/task");
-  }, [searchParams, router]);
-
-  useEffect(() => {
     const hasCompletedTask = columns.some((column) => column.status === "complete");
     if (!hasCompletedTask) {
       return;
     }
 
-    try {
-      const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
-      if (!storedProfile) {
-        return;
-      }
-
-      const parsedProfile = JSON.parse(storedProfile) as { status?: string };
-      if (parsedProfile.status === "friend") {
+    void userStore.getCurrentProfile().then((profile) => {
+      if (profile.status === "friend") {
         router.replace("/profile");
       }
-    } catch {
-      // Ignore malformed local storage data.
-    }
+    }).catch(() => {
+      // Ignore profile fetch failures for this non-blocking redirect.
+    });
   }, [columns, router]);
 
   return (

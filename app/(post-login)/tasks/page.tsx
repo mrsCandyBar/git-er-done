@@ -3,171 +3,132 @@
 import { useEffect, useState } from "react";
 import CardStack from "../../../components/CardStack";
 import type { CardStackItem } from "../../../components/CardStack";
-import Button from "../../../components/Button";
-import Card from "../../../components/Card";
 import Modal from "../../../components/Modal";
-import Tabs from "../../../components/Tabs";
 import Text from "../../../components/Text";
-import { USER_PROFILE_STORAGE_KEY } from "../../../models/userProfile";
+import { taskStore, userStore } from "../../../stores";
 import styles from "./page.module.scss";
 
 type TaskCard = {
+  type: "fun" | "new" | "quest";
   id: string;
   title: string;
   description: string;
 };
 
-const taskCardsByTab: Record<"fun" | "new" | "quest", TaskCard[]> = {
-  fun: [
-    {
-      id: "dance-class-for-beginners",
-      title: "Dance Class for Beginners",
-      description: "Start simple and stay playful. Build confidence one small rhythm at a time.",
-    },
-    {
-      id: "learn-pottery",
-      title: "Weekend Pottery Session",
-      description: "Get your hands messy and make something real. Perfection is not required.",
-    },
-    {
-      id: "karaoke-night",
-      title: "Karaoke Night",
-      description: "Pick one song, show up, and have fun with it. No perfect notes needed.",
-    },
-    {
-      id: "street-food-crawl",
-      title: "Street Food Crawl",
-      description: "Try two spots you have never visited and rate your favorites.",
-    },
-    {
-      id: "board-game-night",
-      title: "Board Game Night",
-      description: "Host a low-key evening with one new game and close friends.",
-    },
-  ],
-  new: [
-    {
-      id: "hike-sunrise-trail",
-      title: "Sunrise Trail Hike",
-      description: "Start your day with momentum. A short trail is enough to reset your headspace.",
-    },
-    {
-      id: "first-climbing-gym",
-      title: "First Climbing Gym Session",
-      description: "Learn the basics and complete one route that challenges you.",
-    },
-    {
-      id: "language-exchange",
-      title: "Language Exchange Meetup",
-      description: "Join a beginner-friendly meetup and introduce yourself in a new language.",
-    },
-    {
-      id: "coding-kata",
-      title: "Try a Coding Kata",
-      description: "Solve one short coding challenge in a language you do not use daily.",
-    },
-    {
-      id: "museum-day",
-      title: "Museum Discovery Day",
-      description: "Visit one exhibit outside your normal interests and capture one takeaway.",
-    },
-  ],
-  quest: [
-    {
-      id: "write-5k-plan",
-      title: "Build a 5K Training Plan",
-      description: "Create a realistic weekly plan and schedule your first run.",
-    },
-    {
-      id: "portfolio-refresh",
-      title: "Refresh Your Portfolio",
-      description: "Update your headline, one project case study, and contact section.",
-    },
-    {
-      id: "public-speaking-goal",
-      title: "Public Speaking Sprint",
-      description: "Draft and practice a three-minute talk for a small audience.",
-    },
-    {
-      id: "financial-checkin",
-      title: "Monthly Financial Check-in",
-      description: "Review spending trends and choose one improvement for next month.",
-    },
-    {
-      id: "creative-30-day",
-      title: "30-Day Creative Challenge",
-      description: "Pick one medium and commit to a short daily output streak.",
-    },
-  ],
-};
+const taskCardPayloads: TaskCard[] = [
+  {
+    type: "fun",
+    id: "dance-class-for-beginners",
+    title: "Dance Class for Beginners",
+    description: "Start simple and stay playful. Build confidence one small rhythm at a time.",
+  },
+  {
+    type: "fun",
+    id: "learn-pottery",
+    title: "Weekend Pottery Session",
+    description: "Get your hands messy and make something real. Perfection is not required.",
+  },
+  {
+    type: "fun",
+    id: "karaoke-night",
+    title: "Karaoke Night",
+    description: "Pick one song, show up, and have fun with it. No perfect notes needed.",
+  },
+  {
+    type: "new",
+    id: "hike-sunrise-trail",
+    title: "Sunrise Trail Hike",
+    description: "Start your day with momentum. A short trail is enough to reset your headspace.",
+  },
+  {
+    type: "new",
+    id: "first-climbing-gym",
+    title: "First Climbing Gym Session",
+    description: "Learn the basics and complete one route that challenges you.",
+  },
+  {
+    type: "quest",
+    id: "write-5k-plan",
+    title: "Build a 5K Training Plan",
+    description: "Create a realistic weekly plan and schedule your first run.",
+  },
+  {
+    type: "quest",
+    id: "portfolio-refresh",
+    title: "Refresh Your Portfolio",
+    description: "Update your headline, one project case study, and contact section.",
+  },
+  {
+    type: "quest",
+    id: "creative-30-day",
+    title: "30-Day Creative Challenge",
+    description: "Pick one medium and commit to a short daily output streak.",
+  },
+];
 
 function createStackCards(cards: TaskCard[]): CardStackItem[] {
   return cards.map((card) => ({
     title: card.title,
     description: card.description,
     ctaLabel: "Start! 🚀",
-    ctaHref: `/task#${card.id}`,
+    ctaHref: `/task?#${card.id}`,
   }));
 }
 
 export default function TasksPage() {
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
+  const [cards, setCards] = useState<CardStackItem[]>(createStackCards(taskCardPayloads));
 
   useEffect(() => {
-    try {
-      const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
-      if (!storedProfile) {
-        return;
+    let isMounted = true;
+
+    async function loadPageData() {
+      try {
+        const [profile, tasks] = await Promise.all([
+          userStore.getCurrentProfile(),
+          taskStore.listTasks(),
+        ]);
+
+        if (!isMounted) {
+          return;
+        }
+
+        const completedTasksCount = Array.isArray(profile.achievements)
+          ? profile.achievements.reduce((count, achievement) => {
+              const completed = achievement?.completed;
+              return (
+                count +
+                (completed?.new?.length ?? 0) +
+                (completed?.fun?.length ?? 0) +
+                (completed?.quest?.length ?? 0)
+              );
+            }, 0)
+          : 0;
+
+        const dynamicCards = tasks.length > 0
+          ? tasks.map((task) => ({
+              title: task.title,
+              description: task.description,
+              ctaLabel: "Start! 🚀",
+              ctaHref: `/task?#${task.id}`,
+            }))
+          : createStackCards(taskCardPayloads);
+
+        setCards(dynamicCards);
+        setIsWelcomeOpen(profile.status === "friend_new" && completedTasksCount === 1);
+      } catch {
+        if (isMounted) {
+          setCards(createStackCards(taskCardPayloads));
+        }
       }
-
-      const parsedProfile = JSON.parse(storedProfile) as { status?: string };
-      setIsWelcomeOpen(parsedProfile.status === "friend");
-    } catch {
-      // Ignore malformed local storage and continue with defaults.
     }
-  }, []);
 
-  const tabs = [
-    {
-      id: "fun",
-      label: "Do something Fun",
-      content: (
-        <div className={styles.stackArea}>
-          <CardStack
-            cards={createStackCards(taskCardsByTab.fun)}
-            emptyLabel="More fun, please!"
-            emptyDescription="Oh no... Where has all the fun gone?"
-          />
-        </div>
-      ),
-    },
-    {
-      id: "new",
-      label: "Let's Try Something New",
-      content: (
-        <div className={styles.stackArea}>
-          <CardStack
-            cards={createStackCards(taskCardsByTab.new)}
-            emptyLabel="More new things, please!"
-            emptyDescription="The cards have blown away..."
-          />
-        </div>
-      ),
-    },
-    {
-      id: "quest",
-      label: "Embark on a Quest",
-      content: (
-        <div className={styles.stackArea}>
-          <CardStack
-            cards={createStackCards(taskCardsByTab.quest)}
-            emptyLabel="More quests, please!"
-            emptyDescription="No more quests in sight... Time to forge new ones!"
-          />
-        </div>
-      ),
-    },
-  ];
+    loadPageData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className={styles.page}>
@@ -194,19 +155,13 @@ export default function TasksPage() {
         </div>
       </Modal>
 
-    
-      <Tabs items={tabs} defaultActiveId="fun" />
-
-      <Card
-        bare
-        className={styles.newQuestCard}
-        title="Ready for a new adventure"
-        actions={(
-          <Button href="/tasks/new" variant="outline">
-            Create New Quest
-          </Button>
-        )}
-      />
+      <div className={styles.stackArea}>
+        <CardStack
+          cards={cards}
+          emptyLabel="Reshuffle!"
+          emptyDescription="Oh no, looks like you've swiped through all the cards!"
+        />
+      </div>
     </div>
   );
 }

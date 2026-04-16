@@ -8,7 +8,7 @@ import Text from "../../../../components/Text";
 type UpdateProfileProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSaveInspiration: () => void;
+  onSaveInspiration: (formData: Record<string, FormDataEntryValue>) => void;
 };
 
 export default function UpdateProfile({ isOpen, onClose, onSaveInspiration }: UpdateProfileProps) {
@@ -48,8 +48,8 @@ export default function UpdateProfile({ isOpen, onClose, onSaveInspiration }: Up
     },
   ];
 
-  const handleSubmit = () => {
-    onSaveInspiration();
+  const handleSubmit = (formData: Record<string, FormDataEntryValue>) => {
+    onSaveInspiration(formData);
   };
 
   return (

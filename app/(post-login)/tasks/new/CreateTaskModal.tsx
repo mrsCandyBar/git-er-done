@@ -26,8 +26,9 @@ type CreateTaskModalProps = {
   isOpen: boolean;
   onClose: () => void;
   fields: FormFieldConfig[];
-  onSubmit: (payload: CreateTaskSubmitPayload) => CreateTaskSubmitResult;
+  onSubmit: (payload: CreateTaskSubmitPayload) => CreateTaskSubmitResult | Promise<CreateTaskSubmitResult>;
   footnote?: string;
+  isTaskCreationBlocked: boolean;
   canCreateMultipleTasks: boolean;
   createdTaskCount: number;
   maxTasksAllowed: number;
@@ -42,6 +43,7 @@ export default function CreateTaskModal({
   fields,
   onSubmit,
   footnote,
+  isTaskCreationBlocked,
   canCreateMultipleTasks,
   createdTaskCount,
   maxTasksAllowed,
@@ -66,8 +68,8 @@ export default function CreateTaskModal({
     setChecklist((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  const handleSubmit = (formData: Record<string, FormDataEntryValue>) => {
-    const result = onSubmit({
+  const handleSubmit = async (formData: Record<string, FormDataEntryValue>) => {
+    const result = await onSubmit({
       formData,
       checklist,
       submitIntent,
@@ -89,86 +91,120 @@ export default function CreateTaskModal({
       isOpen={isOpen}
       onClose={onClose}
       showFooterCloseButton={false}
-      title="Embark on a new quest 🚞"
+      title={isTaskCreationBlocked ? "A moment to reflect 🚞" : "Embark on a new quest 🚞"}
     >
       <Card bare minHeight={false}>
-        <Form
-          key={formVersion}
-          fields={fields}
-          onSubmit={handleSubmit}
-          footnote={!checklistEnabled ? footnote : undefined}
-          renderSubmitButton={({ disabled }) => (
-            <div className={styles.actions}>
-              <Button
-                type="submit"
-                variant={canCreateMultipleTasks ? "outline" : "filled"}
-                disabled={disabled}
-                onClick={() => setSubmitIntent("save")}
-              >
-                Save adventure! 💾
-              </Button>
-              {canCreateMultipleTasks && createdTaskCount < maxTasksAllowed && (
-                isFinalAllowedCreate ? (
-                  <ConfettiButton
-                    type="submit"
-                    label="Save and make another! 😄"
-                    disabled={disabled}
-                    onClick={() => setSubmitIntent("saveAndMakeAnother")}
-                    burstPattern="finale"
-                    burstCount={2}
-                  />
-                ) : (
-                  <Button
-                    type="submit"
-                    variant="filled"
-                    disabled={disabled}
-                    onClick={() => setSubmitIntent("saveAndMakeAnother")}
-                  >
-                    Save and make another! 😄
-                  </Button>
-                )
-              )}
-            </div>
-          )}
-        >
-          <div className={styles.fieldGroup}>
-            {!checklistEnabled && <Text as="p" fullWidth>This next step is <b><u>optional</u></b></Text>}
-            <Text as="p" fullWidth><input
-              type="checkbox"
-              checked={checklistEnabled}
-              onChange={(event) => setChecklistEnabled(event.target.checked)}
-            />&nbsp;&nbsp;Add a roadmap?<br/></Text>
-          </div>
+        {isTaskCreationBlocked ? (
+            <>
+                <Text as="p" tone="secondary" fullWidth>
+                    You have accomplished many quests with us, and we are so proud of you!
+                </Text>
 
-          {checklistEnabled && (
-            <div className={styles.fieldGroup}>
-              {checklist.length > 0 && (
-                <ul className={styles.checklistList}>
-                  {checklist.map((item, index) => (
-                    <li key={`${item}-${index}`} className={styles.checklistItem}>
-                      <InfoChip label={item} variant="outline" onClose={() => removeChecklistItem(index)} />
-                    </li>
-                  ))}
-                </ul>
-              )}
+                <Text as="h1" tone="secondary" fullWidth>
+                    <big>💐🤗😽🥹</big>
+                </Text>
 
-              <br/>
-              <div className={styles.checklistAddRow}>
-                <input
-                  id="checklist-item"
-                  type="text"
-                  className={styles.checklistInput}
-                  placeholder="research, buy supplies, invite friends, etc..."
-                  value={checklistDraft}
-                  onChange={(event) => setChecklistDraft(event.target.value)}
-                />
-                <Button type="button" variant="filled" onClick={addChecklistItem}>
-                  ➕Add
+                <Text as="p" tone="secondary" fullWidth>
+                    To keep the magic alive, we encourage you to focus on <br/>
+                    your current quests and make them truly epic.
+                </Text>
+                <Text as="p" tone="secondary" fullWidth>
+                    In the meantime, feel free to explore your existing quests, <br/>
+                    update their details, or reflect on your journey so far.
+                </Text>
+
+                <br/>
+                <Text as="h1" tone="secondary" fullWidth>
+                    <big>🌼🐎🚞</big>
+                </Text>
+                <Text as="p" tone="secondary" fullWidth>
+                    We can&apos;t wait to embark on more adventures together!
+                </Text>
+                <Button>
+                    Sign Up Today, Go Brioh!
                 </Button>
-              </div>
+            </>
+        ) : (
+
+            <Form
+            key={formVersion}
+            fields={fields}
+            onSubmit={handleSubmit}
+            footnote={!checklistEnabled ? footnote : undefined}
+            renderSubmitButton={({ disabled }) => (
+                <div className={styles.actions}>
+                <Button
+                    type="submit"
+                    variant={canCreateMultipleTasks ? "outline" : "filled"}
+                    disabled={disabled || isTaskCreationBlocked}
+                    onClick={() => setSubmitIntent("save")}
+                >
+                    Save adventure! 💾
+                </Button>
+                {canCreateMultipleTasks && createdTaskCount < maxTasksAllowed && (
+                    isFinalAllowedCreate ? (
+                    <ConfettiButton
+                        type="submit"
+                        label="Save and make another! 😄"
+                        disabled={disabled || isTaskCreationBlocked}
+                        onClick={() => setSubmitIntent("saveAndMakeAnother")}
+                        burstPattern="finale"
+                        burstCount={2}
+                    />
+                    ) : (
+                    <Button
+                        type="submit"
+                        variant="filled"
+                        disabled={disabled || isTaskCreationBlocked}
+                        onClick={() => setSubmitIntent("saveAndMakeAnother")}
+                    >
+                        Save and make another! 😄
+                    </Button>
+                    )
+                )}
+                </div>
+            )}
+            >
+            <div className={styles.fieldGroup}>
+                {!checklistEnabled && <Text as="p" fullWidth>This next step is <b><u>optional</u></b></Text>}
+                <Text as="p" fullWidth><input
+                type="checkbox"
+                checked={checklistEnabled}
+                onChange={(event) => setChecklistEnabled(event.target.checked)}
+                />&nbsp;&nbsp;Add a roadmap?<br/></Text>
             </div>
-          )}
-        </Form>
+
+            {checklistEnabled && (
+                <div className={styles.fieldGroup}>
+                {checklist.length > 0 && (
+                    <ul className={styles.checklistList}>
+                    {checklist.map((item, index) => (
+                        <li key={`${item}-${index}`} className={styles.checklistItem}>
+                        <InfoChip label={item} variant="outline" onClose={() => removeChecklistItem(index)} />
+                        </li>
+                    ))}
+                    </ul>
+                )}
+
+                <br/>
+                <div className={styles.checklistAddRow}>
+                    <input
+                    id="checklist-item"
+                    type="text"
+                    className={styles.checklistInput}
+                    placeholder="research, buy supplies, invite friends, etc..."
+                    value={checklistDraft}
+                    onChange={(event) => setChecklistDraft(event.target.value)}
+                    />
+                    <Button type="button" variant="filled" onClick={addChecklistItem}>
+                    ➕Add
+                    </Button>
+                </div>
+                </div>
+            )}
+            </Form>
+
+        )}
       </Card>
       <ToastRegion toasts={toasts} onDismiss={onDismissToast} />
     </Modal>

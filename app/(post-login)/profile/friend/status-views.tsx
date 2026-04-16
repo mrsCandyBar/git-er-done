@@ -32,7 +32,25 @@ export function FriendView({ profileName, card }: SharedViewProps) {
         title={<Text as="h2">{card.title}</Text>}
         actions={(
           <>
-            <br />
+            <Card
+              bare
+              title={
+                <>
+                  <br />
+                  <Text as="h3" fullWidth>
+                    We&apos;re not doing <i>&apos;tasking&apos;</i> here
+                  </Text>
+                </>
+              }
+              description={<Text as="p" tone="secondary">This space is for you to explore your passions and dreams</Text>}
+              >
+              <Text as="h1">💃🏰🚞</Text>
+              <Text as="h3">Inspiration & Aspirations</Text>
+              <Text as="p" tone="secondary">
+                Make space for what lights you up, what gets you going, what makes you feel accomplished.
+              </Text>
+            </Card>
+            
             <Button href={card.primaryHref()} variant="filled">
               {card.primaryLabel(profileName)}
             </Button>
@@ -40,33 +58,6 @@ export function FriendView({ profileName, card }: SharedViewProps) {
           </>
         )}
       />
-
-      <Card
-        bare
-        title={
-          <>
-            <br />
-            <Text as="h3" fullWidth>
-              We&apos;re not doing <i>&apos;tasking&apos;</i> here
-            </Text>
-          </>
-        }
-        description={<Text as="p" tone="secondary">This space is for you to explore your passions and dreams</Text>}
-        actions={(
-          <>
-            <Button href={card.primaryHref()} variant="filled">
-              Let&apos;s make it happen! 🎉
-            </Button>
-            <br />
-          </>
-        )}
-      >
-        <Text as="h1">💃🏰🚞</Text>
-        <Text as="h3">Inspiration & Aspirations</Text>
-        <Text as="p" tone="secondary">
-          Make space for what lights you up, what gets you going, what makes you feel accomplished.
-        </Text>
-      </Card>
     </>
   );
 }

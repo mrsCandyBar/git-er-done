@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FormFieldConfig } from "../../../../components/Form";
 import { useToastSystem } from "../../../../components/Toast/useToast";
-import { USER_PROFILE_STORAGE_KEY } from "../../../../models/userProfile";
+import { taskStore, userStore } from "../../../../stores";
 import CreateTaskModal, { CreateTaskSubmitPayload, CreateTaskSubmitResult } from "./CreateTaskModal";
 import SlowDownModal from "./SlowDownModal";
 
-const TASK_CREATE_COUNT_KEY = "brioh-task-create-count";
-const MAX_TASKS_ALLOWED = 2;
+const MAX_TASKS_ALLOWED = 5;
 
 type Category = "fun" | "new" | "quest";
 
@@ -23,25 +22,43 @@ export default function NewTaskPage() {
   const router = useRouter();
   const { toasts, pushToast, dismissToast } = useToastSystem();
   const [canCreateMultipleTasks, setCanCreateMultipleTasks] = useState(false);
+  const [isTaskCreationBlocked, setIsTaskCreationBlocked] = useState(false);
   const [createdTaskCount, setCreatedTaskCount] = useState(0);
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(true);
   const [isSlowDownOpen, setIsSlowDownOpen] = useState(false);
   const isFinalAllowedCreate = createdTaskCount === MAX_TASKS_ALLOWED - 1;
 
   useEffect(() => {
-    try {
-      const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
-      if (storedProfile) {
-        const parsedProfile = JSON.parse(storedProfile) as { status?: string };
-        setCanCreateMultipleTasks(parsedProfile.status !== "friend");
-      }
+    let isMounted = true;
 
-      const rawCreatedTaskCount = window.localStorage.getItem(TASK_CREATE_COUNT_KEY);
-      const parsedCreatedTaskCount = Number.parseInt(rawCreatedTaskCount ?? "0", 10);
-      setCreatedTaskCount(Number.isFinite(parsedCreatedTaskCount) ? parsedCreatedTaskCount : 0);
-    } catch {
-      // Ignore malformed local storage and continue with defaults.
+    async function loadState() {
+      try {
+        const [profile, tasks] = await Promise.all([
+          userStore.getCurrentProfile(),
+          taskStore.listTasks(),
+        ]);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setCanCreateMultipleTasks(profile.status !== "friend" && profile.status !== "friend_close");
+        setIsTaskCreationBlocked(profile.status === "friend_close");
+        setCreatedTaskCount(tasks.length);
+      } catch {
+        if (isMounted) {
+          setCanCreateMultipleTasks(false);
+          setIsTaskCreationBlocked(false);
+          setCreatedTaskCount(0);
+        }
+      }
     }
+
+    loadState();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const closeSlowDownModal = () => {
@@ -55,8 +72,7 @@ export default function NewTaskPage() {
   };
 
   const openSlowDownFlow = () => {
-    setCreatedTaskCount(1);
-    window.localStorage.setItem(TASK_CREATE_COUNT_KEY, "1");
+    setCreatedTaskCount(MAX_TASKS_ALLOWED);
     setIsCreateTaskModalOpen(false);
     setIsSlowDownOpen(true);
   };
@@ -89,7 +105,11 @@ export default function NewTaskPage() {
     }
   ];
 
-  const handleSubmit = ({ formData, checklist, submitIntent }: CreateTaskSubmitPayload): CreateTaskSubmitResult => {
+  const handleSubmit = async ({ formData, checklist, submitIntent }: CreateTaskSubmitPayload): Promise<CreateTaskSubmitResult> => {
+    if (isTaskCreationBlocked) {
+      return "noop";
+    }
+
     const title = String(formData.title ?? "").trim();
     const description = String(formData.description ?? "").trim();
     const rawCategory = String(formData.category ?? "fun");
@@ -97,9 +117,28 @@ export default function NewTaskPage() {
 
     if (!title || !description) return "noop";
 
+    try {
+      await taskStore.createTask({
+        category,
+        title,
+        description,
+        tasks: checklist.map((label, index) => ({
+          id: `${category}-${index}-${Date.now()}`,
+          label,
+          checked: false,
+        })),
+      });
+    } catch {
+      pushToast({
+        title: "Unable to create task",
+        description: "Please try again in a moment.",
+        variant: "error",
+      });
+      return "noop";
+    }
+
     const nextCreatedTaskCount = createdTaskCount + 1;
     setCreatedTaskCount(nextCreatedTaskCount);
-    window.localStorage.setItem(TASK_CREATE_COUNT_KEY, String(nextCreatedTaskCount));
 
     if (submitIntent === "saveAndMakeAnother") {
       if (nextCreatedTaskCount >= MAX_TASKS_ALLOWED) {
@@ -109,6 +148,11 @@ export default function NewTaskPage() {
 
       pushToast({ title: "Quest Created!", description: "Your quest has been successfully created.", variant: "success" });
       return "reset";
+
+    } else if (submitIntent === "save") {
+      pushToast({ title: "Quest Created!", description: "Your quest has been successfully created.", variant: "success" });
+      closeModal();
+      return "noop";
     }
 
     if (nextCreatedTaskCount >= MAX_TASKS_ALLOWED) {
@@ -117,6 +161,7 @@ export default function NewTaskPage() {
     }
 
     return "noop";
+
   };
 
   return (
@@ -127,6 +172,7 @@ export default function NewTaskPage() {
         fields={fields}
         onSubmit={handleSubmit}
         footnote={!canCreateMultipleTasks ? "psssst, you can update your quest anytime 🦄" : undefined}
+        isTaskCreationBlocked={isTaskCreationBlocked}
         canCreateMultipleTasks={canCreateMultipleTasks}
         createdTaskCount={createdTaskCount}
         maxTasksAllowed={MAX_TASKS_ALLOWED}
