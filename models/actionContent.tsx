@@ -74,7 +74,7 @@ export const friendStatusActionContent: Record<UserStatusType, FriendStatusActio
     primaryHref: () => "/task",
   },
   friend_dear: {
-    eyebrow: () => "Profile Complete! 💯!!!",
+    eyebrow: () => "smooth sailing 🛥️",
     icon: "🫶",
     title: "Thank you for sharing your inspirations and aspirations with us. Here's a 🎁 for you",
     primaryLabel: () => "Accept Gift ✨",

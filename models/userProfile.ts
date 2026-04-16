@@ -33,7 +33,7 @@ export type UserProfile = {
 export const USER_PROFILE_STORAGE_KEY = "brioh-user-profile";
 
 export const defaultUserProfile: UserProfile = {
-  status: "friend_dear",
+  status: "friend",
   name: "Candice Bar",
   profilePicture: "https://lh3.googleusercontent.com/a/ACg8ocKkfePBiQdfVEcR5NV5NfNhOAEx91qvQtyibO0NITg6-yc-4LPR=s96-c",
   dob: "1987-07-04",
@@ -49,7 +49,7 @@ export const defaultUserProfile: UserProfile = {
       url: "",
     },
   ],
-  /*achievements: [
+  achievements: [
     {
       completed: {
         new: ["1","2","3","4","5"],
@@ -63,13 +63,13 @@ export const defaultUserProfile: UserProfile = {
     new: ["1","2","3","4","5"],
     fun: ["6","7","8"],
     quest: ["9"],
-  },*/
-  achievements: [
+  },
+  /*achievements: [
     {
       completed: {
         new: [],
         fun: [],
-        quest: ["9"],
+        quest: ["9","7"],
       },
       recognized: ["11","12"],
     },
@@ -78,5 +78,5 @@ export const defaultUserProfile: UserProfile = {
     new: [],
     fun: [],
     quest: ["9"],
-  },
+  }*/
 };
