@@ -46,11 +46,19 @@ export default function NewTaskPage() {
 
   const closeSlowDownModal = () => {
     setIsSlowDownOpen(false);
+    router.push("/tasks");
   };
 
   const closeModal = () => {
     setIsCreateTaskModalOpen(false);
     router.push("/tasks");
+  };
+
+  const openSlowDownFlow = () => {
+    setCreatedTaskCount(1);
+    window.localStorage.setItem(TASK_CREATE_COUNT_KEY, "1");
+    setIsCreateTaskModalOpen(false);
+    setIsSlowDownOpen(true);
   };
 
   const fields: FormFieldConfig[] = [
@@ -95,10 +103,7 @@ export default function NewTaskPage() {
 
     if (submitIntent === "saveAndMakeAnother") {
       if (nextCreatedTaskCount >= MAX_TASKS_ALLOWED) {
-        setCreatedTaskCount(1);
-        window.localStorage.setItem(TASK_CREATE_COUNT_KEY, "1");
-        setIsCreateTaskModalOpen(false);
-        setIsSlowDownOpen(true);
+        openSlowDownFlow();
         return "noop";
       }
 
@@ -107,14 +112,10 @@ export default function NewTaskPage() {
     }
 
     if (nextCreatedTaskCount >= MAX_TASKS_ALLOWED) {
-      setCreatedTaskCount(1);
-      window.localStorage.setItem(TASK_CREATE_COUNT_KEY, "1");
-      setIsCreateTaskModalOpen(false);
-      setIsSlowDownOpen(true);
+      openSlowDownFlow();
       return "noop";
     }
 
-    router.push("/task");
     return "noop";
   };
 
