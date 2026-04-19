@@ -33,7 +33,7 @@ export const dashboardActionContent: Record<LastActionType, DashboardActionCardC
     primaryLabel: () => "Let’s make it happen again ✨",
     primaryHref: () => "/task",
     secondaryLabel: "Let's make another!",
-    secondaryHref: "/tasks/new",
+    secondaryHref: "/tasks/form/new",
   },
   createdNewTask: {
     eyebrow: "Ready to roll! 🙌",
@@ -64,7 +64,7 @@ export const friendStatusActionContent: Record<UserStatusType, FriendStatusActio
     icon: "🎴",
     title: "You're new here, let's get you set up with your first quest!",
     primaryLabel: () => "Let's Go!",
-    primaryHref: () => "/tasks/new",
+    primaryHref: () => "/tasks/form/new",
   },
   friend_new: {
     eyebrow: () => `Time to shift gears ✨`,
@@ -78,14 +78,14 @@ export const friendStatusActionContent: Record<UserStatusType, FriendStatusActio
     icon: "🫶",
     title: "Thank you for sharing your inspirations and aspirations with us. Here's a 🎁 for you",
     primaryLabel: () => "Accept Gift ✨",
-    primaryHref: () => "/tasks/new",
+    primaryHref: () => "/tasks/form/new",
   },
   friend_close: {
     eyebrow: () => "You're a close friend! 💖",
     icon: "🌟",
     title: "Thank you for being with us on this journey.",
     primaryLabel: () => "Continue Exploring 🌍",
-    primaryHref: () => "/tasks/new",
+    primaryHref: () => "/tasks/form/new",
   },
 };
 
@@ -106,5 +106,5 @@ export const closeProfileActionContent: CloseProfileActionCardContent = {
   title: (profileName) => <>{profileName}</>,
   description: (profileAbout) => <>{profileAbout}</>,
   primaryLabel: () => "What shall we do next? 🏅",
-  primaryHref: () => "/tasks/new",
+  primaryHref: () => "/tasks/form/new",
 };

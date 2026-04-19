@@ -104,7 +104,7 @@ export function FriendNewView({ profileName, card }: FriendNewViewProps) {
               just do it with 🫵 as the hero
             </Text>
             <br/>
-            <Button variant="filled" href="/tasks/new">
+            <Button variant="filled" href="/tasks/form/new">
               {card.primaryLabel(profileName)}
             </Button>
             <br />

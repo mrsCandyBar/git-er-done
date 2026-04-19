@@ -1,9 +1,9 @@
 "use client";
 
-import Button from "../../../../components/Button";
-import Card from "../../../../components/Card";
-import Modal from "../../../../components/Modal";
-import Text from "../../../../components/Text";
+import Button from "../../../../../components/Button";
+import Card from "../../../../../components/Card";
+import Modal from "../../../../../components/Modal";
+import Text from "../../../../../components/Text";
 
 type SlowDownModalProps = {
   isOpen: boolean;

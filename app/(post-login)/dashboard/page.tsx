@@ -44,7 +44,7 @@ export default function Dashboard() {
           bare
           title={<Text as="h3" fullWidth>Found something new, <br/>or something borrowed...</Text>}
           actions={(
-            <Button href="tasks/new" variant="outline">
+            <Button href="tasks/form/new" variant="outline">
                 add that something for us to do 😉
             </Button>
           )}

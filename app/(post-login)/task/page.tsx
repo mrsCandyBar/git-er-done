@@ -192,8 +192,7 @@ export default function Task() {
       description: column.description,
       checklist: column.tasks.map((task) => task.label),
     };
-    const params = new URLSearchParams({ task: JSON.stringify(taskPayload) });
-    router.push(`/tasks/update-task?${params.toString()}`);
+    router.push(`/tasks/form/update?id=${taskPayload.id}`);
   };
 
   const openCompleteTask = (column: Column) => {
@@ -201,8 +200,7 @@ export default function Task() {
       id: column.id,
       startedAt: column.updatedAt,
     };
-    const params = new URLSearchParams({ task: JSON.stringify(completionPayload) });
-    router.push(`/tasks/complete-task?${params.toString()}`);
+    router.push(`/tasks/form/complete?id=${completionPayload.id}`);
   };
 
   useEffect(() => {
