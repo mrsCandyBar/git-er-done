@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import CardStack from "../../../components/CardStack";
+import { CardStack, Modal, Text } from "@/components/index";
 import type { CardStackItem } from "../../../components/CardStack";
-import Modal from "../../../components/Modal";
-import Text from "../../../components/Text";
 import { taskStore, userStore } from "../../../stores";
 import styles from "./page.module.scss";
 

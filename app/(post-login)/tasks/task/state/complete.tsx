@@ -1,7 +1,4 @@
-import Badge from "../../../../../components/Badge";
-import Button from "../../../../../components/Button";
-import Card from "../../../../../components/Card";
-import Text from "../../../../../components/Text";
+import { Badge, Button, Card, Text } from "@/components/index";
 import { getTaskMoodLabel } from "../../../../../models/taskMood";
 import type { Column } from "../types";
 import styles from "../page.module.scss";

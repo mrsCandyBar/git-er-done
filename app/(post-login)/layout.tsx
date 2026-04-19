@@ -1,5 +1,4 @@
-import Header from "../../components/Header";
-import Button from "../../components/Button";
+import { Header, Button } from "@/components/index";
 import PostLoginNav from "./_components/navigation";
 import styles from "./layout.module.scss";
 

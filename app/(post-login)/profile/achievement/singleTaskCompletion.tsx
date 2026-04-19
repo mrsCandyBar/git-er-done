@@ -1,10 +1,6 @@
 import type { ReactNode } from "react";
-import Button from "@/components/Button";
-import TaskTable from "@/components/TaskTable";
-import Text from "@/components/Text";
+import { Button, TaskTable, Text, Card, Badge } from "@/components/index";
 import { getTaskMoodLabel, type TaskMood } from "@/models/taskMood";
-import Card from "../../../../components/Card";
-import Badge from "../../../../components/Badge";
 import { closeProfileActionContent } from "../../../../models/actionContent";
 
 type TaskChecklistItem = {

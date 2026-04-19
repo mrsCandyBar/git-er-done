@@ -1,7 +1,4 @@
-import type { ReactNode } from "react";
-import Button from "../../../components/Button";
-import Card from "../../../components/Card";
-import Text from "../../../components/Text";
+import { Button, Card, Text } from "@/components/index";
 import { dashboardActionContent, type LastActionType } from "../../../models/actionContent";
 import styles from "./page.module.scss";
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import CardStack from "../../../../components/CardStack";
-import type { CardStackItem } from "../../../../components/CardStack";
+import CardStack from "@/components/CardStack";
+import type { CardStackItem } from "@/components/CardStack";
 import { taskStore, userStore } from "../../../../stores";
 import styles from "./page.module.scss";
 import { Column } from "../task/types";

@@ -2,23 +2,12 @@
 
 import { useState } from "react";
 import { faCircleCheck, faClock, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-import Header from "../../../components/Header";
-import Footer from "../../../components/Footer";
-import Button from "../../../components/Button";
-import Badge from "../../../components/Badge";
-import Input from "../../../components/Input";
-import Form from "../../../components/Form";
-import Text from "../../../components/Text";
-import InfoChip from "../../../components/InfoChip";
-import Card from "../../../components/Card";
-import CardStack from "../../../components/CardStack";
-import Modal from "../../../components/Modal";
-import ConfettiButton from "../../../components/ConfettiButton";
-import Tabs from "../../../components/Tabs";
-import Accordion from "../../../components/Accordion";
-import ToastRegion from "../../../components/Toast";
-import { useToastSystem } from "../../../components/Toast/useToast";
-import StyleguideThemeToggle from "../../../components/StyleguideThemeToggle";
+import { 
+  Header, Footer, Button, Badge, Input, Form, Text, InfoChip, Accordion,
+  Card, CardStack, Modal, ConfettiButton, Tabs, ToastRegion, useToastSystem
+} from "@/components/index";
+
+import StyleguideThemeToggle from "@/components/StyleguideThemeToggle";
 import styles from "./page.module.scss";
 
 export default function Styleguide() {

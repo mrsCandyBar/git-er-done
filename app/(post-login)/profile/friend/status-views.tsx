@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
-import Button from "../../../../components/Button";
-import Card from "../../../../components/Card";
-import Text from "../../../../components/Text";
+import { Button, Card, Text } from "@/components/index";
 
 type StatusCardContent = {
   eyebrow: (profileName?: string) => ReactNode;

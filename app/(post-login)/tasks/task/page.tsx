@@ -3,9 +3,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "../../../../components/Button";
-import Card from "../../../../components/Card";
-import Text from "../../../../components/Text";
+import { Button, Card, Text } from "@/components/index";
 import TaskBusyPage from "./state/busy";
 import TaskCompletePage from "./state/complete";
 import TaskWaitingPage from "./state/waiting";

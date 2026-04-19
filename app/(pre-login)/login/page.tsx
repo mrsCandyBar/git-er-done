@@ -1,8 +1,5 @@
-import Header from "../../../components/Header";
-import Footer from "../../../components/Footer";
+import { Header, Footer, Button, Text } from "@/components/index";
 import GoogleLoginButton from "@/components/google-login";
-import Button from "@/components/Button";
-import Text from "@/components/Text";
 
 export default function Login() {
   return (

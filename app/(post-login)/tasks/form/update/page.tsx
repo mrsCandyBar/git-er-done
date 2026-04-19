@@ -2,12 +2,8 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Button from "../../../../../components/Button";
-import Card from "../../../../../components/Card";
-import Form, { FormFieldConfig } from "../../../../../components/Form";
-import InfoChip from "../../../../../components/InfoChip";
-import Modal from "../../../../../components/Modal";
-import Text from "../../../../../components/Text";
+import { Button, Card, Form, InfoChip, Modal, Text } from "@/components/index";
+import { FormFieldConfig } from "@/components/Form";
 import { taskStore } from "../../../../../stores";
 import styles from "./page.module.scss";
 

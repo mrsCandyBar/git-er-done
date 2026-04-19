@@ -2,12 +2,8 @@
 
 import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Button from "../../../../../components/Button";
-import Card from "../../../../../components/Card";
-import ConfettiButton from "../../../../../components/ConfettiButton";
-import Form, { FormFieldConfig } from "../../../../../components/Form";
-import Modal from "../../../../../components/Modal";
-import Text from "../../../../../components/Text";
+import { Card, ConfettiButton, Form, Modal, Text } from "@/components/index";
+import { FormFieldConfig } from "../../../../../components/Form";
 import { TASK_MOOD_OPTIONS, isTaskMood, type TaskMood } from "../../../../../models/taskMood";
 import { taskStore, userStore } from "../../../../../stores";
 import styles from "./page.module.scss";

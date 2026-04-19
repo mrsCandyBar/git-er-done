@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Button from "../../../components/Button";
+import { Button } from "@/components/index";
 import styles from "../layout.module.scss";
 
 const links = [

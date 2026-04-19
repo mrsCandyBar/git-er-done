@@ -1,7 +1,6 @@
 "use client";
 
-import Card from "../../../../components/Card";
-import Text from "../../../../components/Text";
+import { Card, Text } from "@/components/index";
 import styles from "./page.module.scss";
 
 const recurringQuotes = [

@@ -1,8 +1,4 @@
-import Badge from "../../../../../components/Badge";
-import Button from "../../../../../components/Button";
-import Card from "../../../../../components/Card";
-import TaskTable from "../../../../../components/TaskTable";
-import Text from "../../../../../components/Text";
+import { Badge, Button, Card, TaskTable, Text } from "@/components/index";
 import type { Column } from "../types";
 import styles from "../page.module.scss";
 

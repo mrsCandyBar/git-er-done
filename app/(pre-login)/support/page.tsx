@@ -1,7 +1,4 @@
-import Header from "../../../components/Header";
-import Footer from "../../../components/Footer";
-import Text from "@/components/Text";
-import Button from "@/components/Button";
+import { Header, Footer, Text, Button } from "@/components/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
