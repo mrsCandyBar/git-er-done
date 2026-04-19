@@ -31,7 +31,7 @@ TODO:
   - It should summarise with an overall mood for this task, how often it is completed, it should show a basic timeline from when the user started the initial task until the last completed task in a timeline fashion with the mood emojis.
   - it should then end off with the latest task to start being available for the user to start if they want to, or to cancel if they wish to.
 
-- pagement page
+- payment page
 - achievements over given time frame
 - achievements page overview
 - achievements calendar
@@ -42,4 +42,4 @@ BE TODOS:
 - add mood to completed task object
 - change recur to being an objectID to a new collection called recur
 - add a new collection called recur with basic CRUD updates
-- add statuses : friend, friend-new, friend-dear, friend-old (better than user)
+- add statuses : friend, friend-new, friend-dear, friend-old (better than user), confidant (paid user)

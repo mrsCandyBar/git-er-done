@@ -118,6 +118,7 @@ export default function NewTaskPage() {
     if (!title || !description) return "noop";
 
     try {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       await taskStore.createTask({
         category,
         title,
@@ -128,12 +129,14 @@ export default function NewTaskPage() {
           checked: false,
         })),
       });
+
     } catch {
       pushToast({
         title: "Unable to create task",
         description: "Please try again in a moment.",
         variant: "error",
       });
+
       return "noop";
     }
 

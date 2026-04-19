@@ -131,7 +131,14 @@ export default function Modal({
               </Button>
             )}
             {primaryActionLabel && (
-              <Button type="button" variant="filled" onClick={onPrimaryAction}>
+              <Button
+                type="button"
+                variant="filled"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  if (onPrimaryAction) onPrimaryAction();
+                }}
+              >
                 {primaryActionLabel}
               </Button>
             )}

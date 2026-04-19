@@ -49,6 +49,7 @@ export default function UpdateProfile({ isOpen, onClose, onSaveInspiration }: Up
   ];
 
   const handleSubmit = (formData: Record<string, FormDataEntryValue>) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     onSaveInspiration(formData);
   };
 
