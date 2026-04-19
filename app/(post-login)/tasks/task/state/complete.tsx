@@ -1,31 +1,29 @@
 import { Badge, Button, Card, Text } from "@/components/index";
-import { getTaskMoodLabel } from "../../../../../models/taskMood";
-import type { Column } from "../types";
+import { getTaskMoodLabel } from "@/models/taskMood";
+import type { detailCard } from "@/models/task";
 import styles from "../page.module.scss";
 
 type TaskCompletePageProps = {
-  column: Column;
-  isSecondary: boolean;
+  task: detailCard;
 };
 
-export default function TaskCompletePage({ column, isSecondary }: TaskCompletePageProps) {
+export default function TaskCompletePage({ task }: TaskCompletePageProps) {
   return (
     <Card
-      className={isSecondary ? styles.secondary : ""}
-      eyebrow={<Text as="h4">{column.eyebrow}</Text>}
-      icon={column.icon}
-      title={<Text as="h2" fullWidth>{column.title}</Text>}
-      description={<Text as="p">{column.description}</Text>}
+      eyebrow={<Text as="h4">{task.eyebrow}</Text>}
+      icon={task.icon}
+      title={<Text as="h2" fullWidth>{task.title}</Text>}
+      description={<Text as="p">{task.description}</Text>}
       actions={(
         <>
           <div className={styles.stickerStackFloat}>
             <Badge
               label="You did it!"
-              subtitle={column.updatedAt ? `Started ${column.updatedAt}` : undefined}
+              subtitle={task.updatedAt ? `Started ${task.updatedAt}` : undefined}
               variant="mint"
             />
-            {column.mood && <Badge label={getTaskMoodLabel(column.mood)} variant="coral" />}
-            {column.recur && (
+            {task.mood && <Badge label={getTaskMoodLabel(task.mood)} variant="coral" />}
+            {task.recur && (
               <>
                 <Badge label="We're doing this one again!" variant="sky" />
                 <Button href="/tasks/recurring" variant="ghost" className={styles.recurProgressLink}>
@@ -40,20 +38,20 @@ export default function TaskCompletePage({ column, isSecondary }: TaskCompletePa
     >
       <br/>
       <div className={styles.completedMeta}>
-        {column.completedAt && (
+        {task.completedAt && (
           <Text as="p" tone="secondary" className={styles.completedDate}>
-            Completed {column.completedAt}
+            Completed {task.completedAt}
           </Text>
         )}
-        {column.finalNote && (
+        {task.finalNote && (
           <Text as="p" tone="quote" className={styles.finalNote}>
-            {column.finalNote}
+            {task.finalNote}
           </Text>
         )}
-        {column.keepsakeUrl && (
+        {task.keepsakeUrl && (
             <>
                 <br/>
-                <Button href={column.keepsakeUrl} target="_blank" rel="noreferrer noopener" variant="outline">
+                <Button href={task.keepsakeUrl} target="_blank" rel="noreferrer noopener" variant="outline">
                     Relive the journey!
                 </Button>
             </>

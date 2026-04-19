@@ -6,7 +6,7 @@ import type { CardStackItem } from "@/components/CardStack";
 import { taskCardPayloads, createStackCards } from "@/models/task";
 import { getPropFromUrl } from "@/utilities/helper";
 import { taskStore } from "../../../../stores";
-import styles from "./page.module.scss";
+import styles from "../page.module.scss";
 import { Column } from "../task/types";
 
 export default function TasksPage() {

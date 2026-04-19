@@ -1,53 +1,50 @@
 import { Badge, Button, Card, TaskTable, Text } from "@/components/index";
-import type { Column } from "../types";
+import type { detailCard } from "@/models/task";
 import styles from "../page.module.scss";
 
 type TaskBusyPageProps = {
-  column: Column;
-  isSecondary: boolean;
-  onOpenCompleteTask: (column: Column) => void;
-  onSetWaiting: (columnId: string) => void;
-  onToggleTask: (columnId: string, taskIndex: number) => void;
+  task: detailCard;
+  onOpenCompleteTask: (task: any) => void;
+  onSetWaiting: (task: detailCard) => void;
+  onToggleTask: (taskIndex: number) => void;
 };
 
 export default function TaskBusyPage({
-  column,
-  isSecondary,
+  task,
   onOpenCompleteTask,
   onSetWaiting,
   onToggleTask,
 }: TaskBusyPageProps) {
   return (
     <Card
-      className={isSecondary ? styles.secondary : ""}
-      eyebrow={<Text as="h4">{column.eyebrow}</Text>}
-      icon={column.icon}
-      title={<Text as="h2" fullWidth>{column.title}</Text>}
-      description={<Text as="p">{column.description}</Text>}
+      eyebrow={<Text as="h4">{task.eyebrow}</Text>}
+      icon={task.icon}
+      title={<Text as="h2" fullWidth>{task.title}</Text>}
+      description={<Text as="p">{task.description}</Text>}
       actions={(
         <>
           <div className={styles.stickerStackFloat}>
             <Badge label="You got this" variant="sunshine" />
           </div>
-          <Button variant="filled" onClick={() => onOpenCompleteTask(column)}>
+          <Button variant="filled" onClick={() => onOpenCompleteTask(task)}>
             I've done it! 💪
           </Button>
-          <Button variant="ghost" onClick={() => onSetWaiting(column.id)}>
+          <Button variant="ghost" onClick={() => onSetWaiting(task)}>
             Raincheck? Let's return to the roadmap
           </Button>
           <br/>
         </>
       )}
     >
-      {column.tasks.length > 0 && (
+      {task.tasks.length > 0 && (
         <>
           <br/>
           <Text as="h3" fullWidth>Guides: make it memorable</Text>
           <TaskTable
-            tasks={column.tasks}
+            tasks={task.tasks}
             showCheckbox
             taskHeader="Task"
-            onToggleTask={(taskIndex) => onToggleTask(column.id, taskIndex)}
+            onToggleTask={(taskIndex) => onToggleTask(taskIndex)}
           />
           <br/>
         </>

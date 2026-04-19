@@ -1,49 +1,46 @@
 import { Card, Button, TaskTable, Text } from "@/components/index";
-import type { Column } from "../types";
+import type { detailCard } from "@/models/task";
 import styles from "../page.module.scss";
 
 type TaskWaitingPageProps = {
-  column: Column;
-  isSecondary: boolean;
-  onStartTask: (columnId: string) => void;
-  onOpenUpdateTask: (column: Column) => void;
-  onToggleTask: (columnId: string, taskIndex: number) => void;
+  task: detailCard;
+  onUpdateTask: (task: any) => void;
+  onOpenUpdateTask: (task: detailCard) => void;
+  onToggleTask: (taskIndex: number) => void;
 };
 
 export default function TaskWaitingPage({
-  column,
-  isSecondary,
-  onStartTask,
+  task,
+  onUpdateTask,
   onOpenUpdateTask,
   onToggleTask,
 }: TaskWaitingPageProps) {
   return (
     <Card
-      className={isSecondary ? styles.secondary : ""}
-      eyebrow={<Text as="h4">{column.eyebrow}</Text>}
-      icon={column.icon}
-      title={<Text as="h2" fullWidth>{column.title}</Text>}
-      description={<Text as="p">{column.description}</Text>}
+      eyebrow={<Text as="h4">{task.eyebrow}</Text>}
+      icon={task.icon}
+      title={<Text as="h2" fullWidth>{task.title}</Text>}
+      description={<Text as="p">{task.description}</Text>}
       actions={(
         <>
-          <Button variant="filled" onClick={() => onStartTask(column.id)}>
+          <Button variant="filled" onClick={() => onUpdateTask(task)}>
             Let's do this! 🚀
           </Button>
-          <Button variant="ghost" onClick={() => onOpenUpdateTask(column)}>
+          <Button variant="ghost" onClick={() => onOpenUpdateTask(task)}>
             Hmmmm... let's rework this plot
           </Button>
           <br/>
         </>
       )}
     >
-      {column.tasks.length > 0 && (
+      {task.tasks.length > 0 && (
         <>
           <br/>
           <Text as="h3" fullWidth>Guides: make it memorable</Text>
           <TaskTable
-            tasks={column.tasks}
+            tasks={task.tasks}
             taskHeader="Task"
-            onToggleTask={(taskIndex) => onToggleTask(column.id, taskIndex)}
+            onToggleTask={(taskIndex) => onToggleTask(taskIndex)}
           />
           <br/>
         </>

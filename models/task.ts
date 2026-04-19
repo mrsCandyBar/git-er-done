@@ -1,5 +1,11 @@
 import { CardStackItem } from "@/components/CardStack";
 import { UserProfile } from "./userProfile";
+import { TaskRecord } from "@/stores/taskStore";
+import { TaskMood } from "./taskMood";
+
+
+// SEARCH PAGE
+//////////////
 
 // This file defines the TaskCard type, which represents 
 // the structure of a task card in the application.
@@ -18,7 +24,7 @@ export function createStackCards(cards: { title: string; description: string; id
     title: card.title,
     description: card.description,
     ctaLabel: "Start! 🚀",
-    ctaHref: `/tasks/task?#${card.id}`,
+    ctaHref: `/tasks/task?id=${card.id}`,
   }));
 }
 
@@ -93,4 +99,78 @@ export function countCompletedTasks(profile: UserProfile): Number {
     : 0;
     
     return completedTasksCount;
+}
+
+// END SEARCH PAGE
+//////////////////
+
+
+// START TASK PAGE
+//////////////////
+
+const taskIconByCategory = {
+  new: "🌱",
+  fun: "🎉",
+  quest: "🗺️",
+} as const;
+
+export type Task = { id?: string; label: string; checked?: boolean };
+
+export type Mood = TaskMood;
+
+export type detailCard = {
+  id: string;
+  eyebrow: string;
+  icon: string;
+  title: string;
+  description: string;
+  tasks: Task[];
+  updatedAt?: string;
+  completedAt?: string;
+  finalNote?: string;
+  mood?: Mood;
+  recur?: boolean;
+  keepsakeUrl?: string;
+  status: "waiting" | "busy" | "complete";
+};
+
+export function toDetailCard(task: TaskRecord): detailCard {
+  return {
+    id: task.id,
+    eyebrow: task.category.toUpperCase(),
+    icon: taskIconByCategory[task.category],
+    status: task.status,
+    title: task.title,
+    description: task.description,
+    tasks: task.tasks,
+    updatedAt: task.updatedAt,
+    completedAt: task.completedAt,
+    mood: task.mood,
+    finalNote: task.finalNotes,
+    recur: task.recur,
+    keepsakeUrl: task.keepsakeUrl,
+  };
+}
+
+// Actions
+//////////
+
+export function updateTaskModal(method: string, column: detailCard): any {
+  if (method === "update") {
+    const taskPayload = {
+      id: column.id,
+      title: column.title,
+      description: column.description,
+      checklist: column.tasks.map((task) => task.label),
+    };
+    return { payload: taskPayload, url: `/tasks/form/update?id=${taskPayload.id}` };
+  };
+
+  if (method === "complete") {
+    const completionPayload = {
+      id: column.id,
+      startedAt: column.updatedAt,
+    };
+    return { payload: completionPayload, url: `/tasks/form/complete?id=${completionPayload.id}` };
+  };
 }
