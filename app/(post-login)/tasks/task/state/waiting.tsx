@@ -1,6 +1,5 @@
 import { Card, Button, TaskTable, Text } from "@/components/index";
 import type { detailCard } from "@/models/task";
-import styles from "../page.module.scss";
 
 type TaskWaitingPageProps = {
   task: detailCard;

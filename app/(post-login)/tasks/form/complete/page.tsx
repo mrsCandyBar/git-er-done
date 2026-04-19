@@ -1,43 +1,19 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card, ConfettiButton, Form, Modal, Text } from "@/components/index";
-import { FormFieldConfig } from "../../../../../components/Form";
-import { TASK_MOOD_OPTIONS, isTaskMood, type TaskMood } from "../../../../../models/taskMood";
+import { FormFieldConfig } from "@/components/Form";
+import { countCompletedTasks } from "@/models/task";
+import { TASK_MOOD_OPTIONS, isTaskMood, type TaskMood } from "@/models/taskMood";
+import { getPropFromUrl } from "@/utilities/helper";
 import { taskStore, userStore } from "../../../../../stores";
 import styles from "./page.module.scss";
 
-type DraftTask = {
-  mood: TaskMood;
-  finalNotes: string;
-  keepsake?: string;
-  recur: boolean;
-  checklist: string[];
-};
-
-type CompleteTaskPayload = {
-  id?: string;
-  startedAt?: string;
-};
-
 function CompleteTaskPageContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const payload = useMemo<CompleteTaskPayload | null>(() => {
-    const raw = searchParams.get("task");
-    if (!raw) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(raw) as CompleteTaskPayload;
-    } catch {
-      return null;
-    }
-  }, [searchParams]);
+  const taskId = getPropFromUrl("id");
   const [recur, setRecur] = useState(false);
-  const [submittedTask, setSubmittedTask] = useState<DraftTask | null>(null);
 
   const closeModal = () => {
     if (window.history.length > 1) {
@@ -87,78 +63,58 @@ function CompleteTaskPageContent() {
     const rawMood = String(formData.mood ?? "").trim();
     const finalNotes = String(formData.finalNotes ?? "").trim();
     const keepsake = String(formData.keepsake ?? "").trim();
-    const completedAt = new Date().toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
     const mood: TaskMood = isTaskMood(rawMood) ? rawMood : "happy";
 
-    setSubmittedTask({
-      mood,
-      finalNotes,
-      keepsake: keepsake || undefined,
-      recur,
-      checklist: [],
-    });
-
-    if (!payload?.id) {
-      router.push("/tasks/task");
+    if (!taskId) {
+      router.push("/tasks/task?id=not-found");
       return;
     }
 
     try {
-      await taskStore.completeTask(payload.id, {
+      await taskStore.completeTask(taskId, {
         completedAt: new Date().toISOString(),
         mood,
         finalNotes,
         recur,
         keepsakeUrl: keepsake || undefined,
       });
+
     } catch {
-      router.push("/tasks/task");
+      router.push("/tasks/task?id=not-found");
       return;
     }
 
     let shouldRedirectToProfile = false;
     try {
-      const parsedProfile = await userStore.getCurrentProfile();
-        const completedTasksCount = Array.isArray(parsedProfile.achievements)
-          ? parsedProfile.achievements.reduce((acc, achievement) => {
-              const completed = achievement?.completed;
-              const completedCount =
-                (completed?.new?.length ?? 0) +
-                (completed?.fun?.length ?? 0) +
-                (completed?.quest?.length ?? 0);
-              return acc + completedCount;
-            }, 0)
-          : 0;
 
-        const completedTasksAfterSubmit = completedTasksCount + 1;
-        if (completedTasksAfterSubmit >= 4 && parsedProfile.status === "friend_new") {
+      // After completing a task, 
+      // check if we need to update the user's profile status 
+      // based on completed tasks count.
+
+      const profile = await userStore.getCurrentProfile();
+      if (profile.status === "friend_new") {
+        const completeCount = countCompletedTasks(profile);
+        const completeAfterSubmit = completeCount + 1;
+        if (completeAfterSubmit >= 4) {
           const updatedProfile = {
-            ...parsedProfile,
             status: "friend_dear" as const,
             updatedDate: new Date().toISOString().slice(0, 10),
           };
 
-          await userStore.updateCurrentProfile({
-            status: "friend_dear",
-            updatedDate: updatedProfile.updatedDate,
-          });
-          userStore.setSelectedUser(updatedProfile, "me");
+          await userStore.updateCurrentProfile(updatedProfile);
+          userStore.setSelectedUser({ ...profile, ...updatedProfile }, "me");
           shouldRedirectToProfile = true;
         }
-    } catch {
-      // Ignore profile update failures and continue default redirect.
-    }
 
-    if (shouldRedirectToProfile) {
-      router.push("/profile");
-      return;
-    }
+        if (shouldRedirectToProfile) {
+          router.push("/profile");
+          return;
+        }
+      }
 
-    router.push("/tasks/task");
+      router.push("/tasks/task?id=" + taskId);
+
+    } catch {}
   };
 
   return (

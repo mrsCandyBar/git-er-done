@@ -85,7 +85,7 @@ export const taskCardPayloads: TaskCard[] = [
 // Task Helper Functions
 // Cleanups for the views
 
-export function countCompletedTasks(profile: UserProfile): Number {
+export function countCompletedTasks(profile: UserProfile): number {
     const completedTasksCount = Array.isArray(profile.achievements)
     ? profile.achievements.reduce((count, achievement) => {
         const completed = achievement?.completed;
