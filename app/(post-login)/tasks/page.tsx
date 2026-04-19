@@ -2,84 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { CardStack, Modal, Text } from "@/components/index";
-import type { CardStackItem } from "../../../components/CardStack";
+import type { CardStackItem } from "@/components/CardStack";
+import { taskCardPayloads, createStackCards, countCompletedTasks } from "@/models/task";
 import { taskStore, userStore } from "../../../stores";
 import styles from "./page.module.scss";
 
-type TaskCard = {
-  type: "fun" | "new" | "quest";
-  id: string;
-  title: string;
-  description: string;
-};
-
-const taskCardPayloads: TaskCard[] = [
-  {
-    type: "fun",
-    id: "dance-class-for-beginners",
-    title: "Dance Class for Beginners",
-    description: "Start simple and stay playful. Build confidence one small rhythm at a time.",
-  },
-  {
-    type: "fun",
-    id: "learn-pottery",
-    title: "Weekend Pottery Session",
-    description: "Get your hands messy and make something real. Perfection is not required.",
-  },
-  {
-    type: "fun",
-    id: "karaoke-night",
-    title: "Karaoke Night",
-    description: "Pick one song, show up, and have fun with it. No perfect notes needed.",
-  },
-  {
-    type: "new",
-    id: "hike-sunrise-trail",
-    title: "Sunrise Trail Hike",
-    description: "Start your day with momentum. A short trail is enough to reset your headspace.",
-  },
-  {
-    type: "new",
-    id: "first-climbing-gym",
-    title: "First Climbing Gym Session",
-    description: "Learn the basics and complete one route that challenges you.",
-  },
-  {
-    type: "quest",
-    id: "write-5k-plan",
-    title: "Build a 5K Training Plan",
-    description: "Create a realistic weekly plan and schedule your first run.",
-  },
-  {
-    type: "quest",
-    id: "portfolio-refresh",
-    title: "Refresh Your Portfolio",
-    description: "Update your headline, one project case study, and contact section.",
-  },
-  {
-    type: "quest",
-    id: "creative-30-day",
-    title: "30-Day Creative Challenge",
-    description: "Pick one medium and commit to a short daily output streak.",
-  },
-];
-
-function createStackCards(cards: TaskCard[]): CardStackItem[] {
-  return cards.map((card) => ({
-    title: card.title,
-    description: card.description,
-    ctaLabel: "Start! 🚀",
-    ctaHref: `/tasks/task?#${card.id}`,
-  }));
-}
-
 export default function TasksPage() {
-  const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
+  const [newUser, setNewUser] = useState(false);
   const [cards, setCards] = useState<CardStackItem[]>(createStackCards(taskCardPayloads));
 
   useEffect(() => {
     let isMounted = true;
-
     async function loadPageData() {
       try {
         const [profile, tasks] = await Promise.all([
@@ -87,33 +20,21 @@ export default function TasksPage() {
           taskStore.listTasks(),
         ]);
 
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) { return; }
 
-        const completedTasksCount = Array.isArray(profile.achievements)
-          ? profile.achievements.reduce((count, achievement) => {
-              const completed = achievement?.completed;
-              return (
-                count +
-                (completed?.new?.length ?? 0) +
-                (completed?.fun?.length ?? 0) +
-                (completed?.quest?.length ?? 0)
-              );
-            }, 0)
-          : 0;
+        // DETERMINE IF WELCOME MODAL SHOULD BE SHOWN
+        // Used to determine if we should show the welcome modal for new users. 
+        // * We want to show it until they've completed their first task, which is usually the onboarding task.
 
-        const dynamicCards = tasks.length > 0
-          ? tasks.map((task) => ({
-              title: task.title,
-              description: task.description,
-              ctaLabel: "Start! 🚀",
-              ctaHref: `/tasks/task?#${task.id}`,
-            }))
-          : createStackCards(taskCardPayloads);
+        const completedTasksCount = countCompletedTasks(profile);
+        setNewUser(profile.status === "friend_new" && completedTasksCount === 1);
 
+        // SET CARDS TO TASKS
+
+        const hasTasks = tasks && (tasks.length > 0);
+        const dynamicCards = hasTasks ? createStackCards(tasks) : createStackCards(taskCardPayloads);
         setCards(dynamicCards);
-        setIsWelcomeOpen(profile.status === "friend_new" && completedTasksCount === 1);
+        
       } catch {
         if (isMounted) {
           setCards(createStackCards(taskCardPayloads));
@@ -122,17 +43,14 @@ export default function TasksPage() {
     }
 
     loadPageData();
-
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
 
   return (
     <div className={styles.page}>
       <Modal
-        isOpen={isWelcomeOpen}
-        onClose={() => setIsWelcomeOpen(false)}
+        isOpen={newUser}
+        onClose={() => setNewUser(false)}
         closeLabel="You got this"
       >
         <div className={styles.welcomeCopy}>
