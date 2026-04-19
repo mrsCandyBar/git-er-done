@@ -107,7 +107,7 @@ function CompleteTaskPageContent() {
     });
 
     if (!payload?.id) {
-      router.push("/task");
+      router.push("/tasks/task");
       return;
     }
 
@@ -120,7 +120,7 @@ function CompleteTaskPageContent() {
         keepsakeUrl: keepsake || undefined,
       });
     } catch {
-      router.push("/task");
+      router.push("/tasks/task");
       return;
     }
 
@@ -162,7 +162,7 @@ function CompleteTaskPageContent() {
       return;
     }
 
-    router.push("/task");
+    router.push("/tasks/task");
   };
 
   return (

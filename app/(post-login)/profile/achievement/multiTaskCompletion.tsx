@@ -3,7 +3,7 @@ import Card from "@/components/Card";
 import TaskTable from "@/components/TaskTable";
 import Text from "@/components/Text";
 import type { UserProfile } from "@/models/userProfile";
-import styles from "./page.module.scss";
+import styles from "../page.module.scss";
 import Button from "@/components/Button";
 
 type MultiTaskCompletionInsightsProps = {

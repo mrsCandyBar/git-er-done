@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { FormFieldConfig } from "../../../../../components/Form";
 import { useToastSystem } from "../../../../../components/Toast/useToast";
 import { taskStore, userStore } from "../../../../../stores";
-import CreateTaskModal, { CreateTaskSubmitPayload, CreateTaskSubmitResult } from "./CreateTaskModal";
-import SlowDownModal from "./SlowDownModal";
+import CreateTaskModal, { CreateTaskSubmitPayload, CreateTaskSubmitResult } from "./form/createTaskModal";
+import SlowDownModal from "./_special/SlowDownModal";
 
 const MAX_TASKS_ALLOWED = 5;
 

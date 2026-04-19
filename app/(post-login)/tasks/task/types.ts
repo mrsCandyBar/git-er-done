@@ -1,4 +1,4 @@
-import type { TaskMood } from "../../../models/taskMood";
+import type { TaskMood } from "../../../../models/taskMood";
 
 export type Task = { id?: string; label: string; checked?: boolean };
 

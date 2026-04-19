@@ -3,9 +3,9 @@ import Button from "@/components/Button";
 import TaskTable from "@/components/TaskTable";
 import Text from "@/components/Text";
 import { getTaskMoodLabel, type TaskMood } from "@/models/taskMood";
-import Card from "../../../components/Card";
-import Badge from "../../../components/Badge";
-import { closeProfileActionContent } from "../../../models/actionContent";
+import Card from "../../../../components/Card";
+import Badge from "../../../../components/Badge";
+import { closeProfileActionContent } from "../../../../models/actionContent";
 
 type TaskChecklistItem = {
   label: string;

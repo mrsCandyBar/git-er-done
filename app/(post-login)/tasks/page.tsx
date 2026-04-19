@@ -71,7 +71,7 @@ function createStackCards(cards: TaskCard[]): CardStackItem[] {
     title: card.title,
     description: card.description,
     ctaLabel: "Start! 🚀",
-    ctaHref: `/task?#${card.id}`,
+    ctaHref: `/tasks/task?#${card.id}`,
   }));
 }
 
@@ -110,7 +110,7 @@ export default function TasksPage() {
               title: task.title,
               description: task.description,
               ctaLabel: "Start! 🚀",
-              ctaHref: `/task?#${task.id}`,
+              ctaHref: `/tasks/task?#${task.id}`,
             }))
           : createStackCards(taskCardPayloads);
 

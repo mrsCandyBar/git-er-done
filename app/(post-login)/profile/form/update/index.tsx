@@ -1,9 +1,9 @@
 "use client";
 
-import Card from "../../../../components/Card";
-import Form, { FormFieldConfig } from "../../../../components/Form";
-import Modal from "../../../../components/Modal";
-import Text from "../../../../components/Text";
+import Card from "../../../../../components/Card";
+import Form, { FormFieldConfig } from "../../../../../components/Form";
+import Modal from "../../../../../components/Modal";
+import Text from "../../../../../components/Text";
 
 type UpdateProfileProps = {
   isOpen: boolean;

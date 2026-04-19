@@ -1,6 +1,6 @@
 import Header from "../../components/Header";
 import Button from "../../components/Button";
-import PostLoginNav from "./PostLoginNav";
+import PostLoginNav from "./_components/navigation";
 import styles from "./layout.module.scss";
 
 export default function PostLoginLayout({

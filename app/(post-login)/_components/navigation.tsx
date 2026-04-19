@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Button from "../../components/Button";
-import styles from "./layout.module.scss";
+import Button from "../../../components/Button";
+import styles from "../layout.module.scss";
 
 const links = [
   //{ href: "/dashboard", label: "Dashboard" },

@@ -14,7 +14,7 @@ type LastAction = {
 const lastAction: LastAction = {
   type: "createdNewTask",
   taskName: "Dance Class for Beginners",
-  taskHref: "/task#dance-class-for-beginners",
+  taskHref: "/tasks/task#dance-class-for-beginners",
 };
 
 export default function Dashboard() {

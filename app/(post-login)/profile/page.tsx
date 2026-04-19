@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Card from "../../../components/Card";
 import Text from "../../../components/Text";
-import MultiTaskCompletionInsights from "./MultiTaskCompletionInsights";
+import MultiTaskCompletionInsights from "./achievement/multiTaskCompletion";
 import { closeProfileActionContent } from "../../../models/actionContent";
 import { defaultUserProfile } from "../../../models/userProfile";
 import type { UserProfile } from "../../../models/userProfile";

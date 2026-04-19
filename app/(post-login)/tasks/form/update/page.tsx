@@ -140,7 +140,7 @@ function UpdateTaskPageContent() {
       // Keep UX simple; users can retry from the task page.
     }
 
-    router.push("/task");
+    router.push("/tasks/task?#" + payload.id);
   };
 
   return (

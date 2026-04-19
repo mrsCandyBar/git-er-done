@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import UpdateProfile from "../update-profile";
-import SingleTaskCompletionInsights from "../SingleTaskCompletionInsights";
+import UpdateProfile from "../form/update";
+import SingleTaskCompletionInsights from "../achievement/singleTaskCompletion";
 import { FriendDearView, FriendNewView, FriendView } from "./status-views";
 import { friendStatusActionContent } from "../../../../models/actionContent";
 import { defaultUserProfile } from "../../../../models/userProfile";

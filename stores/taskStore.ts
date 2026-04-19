@@ -1,4 +1,4 @@
-import type { Column, Mood, Task } from "../app/(post-login)/task/types";
+import type { Column, Mood, Task } from "../app/(post-login)/tasks/task/types";
 import type { TaskCategory } from "../models/userProfile";
 import { httpGet, httpPost, httpPut, type RequestConfig } from "./httpClient";
 

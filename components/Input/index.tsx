@@ -72,7 +72,7 @@ export default function Input(props: Props) {
                   value={option.value}
                   id={optionId}
                   {...rest}
-                  defaultChecked={fieldType === "radio" ? selectedValue === option.value : undefined}
+                  //defaultChecked={fieldType === "radio" ? selectedValue === option.value : undefined}
                   className={`${styles.optionInput} ${fieldType === "radio" ? styles.radioOptionInput : ""}`.trim()}
                 />
                 <span className={fieldType === "radio" ? styles.radioOptionText : ""}>{option.label}</span>

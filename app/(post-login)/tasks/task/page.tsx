@@ -3,15 +3,15 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "../../../components/Button";
-import Card from "../../../components/Card";
-import Text from "../../../components/Text";
-import TaskBusyPage from "./TaskBusyPage";
-import TaskCompletePage from "./TaskCompletePage";
-import TaskWaitingPage from "./TaskWaitingPage";
+import Button from "../../../../components/Button";
+import Card from "../../../../components/Card";
+import Text from "../../../../components/Text";
+import TaskBusyPage from "./state/busy";
+import TaskCompletePage from "./state/complete";
+import TaskWaitingPage from "./state/waiting";
 import type { Column, Mood } from "./types";
-import type { TaskRecord } from "../../../stores/taskStore";
-import { taskStore, userStore } from "../../../stores";
+import type { TaskRecord } from "../../../../stores/taskStore";
+import { taskStore, userStore } from "../../../../stores";
 import styles from "./page.module.scss";
 
 const taskIconByCategory = {
