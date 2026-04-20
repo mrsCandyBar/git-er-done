@@ -12,3 +12,12 @@ export const formatUpdatedDate = () =>
     day: "numeric",
     year: "numeric",
   });
+
+export function closeModal(router: any, navigateTo: string = "/tasks") {
+  if (window.history.length > 1) {
+    router.back();
+    return;
+  }
+
+  router.push(navigateTo);
+};

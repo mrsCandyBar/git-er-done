@@ -2,6 +2,7 @@ import { CardStackItem } from "@/components/CardStack";
 import { UserProfile } from "./userProfile";
 import { TaskRecord } from "@/stores/taskStore";
 import { TaskMood } from "./taskMood";
+import { FormFieldConfig } from "@/components/Form";
 
 
 // SEARCH PAGE
@@ -173,4 +174,88 @@ export function updateTaskModal(method: string, column: detailCard): any {
     };
     return { payload: completionPayload, url: `/tasks/form/complete?id=${completionPayload.id}` };
   };
+}
+
+// FORMS
+////////
+
+export type TaskCategory = "fun" | "new" | "quest";
+
+export type DraftUpdateTask = {
+  title: string;
+  description: string;
+  category: TaskCategory;
+  checklist: string[];
+};
+
+export type UpdateTaskPayload = {
+  id?: string;
+  title?: string;
+  description?: string;
+  checklist?: string[];
+};
+
+export const taskCategoryOptions: Array<{ value: TaskCategory; label: string }> = [
+  { value: "new", label: "Something New" },
+  { value: "fun", label: "Just for Fun" },
+  { value: "quest", label: "Quest!" },
+];
+
+
+// FORM INPUTS
+//////////////
+
+export function buildTaskForm(payload: any): any {
+  const fields: FormFieldConfig[] = [
+    {
+      label: "Tag it!",
+      name: "category",
+      type: "radio",
+      hideLabel: true,
+      options: taskCategoryOptions,
+      defaultValue: payload?.category ?? "fun",
+      required: true,
+    },
+    {
+      name: "title",
+      label: "Let's give your quest a title! 🏷️",
+      hideLabel: true,
+      type: "text",
+      defaultValue: payload?.title ?? "",
+      placeholder: "What do you want to do?",
+      required: true,
+    },
+    {
+      name: "description",
+      label: "Describe your quest! 📝",
+      hideLabel: true,
+      type: "textarea",
+      rows: 4,
+      defaultValue: payload?.description ?? "",
+      placeholder: "What will you do? Where? When?",
+      required: true,
+    },
+  ];
+
+  return fields;
+}
+
+export function parseUpdateTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, checklist: string[]) {
+    const title = String(formData.title ?? "").trim();
+    const description = String(formData.description ?? "").trim();
+    const rawCategory = String(formData.category ?? "fun");
+    const category: TaskCategory = rawCategory === "new" || rawCategory === "quest" ? rawCategory : "fun";
+
+    if (!title || !description || !payload?.id) return;
+
+    return {
+      title,
+      description,
+      category,
+      tasks: checklist.map((label, index) => ({
+        label,
+        checked: false,
+        id: `${payload.id}-${index}`,
+      })),
+    }
 }

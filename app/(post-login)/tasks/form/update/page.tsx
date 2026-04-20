@@ -1,99 +1,29 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button, Card, Form, InfoChip, Modal, Text } from "@/components/index";
-import { FormFieldConfig } from "@/components/Form";
+import { buildTaskForm, parseUpdateTaskPayload, UpdateTaskPayload } from "@/models/task";
+import { closeModal } from "@/utilities/helper";
 import { taskStore } from "../../../../../stores";
 import styles from "./page.module.scss";
 
-type Category = "fun" | "new" | "quest";
-
-type DraftTask = {
-  title: string;
-  description: string;
-  category: Category;
-  checklist: string[];
-};
-
-type UpdateTaskPayload = {
-  id?: string;
-  title?: string;
-  description?: string;
-  checklist?: string[];
-};
-
-const categoryOptions: Array<{ value: Category; label: string }> = [
-  { value: "new", label: "Something New" },
-  { value: "fun", label: "Just for Fun" },
-  { value: "quest", label: "Quest!" },
-];
 
 function UpdateTaskPageContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const payload = useMemo<UpdateTaskPayload | null>(() => {
-    const raw = searchParams.get("task");
-    if (!raw) {
-      return null;
-    }
+  const selectedTask = taskStore.getSelectedTask();
+  const payload = selectedTask ? (selectedTask as UpdateTaskPayload) : null;
 
-    try {
-      const parsed = JSON.parse(raw) as UpdateTaskPayload;
-      return parsed;
-    } catch {
-      return null;
-    }
-  }, [searchParams]);
   const [checklistEnabled, setChecklistEnabled] = useState(Boolean(payload?.checklist?.length));
   const [checklistDraft, setChecklistDraft] = useState("");
   const [checklist, setChecklist] = useState<string[]>(payload?.checklist ?? []);
-  const [submittedTask, setSubmittedTask] = useState<DraftTask | null>(null);
 
   useEffect(() => {
     setChecklist(payload?.checklist ?? []);
     setChecklistEnabled(Boolean(payload?.checklist?.length));
   }, [payload]);
 
-  const closeModal = () => {
-    if (window.history.length > 1) {
-      router.back();
-      return;
-    }
-
-    router.push("/tasks");
-  };
-
-  const fields: FormFieldConfig[] = [
-    {
-      label: "Tag it!",
-      name: "category",
-      type: "radio",
-      hideLabel: true,
-      options: categoryOptions,
-      defaultValue: "fun",
-      required: true,
-    },
-    {
-      name: "title",
-      label: "Let's give your quest a title! 🏷️",
-      hideLabel: true,
-      type: "text",
-      defaultValue: payload?.title ?? "",
-      placeholder: "What do you want to do?",
-      required: true,
-    },
-    {
-      name: "description",
-      label: "Describe your quest! 📝",
-      hideLabel: true,
-      type: "textarea",
-      rows: 4,
-      defaultValue: payload?.description ?? "",
-      placeholder: "What will you do? Where? When?",
-      required: true,
-    },
-  ];
+  const fields = buildTaskForm(payload);
 
   const addChecklistItem = () => {
     const nextItem = checklistDraft.trim();
@@ -107,42 +37,20 @@ function UpdateTaskPageContent() {
   };
 
   const handleSubmit = async (formData: Record<string, FormDataEntryValue>) => {
-    const title = String(formData.title ?? "").trim();
-    const description = String(formData.description ?? "").trim();
-    const rawCategory = String(formData.category ?? "fun");
-    const category: Category = rawCategory === "new" || rawCategory === "quest" ? rawCategory : "fun";
-
-    if (!title || !description || !payload?.id) return;
-
-    setSubmittedTask({
-      title,
-      description,
-      category,
-      checklist,
-    });
-
+    if (!payload?.id) return;
+    
+    const payloadData = parseUpdateTaskPayload(payload, formData, checklist);
+    if (!payloadData) return;
     try {
-      await taskStore.updateTask(payload.id, {
-        title,
-        description,
-        category,
-        tasks: checklist.map((label, index) => ({
-          label,
-          checked: false,
-          id: `${payload.id}-${index}`,
-        })),
-      });
-    } catch {
-      // Keep UX simple; users can retry from the task page.
-    }
-
-    router.push("/tasks/task?#" + payload.id);
+      await taskStore.updateTask(payload.id, payloadData);
+      router.push("/tasks/task?id=" + payload.id);
+    } catch {}
   };
 
   return (
     <Modal 
       isOpen={true} 
-      onClose={closeModal} 
+      onClose={() => closeModal(router)} 
       showFooterCloseButton={false}
       title="Hmmm... something's not quite right here... 🚞">
       <Card bare minHeight={false}>
