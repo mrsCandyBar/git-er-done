@@ -2,21 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FormFieldConfig } from "@/components/Form";
 import { useToastSystem } from "@/components/Toast/useToast";
+import { buildTaskForm, parseTaskPayload } from "@/models/task";
+import { closeModal } from "@/utilities/helper";
 import { taskStore, userStore } from "../../../../../stores";
 import CreateTaskModal, { CreateTaskSubmitPayload, CreateTaskSubmitResult } from "./form/createTaskModal";
 import SlowDownModal from "./_special/slowDownModal";
 
 const MAX_TASKS_ALLOWED = 5;
-
-type Category = "fun" | "new" | "quest";
-
-const categoryOptions: Array<{ value: Category; label: string }> = [
-  { value: "new", label: "Something New" },
-  { value: "fun", label: "Just for Fun" },
-  { value: "quest", label: "Quest!" },
-];
 
 export default function NewTaskPage() {
   const router = useRouter();
@@ -61,13 +54,12 @@ export default function NewTaskPage() {
     };
   }, []);
 
+
+  // Handlers for managing the slow down flow 
+  // when user creates too many tasks.
+
   const closeSlowDownModal = () => {
     setIsSlowDownOpen(false);
-    router.push("/tasks");
-  };
-
-  const closeModal = () => {
-    setIsCreateTaskModalOpen(false);
     router.push("/tasks");
   };
 
@@ -77,101 +69,52 @@ export default function NewTaskPage() {
     setIsSlowDownOpen(true);
   };
 
-  const fields: FormFieldConfig[] = [
-    {
-      label: "Tag it!",
-      name: "category",
-      type: "radio",
-      hideLabel: true,
-      options: categoryOptions,
-      required: true,
-    },
-    {
-      name: "title",
-      label: "Name it!",
-      type: "text",
-      hideLabel: true,
-      placeholder: "What do you want to do?",
-      required: true,
-    },
-    {
-      name: "description",
-      label: "Describe it!",
-      type: "textarea",
-      rows: 4,
-      hideLabel: true,
-      placeholder: "What will you do? Where? When?",
-      required: true,
-    }
-  ];
 
+  // Submit handler for creating a new task.
+  //////////////////////////////////////////
+
+  const fields = buildTaskForm({});
   const handleSubmit = async ({ formData, checklist, submitIntent }: CreateTaskSubmitPayload): Promise<CreateTaskSubmitResult> => {
-    if (isTaskCreationBlocked) {
-      return "noop";
-    }
-
-    const title = String(formData.title ?? "").trim();
-    const description = String(formData.description ?? "").trim();
-    const rawCategory = String(formData.category ?? "fun");
-    const category: Category = rawCategory === "new" || rawCategory === "quest" ? rawCategory : "fun";
-
-    if (!title || !description) return "noop";
+    if (isTaskCreationBlocked) { return "noop"; }
+    const payloadData = parseTaskPayload({}, formData, checklist);
+    if (!payloadData) return "noop";
 
     try {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      await taskStore.createTask({
-        category,
-        title,
-        description,
-        tasks: checklist.map((label, index) => ({
-          id: `${category}-${index}-${Date.now()}`,
-          label,
-          checked: false,
-        })),
-      });
+      await taskStore.createTask(payloadData);
+      pushToast({ title: "Quest Created!", description: "Your quest has been successfully created.", variant: "success" });
 
     } catch {
-      pushToast({
-        title: "Unable to create task",
-        description: "Please try again in a moment.",
-        variant: "error",
-      });
-
+      pushToast({ title: "Unable to create task", description: "Please try again in a moment.", variant: "error", });
       return "noop";
     }
+    
+
+    // After successfully creating a task,
+    // check if we need to slow down the user from creating too many tasks,
+    // or if we can just reset the form for another task creation.
 
     const nextCreatedTaskCount = createdTaskCount + 1;
     setCreatedTaskCount(nextCreatedTaskCount);
-
-    if (submitIntent === "saveAndMakeAnother") {
-      if (nextCreatedTaskCount >= MAX_TASKS_ALLOWED) {
-        openSlowDownFlow();
-        return "noop";
-      }
-
-      pushToast({ title: "Quest Created!", description: "Your quest has been successfully created.", variant: "success" });
-      return "reset";
-
-    } else if (submitIntent === "save") {
-      pushToast({ title: "Quest Created!", description: "Your quest has been successfully created.", variant: "success" });
-      closeModal();
-      return "noop";
-    }
-
     if (nextCreatedTaskCount >= MAX_TASKS_ALLOWED) {
       openSlowDownFlow();
       return "noop";
     }
 
-    return "noop";
+    if (submitIntent === "saveAndMakeAnother") {
+      return "reset";
+    } else if (submitIntent === "save") {
+      closeModal(router);
+    }
 
+    return "noop";
   };
 
   return (
     <>
       <CreateTaskModal
         isOpen={isCreateTaskModalOpen && !isSlowDownOpen}
-        onClose={closeModal}
+        onClose={() => closeModal(router)}
         fields={fields}
         onSubmit={handleSubmit}
         isTaskCreationBlocked={isTaskCreationBlocked}

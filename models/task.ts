@@ -240,7 +240,7 @@ export function buildTaskForm(payload: any): any {
   return fields;
 }
 
-export function parseUpdateTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, checklist: string[]) {
+export function parseTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, checklist: string[]) {
   const title = String(formData.title ?? "").trim();
   const description = String(formData.description ?? "").trim();
   const rawCategory = String(formData.category ?? "fun");

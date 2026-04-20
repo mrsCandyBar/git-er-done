@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, Form, InfoChip, Modal, Text } from "@/components/index";
-import { buildTaskForm, parseUpdateTaskPayload, UpdateTaskPayload } from "@/models/task";
+import { buildTaskForm, parseTaskPayload, UpdateTaskPayload } from "@/models/task";
 import { closeModal } from "@/utilities/helper";
 import { taskStore } from "../../../../../stores";
 import styles from "./page.module.scss";
@@ -48,7 +48,7 @@ function UpdateTaskPageContent() {
   const handleSubmit = async (formData: Record<string, FormDataEntryValue>) => {
     if (!payload?.id) return;
     
-    const payloadData = parseUpdateTaskPayload(payload, formData, checklist);
+    const payloadData = parseTaskPayload(payload, formData, checklist);
     if (!payloadData) return;
     try {
       await taskStore.updateTask(payload.id, payloadData);
