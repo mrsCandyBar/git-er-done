@@ -1,7 +1,7 @@
 import { CardStackItem } from "@/components/CardStack";
 import { UserProfile } from "./userProfile";
 import { TaskRecord } from "@/stores/taskStore";
-import { TaskMood } from "./taskMood";
+import { isTaskMood, TASK_MOOD_OPTIONS, TaskMood } from "./taskMood";
 import { FormFieldConfig } from "@/components/Form";
 
 
@@ -241,21 +241,65 @@ export function buildTaskForm(payload: any): any {
 }
 
 export function parseUpdateTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, checklist: string[]) {
-    const title = String(formData.title ?? "").trim();
-    const description = String(formData.description ?? "").trim();
-    const rawCategory = String(formData.category ?? "fun");
-    const category: TaskCategory = rawCategory === "new" || rawCategory === "quest" ? rawCategory : "fun";
+  const title = String(formData.title ?? "").trim();
+  const description = String(formData.description ?? "").trim();
+  const rawCategory = String(formData.category ?? "fun");
+  const category: TaskCategory = rawCategory === "new" || rawCategory === "quest" ? rawCategory : "fun";
 
-    if (!title || !description || !payload?.id) return;
+  if (!title || !description || !payload?.id) return;
 
-    return {
-      title,
-      description,
-      category,
-      tasks: checklist.map((label, index) => ({
-        label,
-        checked: false,
-        id: `${payload.id}-${index}`,
-      })),
+  return {
+    title,
+    description,
+    category,
+    tasks: checklist.map((label, index) => ({
+      label,
+      checked: false,
+      id: `${payload.id}-${index}`,
+    })),
+  }
+}
+
+export function buildTaskCompleteForm(payload: any): any {
+  const fields: FormFieldConfig[] = [
+    {
+      name: "mood",
+      label: "How did this task make you feel?",
+      type: "radio",
+      options: TASK_MOOD_OPTIONS,
+      required: true,
+    },
+    {
+      name: "finalNotes",
+      label: "Final Notes",
+      type: "textarea",
+      hideLabel: true,
+      placeholder: "(optional) Any last words about this adventure? How did it go? What was the highlight? Would you do it again?",
+    },
+    {
+      name: "keepsake",
+      label: "Add a link to a post, photo, journal entry, or anything else that helps you remember the journey!",
+      type: "text",
+      placeholder: "(optional) Paste a keepsake URL",
     }
+  ];
+
+  return fields;
+}
+
+export function parseCompleteTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, recur: boolean) {
+  const rawMood = String(formData.mood ?? "").trim();
+  const finalNotes = String(formData.finalNotes ?? "").trim();
+  const keepsake = String(formData.keepsake ?? "").trim();
+  const mood: TaskMood = isTaskMood(rawMood) ? rawMood : "happy";
+
+  if (!mood || !payload?.id) return;
+
+  return {
+    completedAt: new Date().toISOString(),
+    mood,
+    finalNotes,
+    recur,
+    keepsakeUrl: keepsake || undefined,
+  }
 }

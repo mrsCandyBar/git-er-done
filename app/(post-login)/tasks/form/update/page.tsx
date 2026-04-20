@@ -14,27 +14,36 @@ function UpdateTaskPageContent() {
   const selectedTask = taskStore.getSelectedTask();
   const payload = selectedTask ? (selectedTask as UpdateTaskPayload) : null;
 
-  const [checklistEnabled, setChecklistEnabled] = useState(Boolean(payload?.checklist?.length));
-  const [checklistDraft, setChecklistDraft] = useState("");
-  const [checklist, setChecklist] = useState<string[]>(payload?.checklist ?? []);
 
-  useEffect(() => {
-    setChecklist(payload?.checklist ?? []);
-    setChecklistEnabled(Boolean(payload?.checklist?.length));
-  }, [payload]);
+  // Use local state for 
+  // checklist management 
+  // within the form
 
-  const fields = buildTaskForm(payload);
+      const [checklistEnabled, setChecklistEnabled] = useState(Boolean(payload?.checklist?.length));
+      const [checklistDraft, setChecklistDraft] = useState("");
+      const [checklist, setChecklist] = useState<string[]>(payload?.checklist ?? []);
 
-  const addChecklistItem = () => {
-    const nextItem = checklistDraft.trim();
-    if (!nextItem) return;
-    setChecklist((prev) => [...prev, nextItem]);
-    setChecklistDraft("");
-  };
+      useEffect(() => {
+        setChecklist(payload?.checklist ?? []);
+        setChecklistEnabled(Boolean(payload?.checklist?.length));
+      }, [payload]);
 
-  const removeChecklistItem = (indexToRemove: number) => {
-    setChecklist((prev) => prev.filter((_, index) => index !== indexToRemove));
-  };
+      const fields = buildTaskForm(payload);
+
+      const addChecklistItem = () => {
+        const nextItem = checklistDraft.trim();
+        if (!nextItem) return;
+        setChecklist((prev) => [...prev, nextItem]);
+        setChecklistDraft("");
+      };
+
+      const removeChecklistItem = (indexToRemove: number) => {
+        setChecklist((prev) => prev.filter((_, index) => index !== indexToRemove));
+      };
+
+
+  // Handle form submission
+  /////////////////////////
 
   const handleSubmit = async (formData: Record<string, FormDataEntryValue>) => {
     if (!payload?.id) return;
