@@ -26,7 +26,7 @@ export default function TaskCompletePage({ task }: TaskCompletePageProps) {
             {task.recur && (
               <>
                 <Badge label="We're doing this one again!" variant="sky" />
-                <Button href="/tasks/recurring" variant="ghost" className={styles.recurProgressLink}>
+                <Button href="/tasks/recur?id=woo" variant="ghost" className={styles.recurProgressLink}>
                   Track your progress
                 </Button>
               </>
