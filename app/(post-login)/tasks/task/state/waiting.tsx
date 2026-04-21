@@ -14,6 +14,8 @@ export default function TaskWaitingPage({
   onOpenUpdateTask,
   onToggleTask,
 }: TaskWaitingPageProps) {
+
+  console.log("Rendering TaskWaitingPage with task:", task);
   return (
     <Card
       eyebrow={<Text as="h4">{task.eyebrow}</Text>}
@@ -32,12 +34,12 @@ export default function TaskWaitingPage({
         </>
       )}
     >
-      {task.tasks.length > 0 && (
+      {task.checklist.length > 0 && (
         <>
           <br/>
           <Text as="h3" fullWidth>Guides: make it memorable</Text>
           <TaskTable
-            tasks={task.tasks}
+            tasks={task.checklist}
             taskHeader="Task"
             onToggleTask={(taskIndex) => onToggleTask(taskIndex)}
           />

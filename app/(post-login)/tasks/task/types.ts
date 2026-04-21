@@ -10,7 +10,7 @@ export type Column = {
   icon: string;
   title: string;
   description: string;
-  tasks: Task[];
+  checklist: Task[];
   updatedAt?: string;
   completedAt?: string;
   finalNote?: string;

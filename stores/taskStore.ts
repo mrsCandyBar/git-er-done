@@ -8,7 +8,7 @@ export type TaskRecord = {
 	title: string;
 	description: string;
 	status: Column["status"];
-	tasks: Task[];
+	checklist: Task[];
 	startedAt?: string;
 	updatedAt?: string;
 	completedAt?: string;
@@ -22,7 +22,7 @@ export type CreateTaskPayload = {
 	category: TaskCategory;
 	title: string;
 	description: string;
-	tasks?: Task[];
+	checklist?: Task[];
 };
 
 export type UpdateTaskPayload = Partial<Omit<TaskRecord, "id">>;
@@ -68,7 +68,7 @@ let dummyTasks: TaskRecord[] = [
 		title: "Dance Class for Beginners",
 		description: "Let's get those feet moving! This beginner-friendly dance class is perfect for anyone looking to have fun.",
 		status: "waiting",
-		tasks: [
+		checklist: [
 			{ id: "dummy-dance-class-1", label: "Book an appointment", checked: true },
 			{ id: "dummy-dance-class-2", label: "Arrange transportation", checked: true },
 			{ id: "dummy-dance-class-3", label: "Take a keepsake photo", checked: false },
@@ -162,7 +162,7 @@ export const taskStore = {
 				title: payload.title,
 				description: payload.description,
 				status: "waiting",
-				tasks: payload.tasks ?? [],
+				checklist: payload.checklist ?? [],
 				updatedAt: new Date().toISOString(),
 			};
 

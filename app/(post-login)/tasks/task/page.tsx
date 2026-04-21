@@ -68,14 +68,14 @@ export default function Task() {
   };
   
   const updateTaskToggle = (selectedTask: detailCard, taskGoalIndex: number) => {
-    const updateTaskList = selectedTask.tasks.map(
+    const updateTaskList = selectedTask.checklist.map(
       (task, index) => 
         index === taskGoalIndex ? 
           { ...task, checked: !task.checked } 
           : task);
 
     void taskStore.updateTask(
-      selectedTask.id, { ...selectedTask, tasks: updateTaskList }).then((updatedTask) => {
+      selectedTask.id, { ...selectedTask, checklist: updateTaskList }).then((updatedTask) => {
         if (updatedTask) {
           setSelectedTask(toDetailCard(updatedTask));
         }

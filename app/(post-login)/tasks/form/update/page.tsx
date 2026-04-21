@@ -21,7 +21,7 @@ function UpdateTaskPageContent() {
 
       const [checklistEnabled, setChecklistEnabled] = useState(Boolean(payload?.checklist?.length));
       const [checklistDraft, setChecklistDraft] = useState("");
-      const [checklist, setChecklist] = useState<string[]>(payload?.checklist ?? []);
+      const [checklist, setChecklist] = useState<any[]>(payload?.checklist ?? []);
 
       useEffect(() => {
         setChecklist(payload?.checklist ?? []);
@@ -32,8 +32,8 @@ function UpdateTaskPageContent() {
 
       const addChecklistItem = () => {
         const nextItem = checklistDraft.trim();
-        if (!nextItem) return;
-        setChecklist((prev) => [...prev, nextItem]);
+        if (!nextItem) return; 
+        setChecklist((prev) => [...prev, { label: nextItem, checked: false }]);
         setChecklistDraft("");
       };
 
@@ -50,6 +50,10 @@ function UpdateTaskPageContent() {
     
     const payloadData = parseTaskPayload(payload, formData, checklist);
     if (!payloadData) return;
+    if (!checklistEnabled && checklist.length > 0) {
+      payloadData.checklist = [];
+    }
+
     try {
       await taskStore.updateTask(payload.id, payloadData);
       router.push("/tasks/task?id=" + payload.id);
@@ -87,8 +91,8 @@ function UpdateTaskPageContent() {
 
               <ul className={styles.checklistList}>
                 {checklist.map((item, index) => (
-                  <li key={`${item}-${index}`} className={styles.checklistItem}>
-                    <InfoChip label={item} variant="outline" onClose={() => removeChecklistItem(index)} />
+                  <li key={`${item.label}-${index}`} className={styles.checklistItem}>
+                    <InfoChip label={item.label} variant="outline" onClose={() => removeChecklistItem(index)} />
                   </li>
                 ))}
               </ul>

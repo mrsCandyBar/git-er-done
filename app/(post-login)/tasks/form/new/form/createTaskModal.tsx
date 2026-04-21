@@ -176,8 +176,8 @@ export default function CreateTaskModal({
                 {checklist.length > 0 && (
                     <ul className={styles.checklistList}>
                     {checklist.map((item, index) => (
-                        <li key={`${item}-${index}`} className={styles.checklistItem}>
-                        <InfoChip label={item} variant="outline" onClose={() => removeChecklistItem(index)} />
+                        <li key={`checklistItem_${index}`} className={styles.checklistItem}>
+                            <InfoChip label={item} variant="outline" onClose={() => removeChecklistItem(index)} />
                         </li>
                     ))}
                     </ul>

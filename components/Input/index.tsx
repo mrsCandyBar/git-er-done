@@ -62,22 +62,43 @@ export default function Input(props: Props) {
         <div className={fieldType === "checkbox" ? styles.checkboxGroup : styles.radioGroup}>
           {optionsArray.map((option: Option) => {
             const optionId = `${inputId}-${option.value}`;
-            return (
-              <label
-                key={option.value}
-                className={`${styles.optionLabel} ${fieldType === "radio" ? styles.radioOptionLabel : ""}`.trim()}
-              >
-                <input
-                  type={fieldType}
-                  value={option.value}
-                  id={optionId}
-                  {...rest}
-                  defaultChecked={fieldType === "radio" ? selectedValue === option.value : undefined}
-                  className={`${styles.optionInput} ${fieldType === "radio" ? styles.radioOptionInput : ""}`.trim()}
-                />
-                <span className={fieldType === "radio" ? styles.radioOptionText : ""}>{option.label}</span>
-              </label>
-            );
+            if (fieldType === "radio") {
+              // Only pass the minimal props for radio
+              return (
+                <label
+                  key={option.value}
+                  className={`${styles.optionLabel} ${styles.radioOptionLabel}`.trim()}
+                >
+                  <input
+                    type="radio"
+                    name={rest.name}
+                    value={option.value}
+                    id={optionId}
+                    defaultChecked={selectedValue === option.value}
+                    className={`${styles.optionInput} ${styles.radioOptionInput}`.trim()}
+                  />
+                  <span className={styles.radioOptionText}>{option.label}</span>
+                </label>
+              );
+            } else {
+              // Checkbox: spread rest as before
+              return (
+                <label
+                  key={option.value}
+                  className={styles.optionLabel}
+                >
+                  <input
+                    type="checkbox"
+                    name={rest.name}
+                    value={option.value}
+                    id={optionId}
+                    {...rest}
+                    className={styles.optionInput}
+                  />
+                  <span>{option.label}</span>
+                </label>
+              );
+            }
           })}
         </div>
       </div>

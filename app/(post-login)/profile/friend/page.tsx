@@ -72,7 +72,7 @@ export default function Profile() {
           status: latestTask.status,
           title: latestTask.title,
           description: latestTask.description,
-          tasks: latestTask.tasks.map((task, index) => ({
+          checklist: latestTask.checklist.map((task, index) => ({
             label: task.label,
             checked: Boolean(task.checked),
             id: task.id ?? `${latestTask.id}-${index}`,

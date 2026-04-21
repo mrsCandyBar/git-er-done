@@ -19,7 +19,7 @@ export default function NewTaskPage() {
   const [createdTaskCount, setCreatedTaskCount] = useState(0);
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(true);
   const [isSlowDownOpen, setIsSlowDownOpen] = useState(false);
-  const isFinalAllowedCreate = createdTaskCount === MAX_TASKS_ALLOWED - 1;
+  const isFinalAllowedCreate = createdTaskCount === MAX_TASKS_ALLOWED;
 
   useEffect(() => {
     let isMounted = true;

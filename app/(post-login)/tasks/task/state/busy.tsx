@@ -36,12 +36,12 @@ export default function TaskBusyPage({
         </>
       )}
     >
-      {task.tasks.length > 0 && (
+      {task.checklist.length > 0 && (
         <>
           <br/>
           <Text as="h3" fullWidth>Guides: make it memorable</Text>
           <TaskTable
-            tasks={task.tasks}
+            tasks={task.checklist}
             showCheckbox
             taskHeader="Task"
             onToggleTask={(taskIndex) => onToggleTask(taskIndex)}

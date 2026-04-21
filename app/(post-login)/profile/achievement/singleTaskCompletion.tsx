@@ -14,7 +14,7 @@ type SingleCompletedTask = {
   status: "waiting" | "busy" | "complete";
   title: string;
   description: string;
-  tasks: TaskChecklistItem[];
+  checklist: TaskChecklistItem[];
   category: "new" | "fun" | "quest";
   createdDate: string;
   startedDate: string;
@@ -80,7 +80,7 @@ export default function SingleTaskCompletionInsights({
   children,
 }: SingleTaskCompletionInsightsProps) {
   const card = closeProfileActionContent;
-  const completedChecklistCount = task.tasks.filter((item) => item.checked).length;
+  const completedChecklistCount = task.checklist.filter((item) => item.checked).length;
   const durationLabel = getDurationLabel(
     task.startedAt ?? task.startedDate,
     task.completed.completedAt ?? task.completed.completedDate
@@ -111,7 +111,7 @@ export default function SingleTaskCompletionInsights({
                 <>
                   <Badge label="Mission Complete!" variant="sunshine" />
                   <Text as="p">
-                    This was: <b>{task.category}</b>, {task?.tasks? "and had a list of goals that could be achieved" : "and easy to accomplish"}<br/><br/>
+                    This was: <b>{task.category}</b>, {task?.checklist? "and had a list of goals that could be achieved" : "and easy to accomplish"}<br/><br/>
                   </Text>
 
                   
@@ -122,14 +122,14 @@ export default function SingleTaskCompletionInsights({
                   </Text>
                   <Badge label="Mood Check" variant="sunshine" />
 
-                  {task.tasks.length > 0 && (
+                  {task.checklist.length > 0 && (
                     <>
                       <Text as="h4">
-                        🫵 completed {completedChecklistCount} out of {task.tasks.length} goals
+                        🫵 completed {completedChecklistCount} out of {task.checklist.length} goals
                       </Text>
 
-                      <TaskTable tasks={task.tasks} useIcons />
-                      <Badge label={`${Math.floor((completedChecklistCount / task.tasks.length) * 100)}% complete!`} variant="sunshine" />
+                      <TaskTable tasks={task.checklist} useIcons />
+                      <Badge label={`${Math.floor((completedChecklistCount / task.checklist.length) * 100)}% complete!`} variant="sunshine" />
                     </>
                   )}
                   

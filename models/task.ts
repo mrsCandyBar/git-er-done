@@ -125,7 +125,7 @@ export type detailCard = {
   icon: string;
   title: string;
   description: string;
-  tasks: Task[];
+  checklist: Task[];
   updatedAt?: string;
   completedAt?: string;
   finalNote?: string;
@@ -143,7 +143,7 @@ export function toDetailCard(task: TaskRecord): detailCard {
     status: task.status,
     title: task.title,
     description: task.description,
-    tasks: task.tasks,
+    checklist: task.checklist,
     updatedAt: task.updatedAt,
     completedAt: task.completedAt,
     mood: task.mood,
@@ -162,7 +162,7 @@ export function updateTaskModal(method: string, column: detailCard): any {
       id: column.id,
       title: column.title,
       description: column.description,
-      checklist: column.tasks.map((task) => task.label),
+      checklist: column.checklist.map((task) => task.label),
     };
     return { payload: taskPayload, url: `/tasks/form/update?id=${taskPayload.id}` };
   };
@@ -192,7 +192,7 @@ export type UpdateTaskPayload = {
   id?: string;
   title?: string;
   description?: string;
-  checklist?: string[];
+  checklist?: { label: string; checked: boolean }[];
 };
 
 export const taskCategoryOptions: Array<{ value: TaskCategory; label: string }> = [
@@ -240,7 +240,7 @@ export function buildTaskForm(payload: any): any {
   return fields;
 }
 
-export function parseTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, checklist: string[]) {
+export function parseTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, checklist: any[]) {
   const title = String(formData.title ?? "").trim();
   const description = String(formData.description ?? "").trim();
   const rawCategory = String(formData.category ?? "fun");
@@ -251,14 +251,23 @@ export function parseTaskPayload(payload: any, formData: Record<string, FormData
     else if (!payload) { return; }
   }
 
+  // If new task, format the checklist 
+  // from array of strings to an
+  // array of { label, checked } objects
+
+  if (checklist.length > 0) {
+    if (!payload) {
+      checklist = checklist.map((item) => {
+        return { label: item, checked: false };
+      });
+    }
+  }
+
   return {
     title,
     description,
     category,
-    tasks: checklist.map((label) => ({
-      label,
-      checked: false
-    })),
+    checklist
   }
 }
 
