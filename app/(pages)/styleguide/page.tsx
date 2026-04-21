@@ -6,6 +6,7 @@ import {
   Header, Footer, Button, Badge, Input, Form, Text, InfoChip, Accordion,
   Card, CardStack, Modal, ConfettiButton, Tabs, ToastRegion, useToastSystem
 } from "@/components/index";
+import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
 
 import StyleguideThemeToggle from "@/components/StyleguideThemeToggle";
 import styles from "./page.module.scss";
@@ -375,6 +376,37 @@ export default function Styleguide() {
                 description: "The last card. Bye!",
                 ctaLabel: "Open",
               },
+            ]}
+          />
+
+          <Text as="h3">Scattered Card Stack</Text>
+          <Text as="p" tone="secondary">
+            Cards appear scattered within a wide area, not stacked. Still swipe to dismiss!
+          </Text>
+          <ScatteredCardStack
+            emptyLabel="Restore Cards"
+            emptyDescription="All cards dismissed. Restore them or bring in something new."
+            cards={[
+              {
+                title: "Card One",
+                description: "Swipe me away when you&apos;re done.",
+                ctaLabel: "Open",
+              },
+              {
+                title: "Card Two",
+                description: "Dismiss the top card to reveal me.",
+                ctaLabel: "Open",
+              },
+              {
+                title: "Card Three",
+                description: "The last card. Bye!",
+                ctaLabel: "Open",
+              },
+              {
+                title: "Card Two",
+                description: "Dismiss the top card to reveal me.",
+                ctaLabel: "Open",
+              }
             ]}
           />
         </section>
