@@ -15,13 +15,6 @@ export default function Profile() {
   const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>(defaultUserProfile);
   const [isHydrated, setIsHydrated] = useState(false);
   const card = closeProfileActionContent;
-  const completedTasksCount = currentUserProfile.achievements.reduce(
-    (acc, entry) => {
-      const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.quest.length;
-      return acc + completedCount;
-    },
-    0
-  );
 
   useEffect(() => {
     let isMounted = true;
