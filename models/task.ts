@@ -302,13 +302,12 @@ export function parseCompleteTaskPayload(payload: any, formData: Record<string, 
   const rawMood = String(formData.mood ?? "").trim();
   const finalNotes = String(formData.finalNotes ?? "").trim();
   const keepsake = String(formData.keepsake ?? "").trim();
-  const mood: TaskMood = isTaskMood(rawMood) ? rawMood : "happy";
 
-  if (!mood || !payload?.id) return;
+  if (!rawMood || !payload?.id) return;
 
   return {
     completedAt: new Date().toISOString(),
-    mood,
+    mood: rawMood as TaskMood,
     finalNotes,
     recur,
     keepsakeUrl: keepsake || undefined,

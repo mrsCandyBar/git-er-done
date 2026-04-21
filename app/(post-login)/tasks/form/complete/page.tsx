@@ -87,7 +87,7 @@ function CompleteTaskPageContent() {
         <Form
           fields={fields}
           showSubmitButton={false}
-          requireValidUpdates={false}
+          requireValidUpdates={true}
           renderSubmitButton={({ disabled }) => (
             <div className={styles.submitRow}>
               <ConfettiButton type="submit" label="Completed, let's party! 🎉" disabled={disabled} />
