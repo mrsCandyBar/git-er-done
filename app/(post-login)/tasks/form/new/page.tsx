@@ -76,7 +76,7 @@ export default function NewTaskPage() {
   const fields = buildTaskForm({});
   const handleSubmit = async ({ formData, checklist, submitIntent }: CreateTaskSubmitPayload): Promise<CreateTaskSubmitResult> => {
     if (isTaskCreationBlocked) { return "noop"; }
-    const payloadData = parseTaskPayload({}, formData, checklist);
+    const payloadData = parseTaskPayload(undefined, formData, checklist);
     if (!payloadData) return "noop";
 
     try {
@@ -104,7 +104,8 @@ export default function NewTaskPage() {
     if (submitIntent === "saveAndMakeAnother") {
       return "reset";
     } else if (submitIntent === "save") {
-      closeModal(router);
+      router.push("/tasks");
+      return "noop";
     }
 
     return "noop";

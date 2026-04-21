@@ -213,7 +213,7 @@ export function buildTaskForm(payload: any): any {
       type: "radio",
       hideLabel: true,
       options: taskCategoryOptions,
-      defaultValue: payload?.category ?? "fun",
+      defaultValue: payload?.category ?? undefined,
       required: true,
     },
     {
@@ -244,18 +244,20 @@ export function parseTaskPayload(payload: any, formData: Record<string, FormData
   const title = String(formData.title ?? "").trim();
   const description = String(formData.description ?? "").trim();
   const rawCategory = String(formData.category ?? "fun");
-  const category: TaskCategory = rawCategory === "new" || rawCategory === "quest" ? rawCategory : "fun";
+  const category: TaskCategory = rawCategory as TaskCategory;
 
-  if (!title || !description || !payload?.id) return;
+  if (!title || !description) {
+    if (payload && !payload.id) { return; }
+    else if (!payload) { return; }
+  }
 
   return {
     title,
     description,
     category,
-    tasks: checklist.map((label, index) => ({
+    tasks: checklist.map((label) => ({
       label,
-      checked: false,
-      id: `${payload.id}-${index}`,
+      checked: false
     })),
   }
 }
