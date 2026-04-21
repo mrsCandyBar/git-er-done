@@ -29,6 +29,15 @@ export function createStackCards(cards: { title: string; description: string; id
   }));
 }
 
+export function createRecurStackCards(cards: { title: string; description: string; id: string }[]): CardStackItem[] {
+  return cards.map((card) => ({
+    title: card.title,
+    description: card.description,
+    ctaLabel: "Show History 🚀",
+    ctaHref: `/tasks/recur/task?id=${card.id}`,
+  }));
+}
+
 // Payloads for default task cards, 
 // which are shown when users have no tasks yet.
 

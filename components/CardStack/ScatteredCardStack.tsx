@@ -62,14 +62,17 @@ export default function ScatteredCardStack({
     setDragX(0);
     activePointerId.current = null;
     isAnimating.current = false;
-    // Scatter positions: random within width, y offset, and angle
-    setScatter(
-      cards.map(() => ({
-        x: Math.random() * (scatterWidth - 100) - (scatterWidth - 100) / 2, // moderate horizontal spread
-        y: Math.random() * 220 - 60, // much more vertical scatter
-        rotate: Math.random() * 28 - 14, // moderate rotation
-      }))
-    );
+    // On mount, animate from center to scattered
+    setScatter(cards.map(() => ({ x: 0, y: 0, rotate: 0 })));
+    setTimeout(() => {
+      setScatter(
+        cards.map(() => ({
+          x: Math.random() * (scatterWidth - 100) - (scatterWidth - 100) / 2,
+          y: Math.random() * 220 - 60,
+          rotate: Math.random() * 28 - 14,
+        }))
+      );
+    }, 30); // short delay to trigger transition
   }, [cards, scatterWidth]);
 
   const isEmpty = order.length === 0 && flicking === null;
@@ -126,7 +129,19 @@ export default function ScatteredCardStack({
     setDragX(0);
     setIsDragging(false);
     activePointerId.current = null;
-    setTimeout(() => setRestoring(false), 700); // match entry animation duration
+    // Start all cards stacked in center
+    setScatter(cards.map(() => ({ x: 0, y: 0, rotate: 0 })));
+    // Animate to scattered positions after a short delay
+    setTimeout(() => {
+      setScatter(
+        cards.map(() => ({
+          x: Math.random() * (scatterWidth - 100) - (scatterWidth - 100) / 2,
+          y: Math.random() * 220 - 60,
+          rotate: Math.random() * 28 - 14,
+        }))
+      );
+      setRestoring(false);
+    }, 30); // short delay to trigger transition
   };
 
   if (isEmpty) {

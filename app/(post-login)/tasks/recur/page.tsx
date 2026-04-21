@@ -1,39 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Modal, Text } from "@/components/index";
 import type { CardStackItem } from "@/components/CardStack";
-import { taskCardPayloads, createStackCards, countCompletedTasks } from "@/models/task";
-import { taskStore, userStore } from "../../../../stores";
+import { taskCardPayloads, createStackCards, createRecurStackCards } from "@/models/task";
+import { taskStore } from "../../../../stores";
 import styles from "./page.module.scss";
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
 
 export default function RecurringTasksPage() {
   const [newUser, setNewUser] = useState(false);
-  const [cards, setCards] = useState<CardStackItem[]>(createStackCards(taskCardPayloads));
+  const [cards, setCards] = useState<CardStackItem[]>(createRecurStackCards(taskCardPayloads));
 
   useEffect(() => {
     let isMounted = true;
     async function loadPageData() {
       try {
-        const [profile, tasks] = await Promise.all([
-          userStore.getCurrentProfile(),
+        const [tasks] = await Promise.all([
           taskStore.listTasks({ status: "waiting" }),
         ]);
 
         if (!isMounted) { return; }
 
-        // DETERMINE IF WELCOME MODAL SHOULD BE SHOWN
-        // Used to determine if we should show the welcome modal for new users. 
-        // * We want to show it until they've completed their first task, which is usually the onboarding task.
-
-        const completedTasksCount = countCompletedTasks(profile);
-        setNewUser(profile.status === "friend_new" && completedTasksCount === 1);
-
         // SET CARDS TO TASKS
-
         const hasTasks = tasks && (tasks.length > 0);
-        const dynamicCards = hasTasks ? createStackCards(tasks) : createStackCards(taskCardPayloads);
+        const dynamicCards = hasTasks ? createRecurStackCards(tasks) : createRecurStackCards(taskCardPayloads);
         setCards(dynamicCards);
         
       } catch {
@@ -49,29 +39,6 @@ export default function RecurringTasksPage() {
 
   return (
     <div className={styles.page}>
-      <Modal
-        isOpen={newUser}
-        onClose={() => setNewUser(false)}
-        closeLabel="You got this"
-      >
-        <div className={styles.welcomeCopy}>
-
-            <br/>
-            <Text as="h1" tone="secondary">😊🫳🎴</Text>
-            <Text as="p" tone="secondary">Choose a card</Text>
-
-            <br/>
-            <Text as="h1" tone="secondary">😗🫸💨 🎴</Text>
-            <Text as="p" tone="secondary">Not this one? Swipe it away.</Text>
-
-            <br/>
-            <Text as="h1" tone="secondary">🗃️🎴 👋😏</Text>
-            <Text as="p" tone="secondary">All tasks can be put on pause. Don't stress</Text>
-
-            <br/>
-        </div>
-      </Modal>
-
       <div className={styles.stackArea}>
         <ScatteredCardStack
           cards={cards}
