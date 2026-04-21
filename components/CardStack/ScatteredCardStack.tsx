@@ -149,37 +149,20 @@ export default function ScatteredCardStack({
           const isTop = position === 0;
           const isFlicking = flicking?.index === cardIndex;
           const scatterPos = scatter[cardIndex] || { x: 0, y: 0, rotate: 0 };
-          // Entry animation: each card comes from a different direction, staggered
-          let entry = '';
-          let delay = 0;
-          if (restoring) {
-            // Alternate directions: left, right, top, bottom
-            const directions = [
-              'translateX(-120vw) scale(0.7)',
-              'translateX(120vw) scale(0.7)',
-              'translateY(-120vh) scale(0.7)',
-              'translateY(120vh) scale(0.7)'
-            ];
-            entry = directions[position % directions.length];
-            delay = 120 * position; // slower stagger
-          }
           const transform = isFlicking
             ? flicking.direction === "left"
               ? `translateX(-160%) translateY(-90px) rotate(-28deg)`
               : `translateX(160%) translateY(-90px) rotate(28deg)`
             : isTop && isDragging
               ? `translateX(${dragX}px) rotate(${dragX / 16 + scatterPos.rotate}deg) translateY(${scatterPos.y}px) translateX(${scatterPos.x}px)`
-            : restoring
-              ? `${entry} translateY(${scatterPos.y}px) translateX(${scatterPos.x}px) rotate(${scatterPos.rotate}deg)`
             : `translateY(${scatterPos.y}px) translateX(${scatterPos.x}px) rotate(${scatterPos.rotate}deg)`;
+
           const transition = isFlicking
             ? `transform ${FLICK_MS}ms cubic-bezier(0.4, 0, 1, 1)`
             : isTop && isDragging
               ? "none"
-            : restoring
-              // slower, no bounce: use a smooth ease
-              ? `transform 1.2s cubic-bezier(0.4,0,0.2,1) ${delay}ms, opacity 1.2s cubic-bezier(0.4,0,0.2,1) ${delay}ms`
             : undefined;
+
           return (
             <div
               key={cardIndex}
@@ -190,7 +173,6 @@ export default function ScatteredCardStack({
               onPointerCancel={isTop ? handlePointerEnd : undefined}
               style={{
                 transform,
-                opacity: restoring ? 0 : 1,
                 transition,
                 zIndex: isFlicking ? total + 1 : total - position,
               } as CSSProperties}

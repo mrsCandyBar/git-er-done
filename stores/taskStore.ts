@@ -112,7 +112,7 @@ export const taskStore = {
 
 	listTasks(query: TaskListQuery = {}, config: TaskStoreConfig = {}) {
 		if (SHOULD_USE_DUMMY_DATA) {
-			let tasks = [...dummyTasks];
+			let tasks = [...dummyTasks, ...dummyTasks, ...dummyTasks, ...dummyTasks, ...dummyTasks];
 
 			if (query.category) {
 				tasks = tasks.filter((task) => task.category === query.category);
