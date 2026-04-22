@@ -23,19 +23,23 @@ DONE:
 - achievements multiple-tasks 04/15
 - add page flow to slow introduce the user to the states of how everything fits together 04/16
 - add stores and state and dummy data 04/16
-
-TODO:
-
-- recurring task page
+- recurring task page 04/21
   - This page should pull all tasks with the selected recurring ID, it'll show the recurring title, description and the completed quotes, moods and dates that those tasks were completed. 
   - It should summarise with an overall mood for this task, how often it is completed, it should show a basic timeline from when the user started the initial task until the last completed task in a timeline fashion with the mood emojis.
-  - it should then end off with the latest task to start being available for the user to start if they want to, or to cancel if they wish to.
+  - it should then end off with the latest task to start being available for the user to start if they want to, or to cancel if they wish to. 04/21
+- payment/account page 04/22
 
-- payment page
+TODO:
+- profile page
+- recurring task page polish and timeline
 - achievements over given time frame
 - achievements page overview
 - achievements calendar
 - set achievement notification settings
+
+MUCH LATER:
+- BucketList
+
 
 
 BE TODOS:

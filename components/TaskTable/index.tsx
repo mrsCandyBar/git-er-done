@@ -3,6 +3,7 @@ import styles from "./TaskTable.module.scss";
 export type TaskTableItem = {
   id?: string;
   label: string;
+  description?: string;
   checked?: boolean;
 };
 
@@ -56,7 +57,7 @@ export default function TaskTable({
 
           return (
             <tr key={task.id ?? `${task.label}-${taskIndex}`} id={task.id} className={rowClassName}>
-              <td className={styles.nameCell}>{task.label}</td>
+              <td className={styles.nameCell}>{task.label}<br/><small>{task.description}</small></td>
               <td className={styles.statusCell}>
                 {showCheckbox && onToggleTask ? (
                   <label className={styles.statusLabel}>
