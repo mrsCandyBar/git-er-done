@@ -23,7 +23,7 @@ export default function TasksPage() {
         if (!isMounted) { return; }
 
         const hasTasks = tasks && (tasks.length > 0);
-        const dynamicCards = hasTasks ? createStackCards(tasks) : createStackCards(taskCardPayloads);
+        const dynamicCards = hasTasks ? createStackCards(tasks, getPropFromUrl("status")) : createStackCards(taskCardPayloads, getPropFromUrl("status"));
         setCards(dynamicCards);
 
       } catch {

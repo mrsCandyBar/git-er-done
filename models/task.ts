@@ -20,11 +20,11 @@ export type TaskCard = {
 
 // Helper to convert TaskCard payloads to CardStackItem format
 
-export function createStackCards(cards: { title: string; description: string; id: string }[]): CardStackItem[] {
+export function createStackCards(cards: { title: string; description: string; id: string }[], status?: string): CardStackItem[] {
   return cards.map((card) => ({
     title: card.title,
     description: card.description,
-    ctaLabel: "Start! 🚀",
+    ctaLabel: status ? (status === "complete" ? "Open 📑" : "Continue 🔖") : "Start! 🚀",
     ctaHref: `/tasks/task?id=${card.id}`,
   }));
 }
@@ -35,6 +35,8 @@ export function createRecurStackCards(cards: { title: string; description: strin
     description: card.description,
     ctaLabel: "Show History 🚀",
     ctaHref: `/tasks/recur/task?id=${card.id}`,
+    cta2Label: "Start! 🚀",
+    cta2Href: `/tasks/task?id=${card.id}`,
   }));
 }
 

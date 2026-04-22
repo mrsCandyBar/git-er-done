@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from "react";
-import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
+import type { CSSProperties, ReactNode, PointerEvent as ReactPointerEvent } from "react";
 import Card from "../Card";
 import Button from "../Button";
 import Text from "../Text";
@@ -14,6 +14,8 @@ export type CardStackItem = {
   imageDescription?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  cta2Label?: string;
+  cta2Href?: string;
 };
 
 type ScatteredCardStackProps = {

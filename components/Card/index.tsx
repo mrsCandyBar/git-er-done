@@ -22,6 +22,10 @@ type CardProps = {
   ctaLabel?: string;
   ctaHref?: string;
   onCtaClick?: MouseEventHandler<HTMLButtonElement>;
+
+  cta2Label?: string;
+  cta2Href?: string;
+  onCta2Click?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
 };
 
@@ -42,6 +46,9 @@ export default function Card({
   ctaLabel,
   ctaHref,
   onCtaClick,
+  cta2Label,
+  cta2Href,
+  onCta2Click,
   className = "",
 }: CardProps) {
   const cardClassName = `${styles.card} ${fullWidth ? styles.fullWidth : ""} ${bare ? styles.bare : ""} ${className}`.trim();
@@ -99,19 +106,34 @@ export default function Card({
       {actions ? (
         <div className={styles.actions}>{actions}</div>
       ) : (
-        ctaLabel && (
-          <div className={styles.actions}>
-            {ctaHref ? (
-              <Button href={ctaHref} variant="filled">
-                {ctaLabel}
-              </Button>
-            ) : (
-              <Button type="button" variant="filled" onClick={onCtaClick}>
-                {ctaLabel}
-              </Button>
-            )}
-          </div>
-        )
+        <>
+          {ctaLabel && (
+            <div className={styles.actions}>
+              {ctaHref ? (
+                <Button href={ctaHref} variant="filled">
+                  {ctaLabel}
+                </Button>
+              ) : (
+                <Button type="button" variant="filled" onClick={onCtaClick}>
+                  {ctaLabel}
+                </Button>
+              )}
+            </div>
+          )}
+          {cta2Label && (
+            <div className={styles.actions}>
+              {cta2Href ? (
+                <Button href={cta2Href} variant="filled">
+                  {cta2Label}
+                </Button>
+              ) : (
+                <Button type="button" variant="filled" onClick={onCta2Click}>
+                  {cta2Label}
+                </Button>
+              )}
+            </div>
+          )}
+        </>
       )}
     </article>
   );
