@@ -28,9 +28,11 @@ DONE:
   - It should summarise with an overall mood for this task, how often it is completed, it should show a basic timeline from when the user started the initial task until the last completed task in a timeline fashion with the mood emojis.
   - it should then end off with the latest task to start being available for the user to start if they want to, or to cancel if they wish to. 04/21
 - payment/account page 04/22
-- add mood to completed task object 04/24
-- change recur to being an objectID to a new collection called recur 04/24
-- add a new collection called recur with basic CRUD updates 04/24
+- [BE] add mood to completed task object 04/24
+- [BE] change recur to being an objectID to a new collection called recur 04/24
+- [BE] add a new collection called recur with basic CRUD updates 04/24
+- [BE] add statuses : friend, friend-new, friend-dear, friend-close (better than user), confidant (paid user) 04/24
+- [BE] add a new collection called achievements with basic CRUD updates 04/24
 
 TODO:
 - profile page
@@ -44,4 +46,4 @@ MUCH LATER:
 - BucketList
 
 BE TODOS:
-- add statuses : friend, friend-new, friend-dear, friend-old (better than user), confidant (paid user)
+- achievement notification settings (Progress Update Push)
