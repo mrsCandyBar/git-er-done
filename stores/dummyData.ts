@@ -55,3 +55,98 @@ export const dummyCurrentUser: UserProfile = {
     quest: ["9"],
   },
 };
+
+let dummySelectedUser: UserProfile | null = null;
+let dummySelectedTask: TaskRecord | null = null;
+let dummyTaskListCache: TaskRecord[] = [];
+
+export function returnDummyData(method: string, path: string, body?: any) {
+  if (method === "GET") {
+    if (path.includes("/api/users/get/")) {
+      dummySelectedUser = dummyCurrentUser;
+      return dummySelectedUser;
+
+    } else if (path.includes("/api/tasks/getAll")) {
+      dummyTaskListCache = dummyTasks
+      return dummyTaskListCache;
+
+    } else if (path.includes("/api/tasks/")) {
+      const taskId = path.split("/").pop();
+      const foundTask = dummyTasks.find((entry) => entry.id === taskId);
+      if (!foundTask) { throw new Error(`Task ${taskId} not found`); }
+      dummySelectedTask = foundTask;
+      return dummySelectedTask;
+    }
+  }
+
+  else if (method === "POST") {
+    if (path.includes("/api/users/login/google")) {
+      dummySelectedUser = dummyCurrentUser;
+      return dummySelectedUser;
+
+    } else if (path.includes("/api/tasks")) {
+      dummyTaskListCache = [...body as unknown as TaskRecord[], ...dummyTasks];
+      return dummyTaskListCache;
+    }
+  }
+
+  else if (method === "PUT") {
+    if (path.includes("/api/users/me") || path.includes("/api/users/updateStatus/")) {
+      dummySelectedUser = dummySelectedUser ?  {
+				...dummySelectedUser,
+				...body,
+			} : {
+        ...dummyCurrentUser,
+        ...body,
+      }
+      return dummySelectedUser;
+
+    } else if (path.includes("/api/tasks/start/")) {
+      dummySelectedTask = dummySelectedTask ? {
+				...dummySelectedTask,
+				status: "busy"
+			} : {
+        ...dummyTasks[0],
+        status: "busy"
+      };
+
+      return dummySelectedTask;
+      
+    } else if (path.includes("/api/tasks/pause/")) {
+      dummySelectedTask = dummySelectedTask ? {
+				...dummySelectedTask,
+				status: "waiting"
+			} : {
+        ...dummyTasks[0],
+        status: "waiting"
+      };
+
+      return dummySelectedTask;
+      
+    } else if (path.includes("/api/tasks/")) {
+      dummySelectedTask = dummySelectedTask ? {
+				...dummySelectedTask,
+				...body
+			} : {
+        ...dummyTasks[0],
+        ...body
+      };
+
+      return dummySelectedTask;
+
+    } else if (path.includes("/complete")) {
+      if (body) {
+        dummySelectedTask = dummySelectedTask ? {
+          ...dummySelectedTask,
+          status: "complete",
+          completed: { ...body },
+        } : {
+          ...dummyTasks[0],
+          status: "complete",
+          completed: { ...body },
+        };
+        return dummySelectedTask;
+      }
+    }
+  }
+};

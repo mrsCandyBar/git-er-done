@@ -1,6 +1,4 @@
-import { UserProfile } from "@/models/userProfile";
-import { dummyCurrentUser, dummyTasks } from "./dummyData";
-import { CompleteTaskPayload, TaskRecord } from "./taskStore";
+import { returnDummyData } from "./dummyData";
 
 type QueryPrimitive = string | number | boolean | null | undefined;
 type QueryValue = QueryPrimitive | QueryPrimitive[];
@@ -96,52 +94,28 @@ async function request<TResponse>(
   if (!response.ok) {
     throw new HttpError(`Request failed with status ${response.status}`, response.status, payload);
   }
-
   return payload as TResponse;
 }
 
 export function httpGet<TResponse>(path: string, config: RequestConfig = {}) {
+  console.log(`HTTP GET: ${path} with config:`, config);
+
   if (SHOULD_USE_DUMMY_DATA) {
-    if (path.includes("/api/users/get/")) {
-      dummySelectedUser = dummyCurrentUser;
-      return <TResponse>dummySelectedUser;
-
-    } else if (path.includes("/api/tasks/getAll")) {
-      dummyTaskListCache = dummyTasks
-      return <TResponse>dummyTaskListCache;
-
-    } else if (path.includes("/api/tasks/")) {
-      const taskId = path.split("/").pop();
-      const foundTask = dummyTasks.find((entry) => entry.id === taskId);
-			if (!foundTask) { throw new Error(`Task ${taskId} not found`); }
-      dummySelectedTask = foundTask;
-      return <TResponse>dummySelectedTask;
-    }
-    
+    return <TResponse>returnDummyData("GET", path);
   } else {
     return request<TResponse>("GET", path, config);
   }
 }
-
-let dummySelectedUser: UserProfile | null = null;
-let dummySelectedTask: TaskRecord | null = null;
-let dummyTaskListCache: TaskRecord[] = [];
 
 export function httpPost<TResponse, TBody = unknown>(
   path: string,
   body: TBody,
   config: RequestConfig = {}
 ) {
-  if (SHOULD_USE_DUMMY_DATA) {
-    if (path.includes("/api/users/login/google")) {
-      dummySelectedUser = dummyCurrentUser;
-      return <TResponse>dummySelectedUser;
+  console.log(`HTTP POST: ${path} with config:`, body, config);
 
-    } else if (path.includes("/api/tasks")) {
-      dummyTaskListCache = [...body as unknown as TaskRecord[], ...dummyTasks];
-      return <TResponse>dummyTaskListCache;
-    }
-    
+  if (SHOULD_USE_DUMMY_DATA) {
+    return <TResponse>returnDummyData("POST", path, body);
   } else {
     return request<TResponse>("POST", path, { ...config, body });
   }
@@ -152,66 +126,10 @@ export function httpPut<TResponse, TBody = unknown>(
   body: TBody,
   config: RequestConfig = {}
 ) {
+  console.log(`HTTP PUT: ${path} with config:`, body, config);
 
   if (SHOULD_USE_DUMMY_DATA) {
-    if (path.includes("/api/users/me") || path.includes("/api/users/updateStatus/")) {
-      dummySelectedUser = dummySelectedUser ?  {
-				...dummySelectedUser,
-				...body,
-			} : {
-        ...dummyCurrentUser,
-        ...body,
-      }
-      return <TResponse>dummySelectedUser;
-
-    } else if (path.includes("/api/tasks/start/")) {
-      dummySelectedTask = dummySelectedTask ? {
-				...dummySelectedTask,
-				status: "busy"
-			} : {
-        ...dummyTasks[0],
-        status: "busy"
-      };
-
-      return <TResponse>dummySelectedTask;
-      
-    } else if (path.includes("/api/tasks/pause/")) {
-      dummySelectedTask = dummySelectedTask ? {
-				...dummySelectedTask,
-				status: "waiting"
-			} : {
-        ...dummyTasks[0],
-        status: "waiting"
-      };
-
-      return <TResponse>dummySelectedTask;
-      
-    } else if (path.includes("/api/tasks/")) {
-      dummySelectedTask = dummySelectedTask ? {
-				...dummySelectedTask,
-				...body
-			} : {
-        ...dummyTasks[0],
-        ...body
-      };
-
-      return <TResponse>dummySelectedTask;
-
-    } else if (path.includes("/complete")) {
-      if (body) {
-        dummySelectedTask = dummySelectedTask ? {
-          ...dummySelectedTask,
-          status: "complete",
-          completed: { ...body },
-        } : {
-          ...dummyTasks[0],
-          status: "complete",
-          completed: { ...body },
-        };
-        return <TResponse>dummySelectedTask;
-      }
-    }
-
+    return <TResponse>returnDummyData("PUT", path, body);
   } else {
     return request<TResponse>("PUT", path, { ...config, body });
   }
