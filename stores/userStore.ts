@@ -1,4 +1,4 @@
-import type { UserProfile } from "../models/userProfile";
+import type { UserProfile, UserStatusType } from "../models/userProfile";
 import { defaultUserProfile } from "../models/userProfile";
 import { httpGet, httpPost, httpPut, type RequestConfig } from "./httpClient";
 
@@ -101,6 +101,22 @@ export const userStore = {
 		}
 
 		const user = await httpPut<UserProfile, UpdateUserPayload>("/api/users/me", payload, config);
+		setSelectedUserState(user, "me");
+		return user;
+	},
+
+	async updateStatus(status: UserStatusType, config: UserStoreConfig = {}) {
+		if (SHOULD_USE_DUMMY_DATA) {
+			dummyCurrentUser = {
+				...dummyCurrentUser,
+				status: status,
+			};
+			setSelectedUserState(dummyCurrentUser, "me");
+			return dummyCurrentUser;
+		}
+
+		
+		const user:UserProfile = await httpPut<UserProfile, UpdateUserPayload>("/api/users/updateStatus/" + selectedUser?.id, { status }, config);
 		setSelectedUserState(user, "me");
 		return user;
 	},

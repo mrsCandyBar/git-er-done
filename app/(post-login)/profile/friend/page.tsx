@@ -122,7 +122,6 @@ export default function Profile() {
     const nextProfile: UserProfile = {
       ...currentUserProfile,
       status: "friend_new",
-      updatedDate: new Date().toISOString().slice(0, 10),
       about: about || currentUserProfile.about,
       inspirations: inspiration
         ? [{ inspiration, reason, url }]
@@ -137,34 +136,20 @@ export default function Profile() {
         status: nextProfile.status,
         about: nextProfile.about,
         inspirations: nextProfile.inspirations,
+      }).then((update) => {
+        setCurrentUserProfile(update);
       });
-      userStore.setSelectedUser(nextProfile, "me");
     } catch {
       // Keep local optimistic state for responsiveness if network update fails.
     }
   };
 
   const handleAcceptGift = async () => {
-    const nextProfile: UserProfile = {
-      ...currentUserProfile,
-      status: "friend_close",
-      updatedDate: new Date().toISOString().slice(0, 10),
-    };
-
-    setCurrentUserProfile(nextProfile);
-
     try {
-      await userStore.updateCurrentProfile({
-        status: "friend_close",
-        updatedDate: nextProfile.updatedDate,
-      });
-      userStore.setSelectedUser(nextProfile, "me");
+      const userUpdate = await userStore.updateStatus("friend_close");
+      setCurrentUserProfile(userUpdate);
     } catch {
-      setCurrentUserProfile((prev) => ({
-      ...prev,
-      status: "friend",
-      updatedDate: nextProfile.updatedDate,
-    }));
+      alert("Sorry, something went wrong accepting the gift. Please try again.");
     }
   };
 

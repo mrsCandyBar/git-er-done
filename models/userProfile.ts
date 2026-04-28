@@ -16,12 +16,18 @@ export type UserAchievement = {
 };
 
 export type UserProfile = {
+  id?: string;
   status: UserStatusType;
   name: string;
   profilePicture: string;
-  dob: string;
+  dob?: string;
   about: string;
-  progressUpdatePush: boolean;
+  progressUpdatePush?: {
+    schedule?: "daily" | "weekly" | "monthly";
+    lastUpdatedDate?: string;
+    lastUpdateSent?: string;
+    updatedDate?: string;
+  };
   startedDate: string;
   updatedDate: string;
   lastLoginDate: string;
@@ -38,7 +44,12 @@ export const defaultUserProfile: UserProfile = {
   profilePicture: "https://lh3.googleusercontent.com/a/ACg8ocKkfePBiQdfVEcR5NV5NfNhOAEx91qvQtyibO0NITg6-yc-4LPR=s96-c",
   dob: "1987-07-04",
   about: "Curious, reflective, and always chasing wonder.",
-  progressUpdatePush: true,
+  progressUpdatePush: {
+    schedule: "monthly",
+    lastUpdateSent: "2026-10-03T22:00:00.000+00:00",
+    lastUpdatedDate: "2026-10-03T22:00:00.000+00:00",
+    updatedDate: "2026-10-03T22:00:00.000+00:00"
+  },
   startedDate: "2026-04-14",
   updatedDate: "2026-04-14",
   lastLoginDate: "2026-04-14",
@@ -64,19 +75,4 @@ export const defaultUserProfile: UserProfile = {
     fun: ["6","7","8"],
     quest: ["9"],
   },
-  /*achievements: [
-    {
-      completed: {
-        new: [],
-        fun: [],
-        quest: ["9","7"],
-      },
-      recognized: ["11","12"],
-    },
-  ],
-  aspirations: {
-    new: [],
-    fun: [],
-    quest: ["9"],
-  }*/
 };

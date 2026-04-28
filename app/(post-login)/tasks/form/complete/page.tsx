@@ -57,14 +57,9 @@ function CompleteTaskPageContent() {
       if (profile.status === "friend_new") {
         const completeCount = countCompletedTasks(profile);
         if (completeCount >= 4) {
-          const updatedProfile = {
-            status: "friend_dear" as const,
-            updatedDate: new Date().toISOString().slice(0, 10),
-          };
-
-          await userStore.updateCurrentProfile(updatedProfile);
-          userStore.setSelectedUser({ ...profile, ...updatedProfile }, "me");
-          shouldRedirectToProfile = true;
+          await userStore.updateStatus("friend_dear").then(() => {
+            shouldRedirectToProfile = true;
+          });
         }
       }
 

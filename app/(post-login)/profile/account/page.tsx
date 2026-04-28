@@ -47,31 +47,6 @@ export default function Account() {
     }
   }, [currentUserProfile.status, isHydrated, router]);
 
-
-  /*const handleAcceptGift = async () => {
-    const nextProfile: UserProfile = {
-      ...currentUserProfile,
-      status: "friend_close",
-      updatedDate: new Date().toISOString().slice(0, 10),
-    };
-
-    setCurrentUserProfile(nextProfile);
-
-    try {
-      await userStore.updateCurrentProfile({
-        status: "friend_close",
-        updatedDate: nextProfile.updatedDate,
-      });
-      userStore.setSelectedUser(nextProfile, "me");
-    } catch {
-      setCurrentUserProfile((prev) => ({
-      ...prev,
-      status: "friend",
-      updatedDate: nextProfile.updatedDate,
-    }));
-    }
-  };*/
-
   const fantasyQuestTasks = [
     { label: "Realistic Questing", description: "You've done these already, no limits this time", checked: true },
     { label: "Personalised Dashboard", description: "Your completed quests feed YOUR progress", checked: true },
