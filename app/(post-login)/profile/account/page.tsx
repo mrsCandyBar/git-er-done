@@ -3,14 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, TaskTable, Text } from "@/components/index";
-import { defaultUserProfile } from "../../../../models/userProfile";
 import type { UserProfile } from "../../../../models/userProfile";
 import { userStore } from "../../../../stores";
 import styles from "./page.module.scss";
 
 export default function Account() {
   const router = useRouter();
-  const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>(defaultUserProfile);
+  const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>();
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -21,11 +20,12 @@ export default function Account() {
           userStore.getCurrentProfile(),
         ]);
 
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) { return; }
+        setCurrentUserProfile(profile);
+
       } catch {
         if (isMounted) {
+          setCurrentUserProfile(undefined);
         }
       } finally {
         if (isMounted) {
@@ -45,7 +45,7 @@ export default function Account() {
     if (!isHydrated) {
       return;
     }
-  }, [currentUserProfile.status, isHydrated, router]);
+  }, [currentUserProfile?.status, isHydrated, router]);
 
   const fantasyQuestTasks = [
     { label: "Realistic Questing", description: "You've done these already, no limits this time", checked: true },

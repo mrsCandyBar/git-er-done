@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import { Card, Text } from "@/components/index";
 import MultiTaskCompletionInsights from "./achievement/multiTaskCompletion";
 import { closeProfileActionContent } from "../../../models/actionContent";
-import { defaultUserProfile } from "../../../models/userProfile";
 import type { UserProfile } from "../../../models/userProfile";
 import { userStore } from "../../../stores";
 import styles from "./page.module.scss";
 
 export default function Profile() {
   const router = useRouter();
-  const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>(defaultUserProfile);
+  const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>();
   const [isHydrated, setIsHydrated] = useState(false);
   const card = closeProfileActionContent;
 
@@ -27,7 +26,7 @@ export default function Profile() {
         }
       } catch {
         if (isMounted) {
-          setCurrentUserProfile(defaultUserProfile);
+          setCurrentUserProfile(undefined);
         }
       } finally {
         if (isMounted) {
@@ -48,15 +47,16 @@ export default function Profile() {
       return;
     }
 
-    if (currentUserProfile.status !== "friend_close") {
+    if (currentUserProfile?.status !== "friend_close") {
       router.replace("/profile/friend");
     }
-  }, [currentUserProfile.status, isHydrated, router]);
+    
+  }, [currentUserProfile?.status, isHydrated, router]);
 
   return (
     <div className={styles.page}>
       <section className={styles.cards}>
-        {currentUserProfile.status === "friend_close" && (
+        {currentUserProfile?.status === "friend_close" && (
           <Card
             eyebrow={<Text as="h4">{card.eyebrow()}</Text>}
             icon={card.profileImage(currentUserProfile.profilePicture)}

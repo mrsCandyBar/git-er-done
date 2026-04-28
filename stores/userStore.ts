@@ -1,5 +1,4 @@
 import type { UserProfile, UserStatusType } from "../models/userProfile";
-import { defaultUserProfile } from "../models/userProfile";
 import { httpGet, httpPost, httpPut, type RequestConfig } from "./httpClient";
 
 export type CreateUserPayload = Omit<UserProfile, "updatedDate" | "lastLoginDate">;
@@ -8,16 +7,13 @@ type UserStoreConfig = Omit<RequestConfig, "query">;
 type SelectedFetchOptions = { forceRefresh?: boolean; };
 
 let selectedUser: UserProfile | null = null;
-let selectedUserKey: string | null = null;
 let selectedUserNeedsRefresh = false;
 
-const SHOULD_USE_DUMMY_DATA = process.env.NEXT_PUBLIC_USE_DUMMY_DATA === "true";
-let dummyCurrentUser: UserProfile = { ...defaultUserProfile };
-
-function setSelectedUserState(user: UserProfile, key: string) {
-	selectedUser = user;
-	selectedUserKey = key;
-	selectedUserNeedsRefresh = false;
+function setSelectedUserState(user?: UserProfile) {
+	if (user) {
+		selectedUser = user;
+		selectedUserNeedsRefresh = false;
+	}
 }
 
 export const userStore = {
@@ -30,11 +26,10 @@ export const userStore = {
 
 	getSelectedUser() { return selectedUser; },
 
-	setSelectedUser(user: UserProfile, key = "me") { setSelectedUserState(user, key);},
+	setSelectedUser(user: UserProfile) { setSelectedUserState(user);},
 
 	clearSelectedUser() {
 		selectedUser = null;
-		selectedUserKey = null;
 		selectedUserNeedsRefresh = false;
 	},
 
@@ -47,19 +42,12 @@ export const userStore = {
 
 	async getCurrentProfile(config: UserStoreConfig = {}, options: SelectedFetchOptions = {}) {
 		const { forceRefresh = false } = options;
-		if (selectedUser && selectedUserKey === "me" && !selectedUserNeedsRefresh && !forceRefresh) {
-			return selectedUser;
-		}
-
-		if (SHOULD_USE_DUMMY_DATA) {
-			const user = dummyCurrentUser;
-			setSelectedUserState(user, "me");
+		if (selectedUser) {
+			if (selectedUser && !selectedUserNeedsRefresh && !forceRefresh) { return selectedUser; }
+			const user = await httpGet<UserProfile>("/api/users/get/" + selectedUser.id, config);
+			setSelectedUserState(user);
 			return user;
-		}
-
-		const user = await httpGet<UserProfile>("/api/users/me", config);
-		setSelectedUserState(user, "me");
-		return user;
+		} 
 	},
 
 
@@ -67,17 +55,9 @@ export const userStore = {
 	// in a real app these would likely involve more complex auth flows and token management
 
 	async loginWithGoogle(credential: string, config: UserStoreConfig = {}) {
-		if (SHOULD_USE_DUMMY_DATA) {
-			setSelectedUserState(dummyCurrentUser, "me");
-			return dummyCurrentUser;
-		}
-
-		const user = await httpPost<UserProfile, { credential: string }>(
-			"/api/users/login/google",
-			{ credential },
-			config
-		);
-		setSelectedUserState(user, "me");
+		const user = await httpPost<UserProfile, { credential: string }>("/api/users/login/google", { credential }, config);
+		console.log("Logged in user:", user);
+		setSelectedUserState(user);
 		return user;
 	},
 
@@ -91,33 +71,18 @@ export const userStore = {
 	// This method will be used to update the user's status or other profile information.
 
 	async updateCurrentProfile(payload?: any, config: UserStoreConfig = {}) {
-		if (SHOULD_USE_DUMMY_DATA) {
-			dummyCurrentUser = {
-				...dummyCurrentUser,
-				...payload,
-			};
-			setSelectedUserState(dummyCurrentUser, "me");
-			return dummyCurrentUser;
-		}
-
-		const user = await httpPut<UserProfile, UpdateUserPayload>("/api/users/me", payload, config);
-		setSelectedUserState(user, "me");
+		const user = await httpPut<UserProfile, UserProfile>("/api/users/me", payload, config);
+		setSelectedUserState(user);
 		return user;
 	},
 
 	async updateStatus(status: UserStatusType, config: UserStoreConfig = {}) {
-		if (SHOULD_USE_DUMMY_DATA) {
-			dummyCurrentUser = {
-				...dummyCurrentUser,
-				status: status,
-			};
-			setSelectedUserState(dummyCurrentUser, "me");
-			return dummyCurrentUser;
-		}
-
-		
-		const user:UserProfile = await httpPut<UserProfile, UpdateUserPayload>("/api/users/updateStatus/" + selectedUser?.id, { status }, config);
-		setSelectedUserState(user, "me");
+		const user = await httpPut<UserProfile, { status: UserStatusType }>(
+			"/api/users/updateStatus/" + selectedUser?.id, 
+			{ status }, 
+			config
+		);
+		setSelectedUserState(user);
 		return user;
 	},
 };

@@ -1,5 +1,8 @@
-type QueryPrimitive = string | number | boolean | null | undefined;
+import { UserProfile } from "@/models/userProfile";
+import { dummyCurrentUser, dummyTasks } from "./dummyData";
+import { CompleteTaskPayload, TaskRecord } from "./taskStore";
 
+type QueryPrimitive = string | number | boolean | null | undefined;
 type QueryValue = QueryPrimitive | QueryPrimitive[];
 
 export type QueryParams = Record<string, QueryValue>;
@@ -23,6 +26,7 @@ export class HttpError extends Error {
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "";
+const SHOULD_USE_DUMMY_DATA = process.env.NEXT_PUBLIC_USE_DUMMY_DATA === "true";
 
 function joinUrl(path: string): string {
   if (/^https?:\/\//i.test(path)) {
@@ -76,10 +80,8 @@ async function request<TResponse>(
   config: RequestConfig & { body?: unknown } = {}
 ): Promise<TResponse> {
   const { query, body, headers, signal } = config;
-
   const url = `${joinUrl(path)}${toQueryString(query)}`;
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
-
   const response = await fetch(url, {
     method,
     headers: {
@@ -91,7 +93,6 @@ async function request<TResponse>(
   });
 
   const payload = await parseResponsePayload(response);
-
   if (!response.ok) {
     throw new HttpError(`Request failed with status ${response.status}`, response.status, payload);
   }
@@ -100,15 +101,50 @@ async function request<TResponse>(
 }
 
 export function httpGet<TResponse>(path: string, config: RequestConfig = {}) {
-  return request<TResponse>("GET", path, config);
+  if (SHOULD_USE_DUMMY_DATA) {
+    if (path.includes("/api/users/get/")) {
+      dummySelectedUser = dummyCurrentUser;
+      return <TResponse>dummySelectedUser;
+
+    } else if (path.includes("/api/tasks/getAll")) {
+      dummyTaskListCache = dummyTasks
+      return <TResponse>dummyTaskListCache;
+
+    } else if (path.includes("/api/tasks/")) {
+      const taskId = path.split("/").pop();
+      const foundTask = dummyTasks.find((entry) => entry.id === taskId);
+			if (!foundTask) { throw new Error(`Task ${taskId} not found`); }
+      dummySelectedTask = foundTask;
+      return <TResponse>dummySelectedTask;
+    }
+    
+  } else {
+    return request<TResponse>("GET", path, config);
+  }
 }
+
+let dummySelectedUser: UserProfile | null = null;
+let dummySelectedTask: TaskRecord | null = null;
+let dummyTaskListCache: TaskRecord[] = [];
 
 export function httpPost<TResponse, TBody = unknown>(
   path: string,
   body: TBody,
   config: RequestConfig = {}
 ) {
-  return request<TResponse>("POST", path, { ...config, body });
+  if (SHOULD_USE_DUMMY_DATA) {
+    if (path.includes("/api/users/login/google")) {
+      dummySelectedUser = dummyCurrentUser;
+      return <TResponse>dummySelectedUser;
+
+    } else if (path.includes("/api/tasks")) {
+      dummyTaskListCache = [...body as unknown as TaskRecord[], ...dummyTasks];
+      return <TResponse>dummyTaskListCache;
+    }
+    
+  } else {
+    return request<TResponse>("POST", path, { ...config, body });
+  }
 }
 
 export function httpPut<TResponse, TBody = unknown>(
@@ -116,5 +152,67 @@ export function httpPut<TResponse, TBody = unknown>(
   body: TBody,
   config: RequestConfig = {}
 ) {
-  return request<TResponse>("PUT", path, { ...config, body });
+
+  if (SHOULD_USE_DUMMY_DATA) {
+    if (path.includes("/api/users/me") || path.includes("/api/users/updateStatus/")) {
+      dummySelectedUser = dummySelectedUser ?  {
+				...dummySelectedUser,
+				...body,
+			} : {
+        ...dummyCurrentUser,
+        ...body,
+      }
+      return <TResponse>dummySelectedUser;
+
+    } else if (path.includes("/api/tasks/start/")) {
+      dummySelectedTask = dummySelectedTask ? {
+				...dummySelectedTask,
+				status: "busy"
+			} : {
+        ...dummyTasks[0],
+        status: "busy"
+      };
+
+      return <TResponse>dummySelectedTask;
+      
+    } else if (path.includes("/api/tasks/pause/")) {
+      dummySelectedTask = dummySelectedTask ? {
+				...dummySelectedTask,
+				status: "waiting"
+			} : {
+        ...dummyTasks[0],
+        status: "waiting"
+      };
+
+      return <TResponse>dummySelectedTask;
+      
+    } else if (path.includes("/api/tasks/")) {
+      dummySelectedTask = dummySelectedTask ? {
+				...dummySelectedTask,
+				...body
+			} : {
+        ...dummyTasks[0],
+        ...body
+      };
+
+      return <TResponse>dummySelectedTask;
+
+    } else if (path.includes("/complete")) {
+      if (body) {
+        dummySelectedTask = dummySelectedTask ? {
+          ...dummySelectedTask,
+          status: "complete",
+          completed: { ...body },
+        } : {
+          ...dummyTasks[0],
+          status: "complete",
+          completed: { ...body },
+        };
+        return <TResponse>dummySelectedTask;
+      }
+    }
+
+  } else {
+    return request<TResponse>("PUT", path, { ...config, body });
+  }
 }

@@ -6,10 +6,10 @@ import UpdateProfile from "../form/update";
 import SingleTaskCompletionInsights from "../achievement/singleTaskCompletion";
 import { FriendDearView, FriendNewView, FriendView } from "./status-views";
 import { friendStatusActionContent } from "../../../../models/actionContent";
-import { defaultUserProfile } from "../../../../models/userProfile";
 import type { UserProfile } from "../../../../models/userProfile";
 import { taskStore, userStore } from "../../../../stores";
 import styles from "./page.module.scss";
+import { TaskRecord } from "@/stores/taskStore";
 
 type SingleCompletedTask = Parameters<typeof SingleTaskCompletionInsights>[0]["task"];
 
@@ -31,17 +31,17 @@ function toDisplayDate(value?: string) {
 export default function Profile() {
   const router = useRouter();
   const [isUpdateProfileOpen, setIsUpdateProfileOpen] = useState(false);
-  const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>(defaultUserProfile);
+  const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile>();
   const [singleCompletedTask, setSingleCompletedTask] = useState<SingleCompletedTask | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
-  const card = friendStatusActionContent[currentUserProfile.status];
-  const completedTasksCount = currentUserProfile.achievements.reduce(
+  const card = currentUserProfile ? friendStatusActionContent[currentUserProfile.status] : undefined;
+  const completedTasksCount = currentUserProfile ? currentUserProfile?.achievements.reduce(
     (acc, entry) => {
       const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.quest.length;
       return acc + completedCount;
     },
     0
-  );
+  ) : 0;
   const hasCompletedTask = completedTasksCount > 0;
 
   useEffect(() => {
@@ -59,8 +59,12 @@ export default function Profile() {
         }
 
         setCurrentUserProfile(profile);
+        if (!completedTasks || completedTasks.length === 0) {
+          setSingleCompletedTask(null);
+          return;
+        }
 
-        const latestTask = completedTasks[0];
+        const latestTask:TaskRecord = completedTasks[0];
         if (!latestTask) {
           setSingleCompletedTask(null);
           return;
@@ -86,7 +90,7 @@ export default function Profile() {
 
       } catch {
         if (isMounted) {
-          setCurrentUserProfile(defaultUserProfile);
+          setCurrentUserProfile(undefined);
           setSingleCompletedTask(null);
         }
       } finally {
@@ -108,10 +112,10 @@ export default function Profile() {
       return;
     }
 
-    if (currentUserProfile.status === "friend_close") {
+    if (currentUserProfile?.status === "friend_close") {
       router.replace("/profile");
     }
-  }, [currentUserProfile.status, isHydrated, router]);
+  }, [currentUserProfile?.status, isHydrated, router]);
 
   const handleSaveInspiration = async (formData: Record<string, FormDataEntryValue>) => {
     const about = String(formData.about ?? "").trim();
@@ -119,25 +123,24 @@ export default function Profile() {
     const reason = String(formData["inspiration-why"] ?? "").trim();
     const url = String(formData["inspiration-url"] ?? "").trim();
 
-    const nextProfile: UserProfile = {
+    if (!currentUserProfile) {
+      alert("Profile data is not loaded yet. Please try again.");
+      return;
+    }
+
+    const userUpdate: UserProfile = {
       ...currentUserProfile,
       status: "friend_new",
-      about: about || currentUserProfile.about,
+      about: about ? about : currentUserProfile?.about ?? "",
       inspirations: inspiration
         ? [{ inspiration, reason, url }]
-        : currentUserProfile.inspirations,
+        : currentUserProfile?.inspirations ?? [],
     };
 
-    setCurrentUserProfile(nextProfile);
-    setIsUpdateProfileOpen(false);
-
     try {
-      await userStore.updateCurrentProfile({
-        status: nextProfile.status,
-        about: nextProfile.about,
-        inspirations: nextProfile.inspirations,
-      }).then((update) => {
+      await userStore.updateCurrentProfile(userUpdate).then((update) => {
         setCurrentUserProfile(update);
+        setIsUpdateProfileOpen(false);
       });
     } catch {
       // Keep local optimistic state for responsiveness if network update fails.
@@ -154,42 +157,44 @@ export default function Profile() {
   };
 
   return (
-    <div className={styles.page}>
-      <section className={styles.cards}>
-        {currentUserProfile.status === "friend" && (
-          hasCompletedTask && singleCompletedTask
-            ? (
-              <SingleTaskCompletionInsights
-                task={singleCompletedTask}
-                profileName={currentUserProfile.name}
-                profilePicture={currentUserProfile.profilePicture}
-                onOpenUpdateProfile={() => setIsUpdateProfileOpen(true)}
-              />
-            )
-            : <FriendView profileName={currentUserProfile.name} card={card} />
-        )}
+    currentUserProfile ? (
+      <div className={styles.page}>
+        <section className={styles.cards}>
+          {currentUserProfile?.status === "friend" && (
+            hasCompletedTask && singleCompletedTask
+              ? (
+                <SingleTaskCompletionInsights
+                  task={singleCompletedTask}
+                  profileName={currentUserProfile.name}
+                  profilePicture={currentUserProfile.profilePicture}
+                  onOpenUpdateProfile={() => setIsUpdateProfileOpen(true)}
+                />
+              )
+              : card && <FriendView profileName={currentUserProfile.name} card={card} />
+          )}
 
-        {currentUserProfile.status === "friend_new" && (
-          <FriendNewView
-            profileName={currentUserProfile.name}
-            card={card}
-          />
-        )}
+          {currentUserProfile.status === "friend_new" && card && (
+            <FriendNewView
+              profileName={currentUserProfile.name}
+              card={card}
+            />
+          )}
 
-        {currentUserProfile.status === "friend_dear" && (
-          <FriendDearView
-            profileName={currentUserProfile.name}
-            card={card}
-            onAcceptGift={handleAcceptGift}
-          />
-        )}
-      </section>
+          {currentUserProfile.status === "friend_dear" && card && (
+            <FriendDearView
+              profileName={currentUserProfile.name}
+              card={card}
+              onAcceptGift={handleAcceptGift}
+            />
+          )}
+        </section>
 
-      <UpdateProfile
-        isOpen={isUpdateProfileOpen}
-        onClose={() => setIsUpdateProfileOpen(false)}
-        onSaveInspiration={handleSaveInspiration}
-      />
-    </div>
+        <UpdateProfile
+          isOpen={isUpdateProfileOpen}
+          onClose={() => setIsUpdateProfileOpen(false)}
+          onSaveInspiration={handleSaveInspiration}
+        />
+      </div>
+    ) : null
   );
 }
