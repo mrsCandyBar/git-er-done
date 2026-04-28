@@ -11,9 +11,9 @@ export type Column = {
   title: string;
   description: string;
   checklist: Task[];
-  updatedAt?: string;
-  completedAt?: string;
-  finalNote?: string;
+  updatedDate?: string;
+  completedDate?: string;
+  finalNotes?: string;
   mood?: Mood;
   recur?: boolean;
   keepsakeUrl?: string;

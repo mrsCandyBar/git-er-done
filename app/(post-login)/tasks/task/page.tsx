@@ -11,9 +11,11 @@ import { toDetailCard, detailCard, countCompletedTasks, updateTaskModal } from "
 import { getPropFromUrl } from "@/utilities/helper";
 import { taskStore, userStore } from "../../../../stores";
 import styles from "./page.module.scss";
+import { TaskRecord } from "@/stores/taskStore";
 
 export default function Task() {
-  const [selectedTask, setSelectedTask] = useState<detailCard | null>(null);
+  const [selectedTask, setSelectedTask] = useState<TaskRecord | null>(null);
+  const [selectedTaskCard, setSelectedTaskCard] = useState<detailCard | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isTaskNotFound, setIsTaskNotFound] = useState(false);
   const router = useRouter();
@@ -31,7 +33,8 @@ export default function Task() {
     async function loadTasks() {
       try {
         const task = await taskStore.getTaskById(selectedTaskId ?? "", {}, { forceRefresh: true });
-        const foundTask: detailCard | null = task ? toDetailCard(task) : null;
+        const foundTask: TaskRecord | null = task ? task : null;
+        const taskDetailCard = foundTask ? toDetailCard(foundTask) : null;
         if (!foundTask) {
           if (isMounted) {
             setIsTaskNotFound(true);
@@ -40,6 +43,7 @@ export default function Task() {
         }
 
         setSelectedTask(foundTask);
+        setSelectedTaskCard(taskDetailCard);
 
       } catch {
         if (isMounted) {
@@ -55,20 +59,30 @@ export default function Task() {
   
 
   const openTaskModal = (method: string, task: detailCard) => {
-    const { taskPayload, url } = updateTaskModal(method, task);
+    const url = updateTaskModal(method, task);
     router.push(url);
   };
 
-  const updateTask = (selectedTaskId: string, payload: any) => {
-    void taskStore.updateTask(selectedTaskId, payload).then((updatedTask) => {
-      if (updatedTask) {
-        setSelectedTask(toDetailCard(updatedTask));
+  const updateTask = (state: string) => {
+    if (selectedTaskId) {
+      if (state === "start") {
+        void taskStore.startTask(selectedTaskId).then((updatedTask) => {
+        if (updatedTask) {
+          setSelectedTaskCard(toDetailCard(updatedTask));
+        }
+      })
+      } else {
+        void taskStore.pauseTask(selectedTaskId).then((updatedTask) => {
+          if (updatedTask) {
+            setSelectedTaskCard(toDetailCard(updatedTask));
+          }
+        });
       }
-    })
+    }
   };
   
-  const updateTaskToggle = (selectedTask: detailCard, taskGoalIndex: number) => {
-    const updateTaskList = selectedTask.checklist.map(
+  const updateTaskToggle = (selectedTask: TaskRecord, taskGoalIndex: number) => {
+    const updateTaskList = selectedTask.checklist?.map(
       (task, index) => 
         index === taskGoalIndex ? 
           { ...task, checked: !task.checked } 
@@ -77,7 +91,7 @@ export default function Task() {
     void taskStore.updateTask(
       selectedTask.id, { ...selectedTask, checklist: updateTaskList }).then((updatedTask) => {
         if (updatedTask) {
-          setSelectedTask(toDetailCard(updatedTask));
+          setSelectedTaskCard(toDetailCard(updatedTask));
         }
       })
   };
@@ -114,29 +128,29 @@ export default function Task() {
           />
         )}
 
-        {selectedTask && (
+        {selectedTaskCard && (
           <>
-            {selectedTask.status === "waiting" && (
+            {selectedTaskCard.status === "waiting" && (
               <TaskWaitingPage
-                task={selectedTask}
+                task={selectedTaskCard}
+                onStartTask={() => updateTask("start")}
                 onOpenUpdateTask={(task) => openTaskModal("update", task)}
-                onUpdateTask={(task) => updateTask(task.id, { ...task, status: "busy" })}
-                onToggleTask={(taskGoalIndex) => updateTaskToggle(selectedTask, taskGoalIndex)}
+                onToggleTask={(taskGoalIndex) => selectedTask && updateTaskToggle(selectedTask, taskGoalIndex)}
               />
             )}
 
-          {selectedTask.status === "busy" && (
+          {selectedTaskCard.status === "busy" && (
             <TaskBusyPage
-                task={selectedTask}
+                task={selectedTaskCard}
                 onOpenCompleteTask={(task) => openTaskModal("complete", task)}
-                onSetWaiting={(task) => updateTask(task.id, { ...task, status: "waiting" })}
-                onToggleTask={(taskGoalIndex) => updateTaskToggle(selectedTask, taskGoalIndex)}
+                onSetWaiting={() => updateTask("pause")}
+                onToggleTask={(taskGoalIndex) => selectedTask && updateTaskToggle(selectedTask, taskGoalIndex)}
               />
             )}
 
-          {selectedTask.status === "complete" && (
+          {selectedTaskCard.status === "complete" && (
             <TaskCompletePage
-              task={selectedTask}
+              task={selectedTaskCard}
             />
           )}
           </>

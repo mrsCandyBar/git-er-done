@@ -33,8 +33,10 @@ DONE:
 - [BE] add a new collection called recur with basic CRUD updates 04/24
 - [BE] add statuses : friend, friend-new, friend-dear, friend-close (better than user), confidant (paid user) 04/24
 - [BE] add a new collection called achievements with basic CRUD updates 04/24
+- Rewrite store pages for easy updating of payloads and requests 04/28
 
 TODO:
+- Test flow and payloads
 - profile page
 - recurring task page polish and timeline
 - achievements over given time frame

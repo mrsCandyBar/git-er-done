@@ -14,18 +14,17 @@ type SingleCompletedTask = {
   status: "waiting" | "busy" | "complete";
   title: string;
   description: string;
-  checklist: TaskChecklistItem[];
+  checklist?: TaskChecklistItem[];
   category: "new" | "fun" | "quest";
   createdDate: string;
   startedDate: string;
   startedAt?: string;
   updatedDate: string;
-  completed: {
-    completedDate: string;
-    completedAt?: string;
-    mood: TaskMood;
+  completed?: {
+    completedDate?: string;
+    mood?: TaskMood;
     finalNotes?: string;
-    recur: boolean;
+    recur?: boolean;
     keepsakeUrl?: string;
   };
 };
@@ -80,10 +79,10 @@ export default function SingleTaskCompletionInsights({
   children,
 }: SingleTaskCompletionInsightsProps) {
   const card = closeProfileActionContent;
-  const completedChecklistCount = task.checklist.filter((item) => item.checked).length;
+  const completedChecklistCount = task.checklist?.filter((item) => item.checked).length ?? 0;
   const durationLabel = getDurationLabel(
-    task.startedAt ?? task.startedDate,
-    task.completed.completedAt ?? task.completed.completedDate
+    task.startedDate,
+    task.completed?.completedDate
   );
     console.log("task", task);
 
@@ -117,12 +116,12 @@ export default function SingleTaskCompletionInsights({
                   
                   <Text as="h3" align="center" fullWidth>What 🫵 have achieved</Text>
                   <Text as="p" tone="secondary">
-                    You did this on <b>{task.completed.completedDate}</b>{durationLabel ? <> over <b>{durationLabel}</b></> : null}.<br/>
-                    it made you feel <b>{getTaskMoodLabel(task.completed.mood)}</b><br/>
+                    You did this on <b>{task.completed?.completedDate}</b>{durationLabel ? <> over <b>{durationLabel}</b></> : null}.<br/>
+                    it made you feel <b>{task.completed && task.completed.mood && getTaskMoodLabel(task.completed.mood)}</b><br/>
                   </Text>
                   <Badge label="Mood Check" variant="sunshine" />
 
-                  {task.checklist.length > 0 && (
+                  {task.checklist && task.checklist.length > 0 && (
                     <>
                       <Text as="h4">
                         🫵 completed {completedChecklistCount} out of {task.checklist.length} goals
@@ -134,7 +133,7 @@ export default function SingleTaskCompletionInsights({
                   )}
                   
 
-                  {task.completed.finalNotes && (
+                  {task.completed && task.completed.finalNotes && (
                     <>
                       <br/>
                       <Text as="blockquote" tone="quote">
@@ -142,7 +141,7 @@ export default function SingleTaskCompletionInsights({
                       </Text>
                     </>
                   )}
-                  {task.completed.keepsakeUrl && (
+                  {task.completed && task.completed.keepsakeUrl && (
                     <>
                       <Text as="h4">
                         Relive that moment

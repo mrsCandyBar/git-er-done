@@ -17,7 +17,7 @@ export default function TasksPage() {
     async function loadPageData() {
       try {
         const [tasks] = await Promise.all([
-          taskStore.listTasks({ status: getPropFromUrl("status") as Column["status"] ?? undefined }),
+          taskStore.getAllTasks({ status: getPropFromUrl("status") as Column["status"] ?? undefined }),
         ]);
 
         if (!isMounted) { return; }

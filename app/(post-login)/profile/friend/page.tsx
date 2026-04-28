@@ -51,7 +51,7 @@ export default function Profile() {
       try {
         const [profile, completedTasks] = await Promise.all([
           userStore.getCurrentProfile(),
-          taskStore.listTasks({ status: "complete", limit: 1 }),
+          taskStore.getAllTasks({ status: "complete", limit: 1 }),
         ]);
 
         if (!isMounted) {
@@ -70,27 +70,20 @@ export default function Profile() {
           id: latestTask.id,
           icon: taskIconByCategory[latestTask.category],
           status: latestTask.status,
-          title: latestTask.title,
+          title: latestTask.name,
           description: latestTask.description,
-          checklist: latestTask.checklist.map((task, index) => ({
+          checklist: latestTask.checklist?.map((task, index) => ({
             label: task.label,
             checked: Boolean(task.checked),
             id: task.id ?? `${latestTask.id}-${index}`,
           })),
           category: latestTask.category,
-          createdDate: toDisplayDate(latestTask.updatedAt),
-          startedDate: toDisplayDate(latestTask.startedAt),
-          startedAt: latestTask.startedAt,
-          updatedDate: toDisplayDate(latestTask.updatedAt),
-          completed: {
-            completedDate: toDisplayDate(latestTask.completedAt),
-            completedAt: latestTask.completedAt,
-            mood: latestTask.mood ?? "happy",
-            finalNotes: latestTask.finalNotes,
-            recur: Boolean(latestTask.recur),
-            keepsakeUrl: latestTask.keepsakeUrl,
-          },
+          createdDate: toDisplayDate(latestTask.updatedDate),
+          startedDate: toDisplayDate(latestTask.startedDate),
+          updatedDate: toDisplayDate(latestTask.updatedDate),
+          completed: latestTask.completed
         });
+
       } catch {
         if (isMounted) {
           setCurrentUserProfile(defaultUserProfile);
@@ -142,7 +135,6 @@ export default function Profile() {
     try {
       await userStore.updateCurrentProfile({
         status: nextProfile.status,
-        updatedDate: nextProfile.updatedDate,
         about: nextProfile.about,
         inspirations: nextProfile.inspirations,
       });

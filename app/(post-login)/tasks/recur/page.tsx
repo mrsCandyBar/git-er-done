@@ -16,7 +16,7 @@ export default function RecurringTasksPage() {
     async function loadPageData() {
       try {
         const [tasks] = await Promise.all([
-          taskStore.listTasks({ status: "waiting" }),
+          taskStore.getAllTasks({ status: "waiting" }),
         ]);
 
         if (!isMounted) { return; }

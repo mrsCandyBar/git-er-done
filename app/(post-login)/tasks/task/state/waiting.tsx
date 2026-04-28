@@ -3,14 +3,14 @@ import type { detailCard } from "@/models/task";
 
 type TaskWaitingPageProps = {
   task: detailCard;
-  onUpdateTask: (task: any) => void;
+  onStartTask: (task: detailCard) => void;
   onOpenUpdateTask: (task: detailCard) => void;
   onToggleTask: (taskIndex: number) => void;
 };
 
 export default function TaskWaitingPage({
   task,
-  onUpdateTask,
+  onStartTask,
   onOpenUpdateTask,
   onToggleTask,
 }: TaskWaitingPageProps) {
@@ -24,7 +24,7 @@ export default function TaskWaitingPage({
       description={<Text as="p">{task.description}</Text>}
       actions={(
         <>
-          <Button variant="filled" onClick={() => onUpdateTask(task)}>
+          <Button variant="filled" onClick={() => onStartTask(task)}>
             Let's do this! 🚀
           </Button>
           <Button variant="ghost" onClick={() => onOpenUpdateTask(task)}>
@@ -34,7 +34,7 @@ export default function TaskWaitingPage({
         </>
       )}
     >
-      {task.checklist.length > 0 && (
+      {task.checklist && task.checklist?.length > 0 && (
         <>
           <br/>
           <Text as="h3" fullWidth>Guides: make it memorable</Text>

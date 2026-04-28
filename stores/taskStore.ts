@@ -5,34 +5,43 @@ import { httpGet, httpPost, httpPut, type RequestConfig } from "./httpClient";
 export type TaskRecord = {
 	id: string;
 	category: TaskCategory;
-	title: string;
+	name: string;
 	description: string;
 	status: Column["status"];
-	checklist: Task[];
-	startedAt?: string;
-	updatedAt?: string;
-	completedAt?: string;
-	mood?: Mood;
-	finalNotes?: string;
-	recur?: boolean;
-	keepsakeUrl?: string;
+	checklist?: Task[];
+	createdDate?: string;
+	startedDate?: string;
+	updatedDate?: string;
+	completed?: {
+		completedDate?: string;
+		mood?: Mood;
+		finalNotes?: string;
+		recur?: boolean;
+		keepsakeUrl?: string;
+	}
 };
 
 export type CreateTaskPayload = {
 	category: TaskCategory;
-	title: string;
+	name: string;
 	description: string;
 	checklist?: Task[];
 };
 
-export type UpdateTaskPayload = Partial<Omit<TaskRecord, "id">>;
+export type UpdateTaskPayload = {
+	category: TaskCategory;
+	name: string;
+	description: string;
+	status?: Column["status"];
+	checklist?: Task[];
+};
 
 export type CompleteTaskPayload = {
 	mood: Mood;
 	finalNotes?: string;
 	keepsakeUrl?: string;
 	recur?: boolean;
-	completedAt?: string;
+	completedDate?: string;
 };
 
 export type TaskListQuery = {
@@ -42,10 +51,7 @@ export type TaskListQuery = {
 };
 
 type TaskStoreConfig = Omit<RequestConfig, "query">;
-
-type SelectedFetchOptions = {
-	forceRefresh?: boolean;
-};
+type SelectedFetchOptions = { forceRefresh?: boolean; };
 
 let selectedTask: TaskRecord | null = null;
 let selectedTaskId: string | null = null;
@@ -53,19 +59,11 @@ let selectedTaskNeedsRefresh = false;
 
 const SHOULD_USE_DUMMY_DATA = process.env.NEXT_PUBLIC_USE_DUMMY_DATA === "true";
 
-const clone = <T,>(value: T): T => {
-	if (typeof structuredClone === "function") {
-		return structuredClone(value);
-	}
-
-	return JSON.parse(JSON.stringify(value)) as T;
-};
-
 let dummyTasks: TaskRecord[] = [
 	{
 		id: "dummy-dance-class",
 		category: "fun",
-		title: "Dance Class for Beginners",
+		name: "Dance Class for Beginners",
 		description: "Let's get those feet moving! This beginner-friendly dance class is perfect for anyone looking to have fun.",
 		status: "waiting",
 		checklist: [
@@ -73,7 +71,7 @@ let dummyTasks: TaskRecord[] = [
 			{ id: "dummy-dance-class-2", label: "Arrange transportation", checked: true },
 			{ id: "dummy-dance-class-3", label: "Take a keepsake photo", checked: false },
 		],
-		updatedAt: new Date().toISOString(),
+		updatedDate: new Date().toISOString(),
 	},
 ];
 
@@ -81,12 +79,6 @@ function setSelectedTaskState(task: TaskRecord) {
 	selectedTask = task;
 	selectedTaskId = task.id;
 	selectedTaskNeedsRefresh = false;
-}
-
-function invalidateSelectedTaskIfMatches(taskId: string) {
-	if (selectedTaskId === taskId) {
-		selectedTaskNeedsRefresh = true;
-	}
 }
 
 export const taskStore = {
@@ -110,23 +102,13 @@ export const taskStore = {
 		}
 	},
 
-	listTasks(query: TaskListQuery = {}, config: TaskStoreConfig = {}) {
+	getAllTasks(query: TaskListQuery = {}, config: TaskStoreConfig = {}) {
 		if (SHOULD_USE_DUMMY_DATA) {
-			let tasks = [...dummyTasks, ...dummyTasks, ...dummyTasks, ...dummyTasks, ...dummyTasks];
-
-			if (query.category) {
-				tasks = tasks.filter((task) => task.category === query.category);
-			}
-
-			if (query.status) {
-				tasks = tasks.filter((task) => task.status === query.status);
-			}
-
-			if (typeof query.limit === "number") {
-				tasks = tasks.slice(0, query.limit);
-			}
-
-			return Promise.resolve(clone(tasks));
+			let tasks = dummyTasks;
+			if (query.category) { tasks = tasks.filter((task) => task.category === query.category); }
+			if (query.status) { tasks = tasks.filter((task) => task.status === query.status); }
+			if (typeof query.limit === "number") { tasks = tasks.slice(0, query.limit); }
+			return Promise.resolve(tasks);
 		}
 
 		return httpGet<TaskRecord[]>("/api/tasks", { ...config, query });
@@ -140,13 +122,10 @@ export const taskStore = {
 
 		if (SHOULD_USE_DUMMY_DATA) {
 			const task = dummyTasks.find((entry) => entry.id === taskId);
-			if (!task) {
-				throw new Error(`Task ${taskId} not found`);
-			}
+			if (!task) { throw new Error(`Task ${taskId} not found`); }
 
-			const copiedTask = clone(task);
-			setSelectedTaskState(copiedTask);
-			return copiedTask;
+			setSelectedTaskState(task);
+			return task;
 		}
 
 		const task = await httpGet<TaskRecord>(`/api/tasks/${taskId}`, config);
@@ -158,76 +137,102 @@ export const taskStore = {
 		if (SHOULD_USE_DUMMY_DATA) {
 			const createdTask: TaskRecord = {
 				id: `dummy-task-${Date.now()}`,
-				category: payload.category,
-				title: payload.title,
-				description: payload.description,
+				...payload,
 				status: "waiting",
-				checklist: payload.checklist ?? [],
-				updatedAt: new Date().toISOString(),
+				createdDate: new Date().toISOString(),
 			};
 
 			dummyTasks = [createdTask, ...dummyTasks];
-			invalidateSelectedTaskIfMatches(createdTask.id);
-			return clone(createdTask);
+			return createdTask;
 		}
 
 		const task = await httpPost<TaskRecord, CreateTaskPayload>("/api/tasks", payload, config);
-		invalidateSelectedTaskIfMatches(task.id);
 		return task;
 	},
 
 	async updateTask(taskId: string, payload: UpdateTaskPayload, config: TaskStoreConfig = {}) {
-		if (SHOULD_USE_DUMMY_DATA) {
-			const existingTask = dummyTasks.find((task) => task.id === taskId);
-			if (!existingTask) {
-				throw new Error(`Task ${taskId} not found`);
+		if (!selectedTask || selectedTaskId !== taskId) {
+			throw new Error("Can only update the currently selected task. Please call getTaskById first to select the task.");
+		}
+		else {
+			if (SHOULD_USE_DUMMY_DATA) {
+				this.setSelectedTask({
+					...selectedTask,
+					...payload,
+					updatedDate: new Date().toISOString(),
+				});
+				return this.getSelectedTask();
 			}
 
-			const updatedTask: TaskRecord = {
-				...existingTask,
-				...payload,
-				updatedAt: new Date().toISOString(),
-			};
-
-			dummyTasks = dummyTasks.map((task) => (task.id === taskId ? updatedTask : task));
-			invalidateSelectedTaskIfMatches(taskId);
-			return clone(updatedTask);
+			const task = await httpPut<TaskRecord, UpdateTaskPayload>(`/api/tasks/${taskId}`, payload, config);
+			this.setSelectedTask(task);
+			return task;
 		}
+	},
 
-		const task = await httpPut<TaskRecord, UpdateTaskPayload>(`/api/tasks/${taskId}`, payload, config);
-		invalidateSelectedTaskIfMatches(taskId);
-		return task;
+	async startTask(taskId: string, config: TaskStoreConfig = {}) {
+		if (!selectedTask || selectedTaskId !== taskId) {
+			throw new Error("Can only start a currently selected task");
+		}
+		else {
+			if (SHOULD_USE_DUMMY_DATA) {
+				this.setSelectedTask({
+					...selectedTask,
+					status: "busy",
+					updatedDate: new Date().toISOString(),
+				});
+				return this.getSelectedTask();
+			}
+
+			const task = await httpPut<TaskRecord, {}>(`/api/tasks/start/${taskId}`, {}, config);
+			this.setSelectedTask(task);
+			return task;
+		}
+	},
+
+	async pauseTask(taskId: string, config: TaskStoreConfig = {}) {
+		if (!selectedTask || selectedTaskId !== taskId) {
+			throw new Error("Can only pause a currently selected task");
+		}
+		else {
+			if (SHOULD_USE_DUMMY_DATA) {
+				this.setSelectedTask({
+					...selectedTask,
+					status: "waiting",
+					updatedDate: new Date().toISOString(),
+				});
+				return this.getSelectedTask();
+			}
+
+			const task = await httpPut<TaskRecord, {}>(`/api/tasks/pause/${taskId}`, {}, config);
+			this.setSelectedTask(task);
+			return task;
+		}
 	},
 
 	async completeTask(taskId: string, payload: CompleteTaskPayload, config: TaskStoreConfig = {}) {
-		if (SHOULD_USE_DUMMY_DATA) {
-			const existingTask = dummyTasks.find((task) => task.id === taskId);
-			if (!existingTask) {
-				throw new Error(`Task ${taskId} not found`);
-			}
-
-			const completedTask: TaskRecord = {
-				...existingTask,
-				status: "complete",
-				mood: payload.mood,
-				finalNotes: payload.finalNotes,
-				recur: payload.recur,
-				keepsakeUrl: payload.keepsakeUrl,
-				completedAt: payload.completedAt ?? new Date().toISOString(),
-				updatedAt: new Date().toISOString(),
-			};
-
-			dummyTasks = dummyTasks.map((task) => (task.id === taskId ? completedTask : task));
-			invalidateSelectedTaskIfMatches(taskId);
-			return clone(completedTask);
+		if (!selectedTask || selectedTaskId !== taskId) {
+			throw new Error(`Task ${taskId} not found`);
 		}
 
-		const task = await httpPut<TaskRecord, CompleteTaskPayload>(
-			`/api/tasks/${taskId}/complete`,
-			payload,
-			config
-		);
-		invalidateSelectedTaskIfMatches(taskId);
+		if (SHOULD_USE_DUMMY_DATA) {
+			this.setSelectedTask({
+				...selectedTask,
+				status: "complete",
+				completed: {
+					mood: payload.mood,
+					finalNotes: payload.finalNotes,
+					recur: payload.recur,
+					keepsakeUrl: payload.keepsakeUrl,
+					completedDate: payload.completedDate ?? new Date().toISOString(),
+				},
+				updatedDate: new Date().toISOString(),
+			});
+			return this.getSelectedTask();
+		}
+
+		const task = await httpPut<TaskRecord, CompleteTaskPayload>(`/api/tasks/${taskId}/complete`, payload, config);
+		this.setSelectedTask(task);
 		return task;
 	},
 };
