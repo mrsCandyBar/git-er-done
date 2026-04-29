@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { Button, TaskTable, Text, Card, Badge } from "@/components/index";
 import { getTaskMoodLabel, type TaskMood } from "@/models/taskMood";
@@ -84,7 +86,6 @@ export default function SingleTaskCompletionInsights({
     task.startedDate,
     task.completed?.completedDate
   );
-    console.log("task", task);
 
   return (
     <Card

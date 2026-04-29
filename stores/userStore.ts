@@ -47,7 +47,11 @@ export const userStore = {
 			const user = await httpGet<UserProfile>("/api/users/get/" + selectedUser.id, config);
 			setSelectedUserState(user);
 			return user;
-		} 
+		} else {
+			const user = await httpGet<UserProfile>("/api/users/me", config);
+			setSelectedUserState(user);
+			return user;
+		}
 	},
 
 
@@ -71,7 +75,7 @@ export const userStore = {
 	// This method will be used to update the user's status or other profile information.
 
 	async updateCurrentProfile(payload?: any, config: UserStoreConfig = {}) {
-		const user = await httpPut<UserProfile, UserProfile>("/api/users/me", payload, config);
+		const user = await httpPut<UserProfile, UserProfile>("/api/users/" + selectedUser?.id, payload, config);
 		setSelectedUserState(user);
 		return user;
 	},

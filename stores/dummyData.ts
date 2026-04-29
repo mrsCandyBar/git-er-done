@@ -18,6 +18,7 @@ export const dummyTasks: TaskRecord[] = [
 ];
 
 export const dummyCurrentUser: UserProfile = { 
+  id: "69ebe15ad506dd037214c89b",
   status: "friend",
   name: "Candice Bar",
   profilePicture: "https://lh3.googleusercontent.com/a/ACg8ocKkfePBiQdfVEcR5NV5NfNhOAEx91qvQtyibO0NITg6-yc-4LPR=s96-c",
@@ -58,17 +59,26 @@ export const dummyCurrentUser: UserProfile = {
 
 let dummySelectedUser: UserProfile | null = null;
 let dummySelectedTask: TaskRecord | null = null;
-let dummyTaskListCache: TaskRecord[] = [];
+let dummyTaskListCache: TaskRecord[] = [...dummyTasks];
 
 export function returnDummyData(method: string, path: string, body?: any) {
   if (method === "GET") {
-    if (path.includes("/api/users/get/")) {
+    if (path.includes("/api/users/get/") || path.includes("/api/users/me")) {
       dummySelectedUser = dummyCurrentUser;
       return dummySelectedUser;
 
     } else if (path.includes("/api/tasks/getAll")) {
-      dummyTaskListCache = dummyTasks
-      return dummyTaskListCache;
+      let filteredTasks = dummyTaskListCache;
+      if (body && body.query && body.query) {
+        if (body.query.status) {
+          filteredTasks = filteredTasks.length > 0 ?
+              filteredTasks.filter((task) => task.status === body.query.status) : [];
+        } else if (body.query.category) {
+          filteredTasks = filteredTasks.length > 0 ?
+              filteredTasks.filter((task) => task.category === body.query.category) : [];
+        }
+      } 
+      return filteredTasks;
 
     } else if (path.includes("/api/tasks/")) {
       const taskId = path.split("/").pop();
@@ -85,13 +95,15 @@ export function returnDummyData(method: string, path: string, body?: any) {
       return dummySelectedUser;
 
     } else if (path.includes("/api/tasks")) {
-      dummyTaskListCache = [...body as unknown as TaskRecord[], ...dummyTasks];
+      dummyTaskListCache = (dummyTaskListCache.length > 0) ? 
+          [body, ...dummyTaskListCache] : 
+          [body];
       return dummyTaskListCache;
     }
   }
 
   else if (method === "PUT") {
-    if (path.includes("/api/users/me") || path.includes("/api/users/updateStatus/")) {
+    if (path.includes("/api/users/") || path.includes("/api/users/updateStatus/")) {
       dummySelectedUser = dummySelectedUser ?  {
 				...dummySelectedUser,
 				...body,

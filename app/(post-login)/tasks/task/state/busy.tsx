@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge, Button, Card, TaskTable, Text } from "@/components/index";
 import type { detailCard } from "@/models/task";
 import styles from "../page.module.scss";
@@ -36,7 +38,7 @@ export default function TaskBusyPage({
         </>
       )}
     >
-      {task.checklist.length > 0 && (
+      {task.checklist && task.checklist.length > 0 && (
         <>
           <br/>
           <Text as="h3" fullWidth>Guides: make it memorable</Text>

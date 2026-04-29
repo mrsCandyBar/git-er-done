@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { Button, Card, Text } from "@/components/index";
 

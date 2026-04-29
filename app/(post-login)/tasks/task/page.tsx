@@ -68,12 +68,14 @@ export default function Task() {
       if (state === "start") {
         void taskStore.startTask(selectedTaskId).then((updatedTask) => {
         if (updatedTask) {
+          setSelectedTask(updatedTask);
           setSelectedTaskCard(toDetailCard(updatedTask));
         }
       })
       } else {
         void taskStore.pauseTask(selectedTaskId).then((updatedTask) => {
           if (updatedTask) {
+            setSelectedTask(updatedTask);
             setSelectedTaskCard(toDetailCard(updatedTask));
           }
         });
@@ -91,6 +93,7 @@ export default function Task() {
     void taskStore.updateTask(
       selectedTask.id, { ...selectedTask, checklist: updateTaskList }).then((updatedTask) => {
         if (updatedTask) {
+          setSelectedTask(updatedTask);
           setSelectedTaskCard(toDetailCard(updatedTask));
         }
       })
@@ -98,7 +101,7 @@ export default function Task() {
 
   useEffect(() => {
     void userStore.getCurrentProfile().then((profile) => {
-      const completedTasks = countCompletedTasks(profile);
+      const completedTasks = profile ? countCompletedTasks(profile) : 0;
 
       // If user has no completed tasks, do not redirect 
       // and let them explore the task details page freely.
@@ -108,7 +111,7 @@ export default function Task() {
       // If user is a "friend" and has completed at least 1 task, 
       // redirect to profile to encourage them to update their status.
 
-      if (profile.status === "friend" && completedTasks === 1) { router.replace("/profile"); }
+      if (profile && profile.status === "friend" && completedTasks === 1) { router.replace("/profile"); }
     });
   }, [router]);
 

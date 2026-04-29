@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, Button, TaskTable, Text } from "@/components/index";
 import type { detailCard } from "@/models/task";
 
@@ -15,7 +17,6 @@ export default function TaskWaitingPage({
   onToggleTask,
 }: TaskWaitingPageProps) {
 
-  console.log("Rendering TaskWaitingPage with task:", task);
   return (
     <Card
       eyebrow={<Text as="h4">{task.eyebrow}</Text>}

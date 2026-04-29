@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import CardStack from "@/components/CardStack";
+import { CardStack, Text } from "@/components/index";
 import type { CardStackItem } from "@/components/CardStack";
-import { taskCardPayloads, createStackCards } from "@/models/task";
+import { createStackCards } from "@/models/task";
 import { getPropFromUrl } from "@/utilities/helper";
 import { taskStore } from "../../../../stores";
 import styles from "../page.module.scss";
 import { Column } from "../task/types";
 
 export default function TasksPage() {
-  const [cards, setCards] = useState<CardStackItem[]>(createStackCards(taskCardPayloads));
+  const [cards, setCards] = useState<CardStackItem[]>(createStackCards([]));
 
   useEffect(() => {
     let isMounted = true;
@@ -27,7 +27,7 @@ export default function TasksPage() {
         setCards(dynamicCards);
 
       } catch {
-        if (isMounted) { setCards(createStackCards(taskCardPayloads)); }
+        if (isMounted) { setCards(createStackCards([])); }
       }
     }
 
@@ -38,11 +38,15 @@ export default function TasksPage() {
   return (
     <div className={styles.page}>
       <div className={styles.stackArea}>
-        <CardStack
-          cards={cards}
-          emptyLabel="Reshuffle!"
-          emptyDescription="Oh no, looks like you've swiped through all the cards!"
-        />
+        {cards && cards.length > 0 ? (
+          <CardStack
+            cards={cards}
+            emptyLabel="Reshuffle!"
+            emptyDescription="Oh no, looks like you've swiped through all the cards!"
+          />
+        ) : (
+          <Text tone="secondary">No tasks found</Text>
+        )}
       </div>
     </div>
   );

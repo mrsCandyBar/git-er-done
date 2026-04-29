@@ -1,3 +1,5 @@
+"use client";
+
 import { Header, Button } from "@/components/index";
 import { userStore } from "../../stores";
 import PostLoginNav from "./_components/navigation";

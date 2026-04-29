@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import { CardStack, Modal, Text } from "@/components/index";
 import type { CardStackItem } from "@/components/CardStack";
-import { taskCardPayloads, createStackCards, countCompletedTasks } from "@/models/task";
+import { createStackCards, countCompletedTasks } from "@/models/task";
 import { taskStore, userStore } from "../../../stores";
 import styles from "./page.module.scss";
 
 export default function TasksPage() {
   const [newUser, setNewUser] = useState(false);
-  const [cards, setCards] = useState<CardStackItem[]>(createStackCards(taskCardPayloads));
+  const [cards, setCards] = useState<CardStackItem[]>(createStackCards([]));
 
   useEffect(() => {
     let isMounted = true;
@@ -32,12 +32,12 @@ export default function TasksPage() {
         // SET CARDS TO TASKS
 
         const hasTasks = tasks && (tasks.length > 0);
-        const dynamicCards = hasTasks ? createStackCards(tasks) : createStackCards(taskCardPayloads);
+        const dynamicCards = hasTasks ? createStackCards(tasks) : createStackCards([]);
         setCards(dynamicCards);
         
       } catch {
         if (isMounted) {
-          setCards(createStackCards(taskCardPayloads));
+          setCards(createStackCards([]));
         }
       }
     }
@@ -72,11 +72,15 @@ export default function TasksPage() {
       </Modal>
 
       <div className={styles.stackArea}>
-        <CardStack
-          cards={cards}
-          emptyLabel="Reshuffle!"
-          emptyDescription="Oh no, looks like you've swiped through all the cards!"
-        />
+        {cards && cards.length > 0 ? (
+          <CardStack
+            cards={cards}
+            emptyLabel="Reshuffle!"
+            emptyDescription="Oh no, looks like you've swiped through all the cards!"
+          />
+        ) : (
+          <Text tone="secondary">No tasks found</Text>
+        )}
       </div>
     </div>
   );

@@ -98,13 +98,13 @@ async function request<TResponse>(
 }
 
 export function httpGet<TResponse>(path: string, config: RequestConfig = {}) {
-  console.log(`HTTP GET: ${path} with config:`, config);
-
-  if (SHOULD_USE_DUMMY_DATA) {
-    return <TResponse>returnDummyData("GET", path);
-  } else {
-    return request<TResponse>("GET", path, config);
-  }
+  const response = SHOULD_USE_DUMMY_DATA ? 
+    returnDummyData("GET", path, config) : 
+    request<TResponse>("GET", path, config);
+  
+  console.log(`HTTP GET: ${path} with config:`, config);  
+  console.log(`HTTP GET RESPONSE:`, response);  
+  return response;
 }
 
 export function httpPost<TResponse, TBody = unknown>(
@@ -112,13 +112,14 @@ export function httpPost<TResponse, TBody = unknown>(
   body: TBody,
   config: RequestConfig = {}
 ) {
-  console.log(`HTTP POST: ${path} with config:`, body, config);
+  console.log(`HTTP POST: ${path} with payload:`, body);
+  const response = SHOULD_USE_DUMMY_DATA ?
+    <TResponse>returnDummyData("POST", path, body) :
+    request<TResponse>("POST", path, { ...config, body });
 
-  if (SHOULD_USE_DUMMY_DATA) {
-    return <TResponse>returnDummyData("POST", path, body);
-  } else {
-    return request<TResponse>("POST", path, { ...config, body });
-  }
+  console.log(`HTTP POST: ${path} with payload:`, body);  
+  console.log(`HTTP POST RESPONSE:`, response); 
+  return response;
 }
 
 export function httpPut<TResponse, TBody = unknown>(
@@ -126,11 +127,11 @@ export function httpPut<TResponse, TBody = unknown>(
   body: TBody,
   config: RequestConfig = {}
 ) {
-  console.log(`HTTP PUT: ${path} with config:`, body, config);
+  const response = SHOULD_USE_DUMMY_DATA ?
+    <TResponse>returnDummyData("PUT", path, body) :
+    request<TResponse>("PUT", path, { ...config, body });
 
-  if (SHOULD_USE_DUMMY_DATA) {
-    return <TResponse>returnDummyData("PUT", path, body);
-  } else {
-    return request<TResponse>("PUT", path, { ...config, body });
-  }
+  console.log(`HTTP PUT: ${path} with payload:`, body);  
+  console.log(`HTTP PUT RESPONSE:`, response); 
+  return response;
 }

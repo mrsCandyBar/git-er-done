@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge, Button, Card, Text } from "@/components/index";
 import { getTaskMoodLabel } from "@/models/taskMood";
 import type { detailCard } from "@/models/task";

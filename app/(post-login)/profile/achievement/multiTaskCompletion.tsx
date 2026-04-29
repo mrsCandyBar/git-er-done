@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Badge, Card, TaskTable, Text } from "@/components/index";
 import type { UserProfile } from "@/models/userProfile";
 import styles from "../page.module.scss";
@@ -150,7 +152,7 @@ export default function MultiTaskCompletionInsights({
         actions={(
           <>
             <br/>
-            <Button href="" variant="filled">
+            <Button href="/profile/account" variant="filled">
               Shall we continue questing together?
             </Button>
             <br/>
