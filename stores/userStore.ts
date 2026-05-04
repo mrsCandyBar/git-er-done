@@ -1,5 +1,6 @@
 import type { UserProfile, UserStatusType } from "../models/userProfile";
 import { httpGet, httpPost, httpPut, type RequestConfig, setAuthToken } from "./httpClient";
+import { encryptPayload, decryptPayload } from "../utilities/helper";
 
 export type CreateUserPayload = Omit<UserProfile, "updatedDate" | "lastLoginDate">;
 export type UpdateUserPayload = Partial<UserProfile>;
@@ -42,16 +43,11 @@ export const userStore = {
 
 	async getCurrentProfile(config: UserStoreConfig = {}, options: SelectedFetchOptions = {}) {
 		const { forceRefresh = false } = options;
-		if (selectedUser) {
-			if (selectedUser && !selectedUserNeedsRefresh && !forceRefresh) { return selectedUser; }
-			const user = await httpGet<UserProfile>("/users/get/" + selectedUser.id, config);
-			setSelectedUserState(user);
-			return user;
-		} else {
-			const user = await httpGet<UserProfile>("/users/me", config);
-			setSelectedUserState(user);
-			return user;
-		}
+		if (selectedUser && !selectedUserNeedsRefresh && !forceRefresh) { return selectedUser; }
+
+		const user = await httpGet<UserProfile>("/users/get/me", config);
+		setSelectedUserState(user);
+		return user;
 	},
 
 
@@ -61,10 +57,29 @@ export const userStore = {
 	async loginWithGoogle(idToken: string, config: UserStoreConfig = {}) {
 		const response:any = await httpPost<UserProfile, { idToken: string }>('/users/login/google', { idToken }, config);
 		// If the response contains a token, set it globally for all future requests
-		if (response?.token) {
+		if (response?.token && response?.user) {
 			setAuthToken(response.token);
+			// Store encrypted pass in localStorage
+			const passPayload = {
+				token: response.token,
+				userId: response.user._id,
+				email: response.user.email,
+			};
+			localStorage.setItem('pass', encryptPayload(passPayload));
 		}
 		console.log("Logged in user:", response);
+		setSelectedUserState(response?.user);
+		return response?.user;
+	},
+	
+	async refreshToken(userId: string, email: string, config: UserStoreConfig = {}) {
+		const response:any = await httpPost<UserProfile, { userId: string, email: string }>('/users/refresh-token', { userId, email }, config);
+		// If the response contains a token, set it globally for all future requests
+		if (response?.token) {
+			setAuthToken(response.token);
+			// Update pass in localStorage
+			localStorage.setItem('pass', encryptPayload({ token: response.token, userId, email }));
+		}
 		setSelectedUserState(response?.user);
 		return response?.user;
 	},
@@ -72,7 +87,21 @@ export const userStore = {
 	logout() {
 		userStore.clearSelectedUser();
 		setAuthToken(null);
+		localStorage.removeItem('pass');
 		return true;
+	},
+	
+	async tryRestoreSession() {
+		const pass = localStorage.getItem('pass');
+		if (!pass) return;
+		try {
+			const { userId, email, token } = decryptPayload(pass);
+			setAuthToken(token);
+			await userStore.refreshToken(userId, email);
+		} catch (e) {
+			setAuthToken(null);
+			localStorage.removeItem('pass');
+		}
 	},
 
 	
@@ -80,14 +109,14 @@ export const userStore = {
 	// This method will be used to update the user's status or other profile information.
 
 	async updateCurrentProfile(payload?: any, config: UserStoreConfig = {}) {
-		const user = await httpPut<UserProfile, UserProfile>("/users/" + selectedUser?.id, payload, config);
+		const user = await httpPut<UserProfile, UserProfile>("/users/me", payload, config);
 		setSelectedUserState(user);
 		return user;
 	},
 
 	async updateStatus(status: UserStatusType, config: UserStoreConfig = {}) {
 		const user = await httpPut<UserProfile, { status: UserStatusType }>(
-			"/users/updateStatus/" + selectedUser?.id, 
+			"/users/updateStatus/me", 
 			{ status }, 
 			config
 		);

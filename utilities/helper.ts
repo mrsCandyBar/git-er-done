@@ -1,3 +1,19 @@
+// --- Simple AES encryption/decryption helpers (for demo only) ---
+import CryptoJS from "crypto-js";
+
+const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY; // Replace with secure key in production
+
+export function encryptPayload(payload: object): string {
+  return CryptoJS.AES.encrypt(JSON.stringify(payload), ENCRYPTION_KEY).toString();
+}
+
+export function decryptPayload(ciphertext: string): any {
+  const bytes = CryptoJS.AES.decrypt(ciphertext, ENCRYPTION_KEY);
+  const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+  return JSON.parse(decrypted);
+}
+
+
 // --- HTTP Client Cache Helpers ---
 const STORAGE_KEY = "httpClientDedupeCache";
 export type StorageCacheEntry = { response?: unknown; error?: string; timestamp: number };

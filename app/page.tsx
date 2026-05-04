@@ -1,5 +1,23 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { userStore } from "../stores";
 
 export default function Page() {
-  redirect("/login");
+  const router = useRouter();
+
+  useEffect(() => {
+    async function checkSession() {
+      try {
+        await userStore.tryRestoreSession();
+        router.replace("/profile");
+      } catch {
+        router.replace("/login");
+      }
+    }
+    checkSession();
+  }, [router]);
+
+  return null;
 }
