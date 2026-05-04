@@ -13,33 +13,27 @@ export default function PostLoginLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   const router = useRouter();
-
-
   const [authorized, setAuthorized] = useState<null | boolean>(null);
 
   useEffect(() => {
-    let valid = false;
-    try {
-      const pass = localStorage.getItem("pass");
-      if (pass) {
-        const { decryptPayload } = require("../../utilities/helper");
-        const { token } = decryptPayload(pass);
-        if (token) valid = true;
+    async function checkSession() {
+      try {
+        const result = await userStore.tryRestoreSession();
+        if (result == "success") {
+          setAuthorized(true);
+        } else {
+          router.replace("/login");
+        }
+      } catch {
+        router.replace("/login");
       }
-    } catch {}
-    if (!valid) {
-      router.replace("/login");
-      setAuthorized(false);
-    } else {
-      setAuthorized(true);
     }
+    checkSession();
   }, [router]);
 
   if (authorized === null) {
-    return null;
-  }
-  if (!authorized) {
     return null;
   }
 

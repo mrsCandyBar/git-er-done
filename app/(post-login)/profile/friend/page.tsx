@@ -49,9 +49,9 @@ export default function Profile() {
 
     async function loadData() {
       try {
-        const [profile, completedTasks] = await Promise.all([
+        const [profile, completedTasks]:any = await Promise.all([
           userStore.getCurrentProfile(),
-          taskStore.getAllTasks({ status: "complete", limit: 1 }),
+          taskStore.getAllTasks({ status: "complete" }),
         ]);
 
         if (!isMounted) {

@@ -6,17 +6,18 @@ import { taskCardPayloads, createStackCards, createRecurStackCards } from "@/mod
 import { taskStore } from "../../../../stores";
 import styles from "./page.module.scss";
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
+import { Column } from "../task/types";
+import { getPropFromUrl } from "@/utilities/helper";
 
 export default function RecurringTasksPage() {
-  const [newUser, setNewUser] = useState(false);
   const [cards, setCards] = useState<CardStackItem[]>(createRecurStackCards(taskCardPayloads));
 
   useEffect(() => {
     let isMounted = true;
     async function loadPageData() {
       try {
-        const [tasks] = await Promise.all([
-          taskStore.getAllTasks({ status: "waiting" }),
+        const [tasks]:any = await Promise.all([
+          taskStore.getAllTasks({ recurId: getPropFromUrl("recurId") as Column["recurId"] ?? undefined }),
         ]);
 
         if (!isMounted) { return; }

@@ -1,6 +1,6 @@
 import type { Column, Mood, Task } from "../app/(post-login)/tasks/task/types";
-import type { TaskCategory } from "../models/userProfile";
-import { httpGet, httpPost, httpPut, type RequestConfig } from "./httpClient";
+import type { TaskCategory, TaskCategoryModel } from "../models/userProfile";
+import { httpGet, httpPost, httpPut, type GenericRequestConfig } from "./httpClient";
 
 export type TaskRecord = {
 	id: string;
@@ -46,13 +46,15 @@ export type CompleteTaskPayload = {
 
 export type TaskListQuery = {
 	category?: TaskCategory;
+	recurId?: Column["recurId"];
 	status?: Column["status"];
 	limit?: number;
 };
 
-type TaskStoreConfig = Omit<RequestConfig, "query">;
+type TaskStoreConfig = Omit<GenericRequestConfig, "query">;
 type SelectedFetchOptions = { forceRefresh?: boolean; };
 
+let selectedTaskCategories: TaskCategoryModel[] | null = null;
 let selectedTask: TaskRecord | null = null;
 let selectedTaskId: string | null = null;
 let selectedTaskNeedsRefresh = false;
@@ -90,19 +92,28 @@ export const taskStore = {
 		return httpGet<TaskRecord[]>("/tasks/getAll", { ...config, query });
 	},
 
+	async getAllTaskCategories(query: TaskListQuery = {}, config: TaskStoreConfig = {}) {
+		if (selectedTaskCategories) {
+			return selectedTaskCategories;
+		}
+		let taskCategories:any = await httpGet<TaskCategoryModel[]>("/task-categories/getAll", { ...config, query });
+		selectedTaskCategories = taskCategories || [];
+		return selectedTaskCategories;
+	},
+
 	async getTaskById(taskId: string, config: TaskStoreConfig = {}, options: SelectedFetchOptions = {}) {
 		const { forceRefresh = false } = options;
 		if (selectedTask && selectedTaskId === taskId && !selectedTaskNeedsRefresh && !forceRefresh) {
 			return selectedTask;
 		}
 
-		const task = await httpGet<TaskRecord>(`/tasks/${taskId}`, config);
+		const task:any = await httpGet<TaskRecord>(`/tasks/get/${taskId}`, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},
 
 	async createTask(payload: CreateTaskPayload, config: TaskStoreConfig = {}) {
-		const task = await httpPost<TaskRecord, CreateTaskPayload>("/tasks", payload, config);
+		const task = await httpPost<TaskRecord, CreateTaskPayload>("/tasks/create", payload, config);
 		return task;
 	},
 
@@ -111,7 +122,7 @@ export const taskStore = {
 			throw new Error("Can only update the currently selected task. Please call getTaskById first to select the task.");
 		}
 		
-		const task = await httpPut<TaskRecord, UpdateTaskPayload>(`/tasks/${taskId}`, payload, config);
+		const task = await httpPut<TaskRecord, UpdateTaskPayload>(`/tasks/update/${taskId}`, payload, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},
@@ -141,7 +152,7 @@ export const taskStore = {
 			throw new Error(`Task ${taskId} not found`);
 		}
 
-		const task = await httpPut<TaskRecord, CompleteTaskPayload>(`/tasks/${taskId}/complete`, payload, config);
+		const task = await httpPut<TaskRecord, CompleteTaskPayload>(`/tasks/complete/${taskId}`, payload, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},

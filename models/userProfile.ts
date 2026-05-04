@@ -1,6 +1,11 @@
 export type UserStatusType = "friend" | "friend_new" | "friend_dear" | "friend_close";
 
 export type TaskCategory = "new" | "fun" | "quest";
+export type TaskCategoryModel = {
+  id?: string;
+  name: string;
+  description: string;
+};
 
 export type CategoryBuckets = Record<TaskCategory, string[]>;
 

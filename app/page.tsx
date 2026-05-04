@@ -10,8 +10,12 @@ export default function Page() {
   useEffect(() => {
     async function checkSession() {
       try {
-        await userStore.tryRestoreSession();
-        router.replace("/profile");
+        const result = await userStore.tryRestoreSession();
+        if (result == "success") {
+          router.replace("/profile");
+        } else {
+          router.replace("/login");
+        }
       } catch {
         router.replace("/login");
       }

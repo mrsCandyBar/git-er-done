@@ -15,7 +15,7 @@ export default function TasksPage() {
     let isMounted = true;
     async function loadPageData() {
       try {
-        const [profile, tasks] = await Promise.all([
+        const [profile, tasks]:any = await Promise.all([
           userStore.getCurrentProfile(),
           taskStore.getAllTasks({ status: "waiting" }),
         ]);

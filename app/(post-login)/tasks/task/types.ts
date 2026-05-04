@@ -16,6 +16,7 @@ export type Column = {
   finalNotes?: string;
   mood?: Mood;
   recur?: boolean;
+  recurId?: string;
   keepsakeUrl?: string;
   status: "waiting" | "busy" | "complete";
 };

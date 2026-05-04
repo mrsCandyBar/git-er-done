@@ -26,9 +26,10 @@ export default function NewTaskPage() {
 
     async function loadState() {
       try {
-        const [profile, tasks] = await Promise.all([
+        const [profile, taskCategories, tasks]:any = await Promise.all([
           userStore.getCurrentProfile(),
-          taskStore.getAllTasks(),
+          taskStore.getAllTaskCategories(),
+          taskStore.getAllTasks({ status: "waiting" }),
         ]);
 
         if (!isMounted) {
@@ -37,7 +38,7 @@ export default function NewTaskPage() {
 
         setCanCreateMultipleTasks(profile.status !== "friend" && profile.status !== "friend_close");
         setIsTaskCreationBlocked(profile.status === "friend_close");
-        setCreatedTaskCount(tasks.length);
+        setCreatedTaskCount(tasks?.length ?? 0);
       } catch {
         if (isMounted) {
           setCanCreateMultipleTasks(false);

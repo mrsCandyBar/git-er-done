@@ -133,13 +133,11 @@ async function genericRequest<TResponse = any>(config: GenericRequestConfig): Pr
   const headers = { ...defaultConfig.headers, ...config.headers };
   const signal = config.signal;
   const key = getRequestKey(method, path, body, query);
-  console.log("[httpClient dedupe] key:", key);
   const now = Date.now();
 
   // Unified cache check
   const cacheEntry = getCacheEntry(key, now, inflightRequests, DEDUPE_WINDOW_MS);
   if (cacheEntry) {
-    console.log("[httpClient dedupe] cache hit", cacheEntry.status);
     if (cacheEntry.status === "pending") {
       return cacheEntry.promise as Promise<TResponse>;
     } else if (cacheEntry.status === "done") {
@@ -152,8 +150,6 @@ async function genericRequest<TResponse = any>(config: GenericRequestConfig): Pr
 
   const url = `${joinUrl(path)}${toQueryString(query)}`;
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
-
-  console.log("[httpClient dedupe] cache miss, making network request");
   const reqPromise = (async () => {
     let ts = Date.now();
     try {
@@ -226,8 +222,6 @@ export function httpGet<TResponse = any>(path: string, config: GenericRequestCon
   const response = SHOULD_USE_DUMMY_DATA ? 
     returnDummyData("GET", path, config) : 
     genericRequest<TResponse>(mergedConfig);
-  console.log(`HTTP GET: ${path} with config:`, config);  
-  console.log(`HTTP GET RESPONSE:`, response);  
   return response;
 }
 
@@ -237,12 +231,9 @@ export function httpPost<TResponse = any, TBody = unknown>(
   config: GenericRequestConfig = {}
 ) {
   const mergedConfig = { ...defaultConfig, ...config, method: "POST", path, body };
-  console.log(`HTTP POST: ${path} with payload:`, body);
   const response = SHOULD_USE_DUMMY_DATA ?
     <TResponse>returnDummyData("POST", path, body) :
     genericRequest<TResponse>(mergedConfig);
-  console.log(`HTTP POST: ${path} with payload:`, body);  
-  console.log(`HTTP POST RESPONSE:`, response); 
   return response;
 }
 
@@ -255,7 +246,5 @@ export function httpPut<TResponse = any, TBody = unknown>(
   const response = SHOULD_USE_DUMMY_DATA ?
     <TResponse>returnDummyData("PUT", path, body) :
     genericRequest<TResponse>(mergedConfig);
-  console.log(`HTTP PUT: ${path} with payload:`, body);  
-  console.log(`HTTP PUT RESPONSE:`, response); 
   return response;
 }

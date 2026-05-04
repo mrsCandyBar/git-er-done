@@ -1,10 +1,10 @@
 import type { UserProfile, UserStatusType } from "../models/userProfile";
-import { httpGet, httpPost, httpPut, type RequestConfig, setAuthToken } from "./httpClient";
+import { httpGet, httpPost, httpPut, type GenericRequestConfig, setAuthToken } from "./httpClient";
 import { encryptPayload, decryptPayload } from "../utilities/helper";
 
 export type CreateUserPayload = Omit<UserProfile, "updatedDate" | "lastLoginDate">;
 export type UpdateUserPayload = Partial<UserProfile>;
-type UserStoreConfig = Omit<RequestConfig, "query">;
+type UserStoreConfig = Omit<GenericRequestConfig, "query">;
 type SelectedFetchOptions = { forceRefresh?: boolean; };
 
 let selectedUser: UserProfile | null = null;
@@ -26,14 +26,11 @@ export const userStore = {
 	// as well as invalidate it when updates occur.
 
 	getSelectedUser() { return selectedUser; },
-
 	setSelectedUser(user: UserProfile) { setSelectedUserState(user);},
-
 	clearSelectedUser() {
 		selectedUser = null;
 		selectedUserNeedsRefresh = false;
 	},
-
 	invalidateSelectedUser() {
 		if (selectedUser) {
 			selectedUserNeedsRefresh = true;
@@ -45,7 +42,7 @@ export const userStore = {
 		const { forceRefresh = false } = options;
 		if (selectedUser && !selectedUserNeedsRefresh && !forceRefresh) { return selectedUser; }
 
-		const user = await httpGet<UserProfile>("/users/get/me", config);
+		const user:any = await httpGet<UserProfile>("/users/get/me", config);
 		setSelectedUserState(user);
 		return user;
 	},
@@ -67,17 +64,14 @@ export const userStore = {
 			};
 			localStorage.setItem('pass', encryptPayload(passPayload));
 		}
-		console.log("Logged in user:", response);
 		setSelectedUserState(response?.user);
 		return response?.user;
 	},
 	
 	async refreshToken(userId: string, email: string, config: UserStoreConfig = {}) {
 		const response:any = await httpPost<UserProfile, { userId: string, email: string }>('/users/refresh-token', { userId, email }, config);
-		// If the response contains a token, set it globally for all future requests
 		if (response?.token) {
 			setAuthToken(response.token);
-			// Update pass in localStorage
 			localStorage.setItem('pass', encryptPayload({ token: response.token, userId, email }));
 		}
 		setSelectedUserState(response?.user);
@@ -98,9 +92,12 @@ export const userStore = {
 			const { userId, email, token } = decryptPayload(pass);
 			setAuthToken(token);
 			await userStore.refreshToken(userId, email);
+			return "success";
+
 		} catch (e) {
 			setAuthToken(null);
 			localStorage.removeItem('pass');
+			return "failed";
 		}
 	},
 

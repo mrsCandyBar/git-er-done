@@ -16,14 +16,14 @@ export default function TasksPage() {
     let isMounted = true;
     async function loadPageData() {
       try {
-        const [tasks] = await Promise.all([
+        const [tasks]:any = await Promise.all([
           taskStore.getAllTasks({ status: getPropFromUrl("status") as Column["status"] ?? undefined }),
         ]);
 
         if (!isMounted) { return; }
 
         const hasTasks = tasks && (tasks.length > 0);
-        const dynamicCards = hasTasks ? createStackCards(tasks, getPropFromUrl("status")) : createStackCards(taskCardPayloads, getPropFromUrl("status"));
+        const dynamicCards = hasTasks ? createStackCards(tasks, getPropFromUrl("status")) : createStackCards([], getPropFromUrl("status"));
         setCards(dynamicCards);
 
       } catch {

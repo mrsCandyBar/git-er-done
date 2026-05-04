@@ -35,33 +35,44 @@ DONE:
 - [BE] add a new collection called achievements with basic CRUD updates 04/24
 - Rewrite store pages for easy updating of payloads and requests 04/28
 - Connected to BE 05/04 WOO!
-
+- encrypt auth token to localstorage 05/04
+- [BE] add auth token to BE 05/04
+- [BE] have auth token return with google login 05/04
+- [BE] use auth token to call for queries that requires user specific data 05/04
 
 TODO:
 - Test flow and payloads
   - isNewUser, prompt the user to create a recognisable pattern that they can use to login to their account later on 
-  - encrypt auth token to localstorage
     - hold onto it for 1 month
     - if user leaves page for 30 mins, add a user check. simple prop check for reinit purpose in the user payload
     - if user returns a day later 
       - let the user to use the token to call the data and then prompt them for the prop check
   
-  - add auth token to BE
-  - have auth token return with google login
-  - use auth token to call for queries that requires user specific data
-
 - profile page
 - recurring task page polish and timeline
+
+- [BE] achievement notification settings (Progress Update Push)
+- set achievement notification settings
+- achievements can be gained via FE
+  - achievements for completion in a week is task count: 6, 12 and 18 (max tasks)
+  - achievements for duration: quick thinker: 5 minutes and under, focused: 15 - 30 minutes, locked-in: 30 minutes - 2 hours, mountaineer: 2 hours and higher
+  - achievements for endurance: total completed task count 
+      20 tasks, 
+      50 tasks, 
+      100 tasks, 
+      210 tasks, 
+      430 tasks, 
+      870 tasks, 
+      1750 tasks, 
+      3510 tasks 
+
 - achievements over given time frame
 - achievements page overview
 - achievements calendar
-- set achievement notification settings
+
 
 THEN
 - MAKE PRETTY !!!!
 
 MUCH LATER:
 - BucketList
-
-BE TODOS:
-- achievement notification settings (Progress Update Push)
