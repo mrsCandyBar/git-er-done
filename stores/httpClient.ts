@@ -49,6 +49,20 @@ const defaultConfig: Omit<GenericRequestConfig, "path"> = {
   headers: { "Content-Type": "application/json" },
 };
 
+// Helper to set the Authorization header globally
+export function setAuthToken(token: string | null) {
+  if (token) {
+    defaultConfig.headers = {
+      ...defaultConfig.headers,
+      Authorization: `Bearer ${token}`,
+    };
+  } else {
+    // Remove the Authorization header
+    const { Authorization, ...rest } = defaultConfig.headers || {};
+    defaultConfig.headers = rest;
+  }
+}
+
 export class HttpError extends Error {
   readonly status: number;
   readonly payload: unknown;

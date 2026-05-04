@@ -1,5 +1,5 @@
 import type { UserProfile, UserStatusType } from "../models/userProfile";
-import { httpGet, httpPost, httpPut, type RequestConfig } from "./httpClient";
+import { httpGet, httpPost, httpPut, type RequestConfig, setAuthToken } from "./httpClient";
 
 export type CreateUserPayload = Omit<UserProfile, "updatedDate" | "lastLoginDate">;
 export type UpdateUserPayload = Partial<UserProfile>;
@@ -59,7 +59,11 @@ export const userStore = {
 	// in a real app these would likely involve more complex auth flows and token management
 
 	async loginWithGoogle(idToken: string, config: UserStoreConfig = {}) {
-		const response:any = await httpPost<UserProfile, { idToken: string }>("/users/login/google", { idToken }, config);
+		const response:any = await httpPost<UserProfile, { idToken: string }>('/users/login/google', { idToken }, config);
+		// If the response contains a token, set it globally for all future requests
+		if (response?.token) {
+			setAuthToken(response.token);
+		}
 		console.log("Logged in user:", response);
 		setSelectedUserState(response?.user);
 		return response?.user;
@@ -67,6 +71,7 @@ export const userStore = {
 
 	logout() {
 		userStore.clearSelectedUser();
+		setAuthToken(null);
 		return true;
 	},
 
