@@ -59,10 +59,10 @@ export const userStore = {
 	// in a real app these would likely involve more complex auth flows and token management
 
 	async loginWithGoogle(idToken: string, config: UserStoreConfig = {}) {
-		const user = await httpPost<UserProfile, { idToken: string }>("/users/login/google", { idToken }, config);
-		console.log("Logged in user:", user);
-		setSelectedUserState(user);
-		return user;
+		const response:any = await httpPost<UserProfile, { idToken: string }>("/users/login/google", { idToken }, config);
+		console.log("Logged in user:", response);
+		setSelectedUserState(response?.user);
+		return response?.user;
 	},
 
 	logout() {
