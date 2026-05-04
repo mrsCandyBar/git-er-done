@@ -87,7 +87,7 @@ export const taskStore = {
 	},
 
 	getAllTasks(query: TaskListQuery = {}, config: TaskStoreConfig = {}) {
-		return httpGet<TaskRecord[]>("/api/tasks/getAll", { ...config, query });
+		return httpGet<TaskRecord[]>("/tasks/getAll", { ...config, query });
 	},
 
 	async getTaskById(taskId: string, config: TaskStoreConfig = {}, options: SelectedFetchOptions = {}) {
@@ -96,13 +96,13 @@ export const taskStore = {
 			return selectedTask;
 		}
 
-		const task = await httpGet<TaskRecord>(`/api/tasks/${taskId}`, config);
+		const task = await httpGet<TaskRecord>(`/tasks/${taskId}`, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},
 
 	async createTask(payload: CreateTaskPayload, config: TaskStoreConfig = {}) {
-		const task = await httpPost<TaskRecord, CreateTaskPayload>("/api/tasks", payload, config);
+		const task = await httpPost<TaskRecord, CreateTaskPayload>("/tasks", payload, config);
 		return task;
 	},
 
@@ -111,7 +111,7 @@ export const taskStore = {
 			throw new Error("Can only update the currently selected task. Please call getTaskById first to select the task.");
 		}
 		
-		const task = await httpPut<TaskRecord, UpdateTaskPayload>(`/api/tasks/${taskId}`, payload, config);
+		const task = await httpPut<TaskRecord, UpdateTaskPayload>(`/tasks/${taskId}`, payload, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},
@@ -121,7 +121,7 @@ export const taskStore = {
 			throw new Error("Can only start a currently selected task");
 		}
 		
-		const task = await httpPut<TaskRecord, {}>(`/api/tasks/start/${taskId}`, {}, config);
+		const task = await httpPut<TaskRecord, {}>(`/tasks/start/${taskId}`, {}, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},
@@ -131,7 +131,7 @@ export const taskStore = {
 			throw new Error("Can only pause a currently selected task");
 		}
 		
-		const task = await httpPut<TaskRecord, {}>(`/api/tasks/pause/${taskId}`, {}, config);
+		const task = await httpPut<TaskRecord, {}>(`/tasks/pause/${taskId}`, {}, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},
@@ -141,7 +141,7 @@ export const taskStore = {
 			throw new Error(`Task ${taskId} not found`);
 		}
 
-		const task = await httpPut<TaskRecord, CompleteTaskPayload>(`/api/tasks/${taskId}/complete`, payload, config);
+		const task = await httpPut<TaskRecord, CompleteTaskPayload>(`/tasks/${taskId}/complete`, payload, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},

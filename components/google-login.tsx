@@ -2,6 +2,7 @@
 
 import Script from 'next/script';
 import { useEffect } from 'react';
+import { taskStore, userStore } from "@/stores";
 
 type GoogleCredentialResponse = {
   credential: string;
@@ -46,14 +47,12 @@ export default function GoogleLoginButton() {
 
   async function handleCredentialResponse(response: GoogleCredentialResponse) {
     const idToken = response.credential;
-
-    const res = await fetch('http://localhost:3000/api/users/login/google', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idToken }),
+    let data = userStore.loginWithGoogle(idToken).then(user => {
+      console.log("Logged in user:", user);
+    }).catch(error => {
+      console.error("Login failed:", error);
     });
 
-    const data = await res.json();
     console.log(data);
   }
 

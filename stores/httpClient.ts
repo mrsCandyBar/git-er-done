@@ -15,76 +15,38 @@ function getRequestKey(method: string, path: string, body: unknown, query?: Quer
 
 // In-flight and completed request cache (persists done responses in sessionStorage)
 type InflightCacheEntry =
-  | { status: "pending"; promise: Promise<unknown>; timestamp: number }
-  | { status: "done"; response: unknown; error?: unknown; timestamp: number };
+  | { status: "pending"; promise: Promise<any>; timestamp: number }
+  | { status: "done"; response: any; error?: unknown; timestamp: number };
 const inflightRequests = new Map<string, InflightCacheEntry>();
 const DEDUPE_WINDOW_MS = 1000;
 
-// LocalStorage cache helpers (refactored)
-const STORAGE_KEY = "httpClientDedupeCache";
-type StorageCacheEntry = { response?: unknown; error?: string; timestamp: number };
-
-function loadStorageCache(): Record<string, StorageCacheEntry> {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
-    return JSON.parse(raw);
-  } catch {
-    return {};
-  }
-}
-
-function saveStorageCache(cache: Record<string, StorageCacheEntry>) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
-  } catch {}
-}
-
-function getCacheEntry(key: string, now: number) {
-  // Check in-memory cache
-  const cached = inflightRequests.get(key);
-  if (cached && now - cached.timestamp < DEDUPE_WINDOW_MS) {
-    return cached;
-  }
-  // Check localStorage
-  const storageCache = loadStorageCache();
-  const storageEntry = storageCache[key];
-  if (storageEntry && now - storageEntry.timestamp < DEDUPE_WINDOW_MS) {
-    if (storageEntry.error !== undefined) {
-      inflightRequests.set(key, { status: "done", response: undefined, error: storageEntry.error, timestamp: storageEntry.timestamp });
-    } else {
-      inflightRequests.set(key, { status: "done", response: storageEntry.response, timestamp: storageEntry.timestamp });
-    }
-    return inflightRequests.get(key);
-  }
-  return undefined;
-}
-
-function setCacheEntry(key: string, entry: { response?: unknown; error?: string; timestamp: number }) {
-  inflightRequests.set(key, { status: "done", response: entry.response, error: entry.error, timestamp: entry.timestamp });
-  const storageCache = loadStorageCache();
-  storageCache[key] = { response: entry.response, error: entry.error, timestamp: entry.timestamp };
-  saveStorageCache(storageCache);
-}
-
-function cleanupCacheEntry(key: string) {
-  inflightRequests.delete(key);
-  const storageCache = loadStorageCache();
-  if (storageCache[key]) {
-    delete storageCache[key];
-    saveStorageCache(storageCache);
-  }
-}
+// Cache helpers moved to utilities/helper
+import {
+  loadStorageCache,
+  saveStorageCache,
+  getCacheEntry,
+  setCacheEntry,
+  cleanupCacheEntry,
+  StorageCacheEntry
+} from "../utilities/helper";
 
 type QueryPrimitive = string | number | boolean | null | undefined;
 type QueryValue = QueryPrimitive | QueryPrimitive[];
 
 export type QueryParams = Record<string, QueryValue>;
 
-export type RequestConfig = {
+
+export type GenericRequestConfig = {
   query?: QueryParams;
   headers?: HeadersInit;
   signal?: AbortSignal;
+  body?: any;
+  method?: RequestMethod;
+  path?: string;
+};
+
+const defaultConfig: Omit<GenericRequestConfig, "path"> = {
+  headers: { "Content-Type": "application/json" },
 };
 
 export class HttpError extends Error {
@@ -149,20 +111,19 @@ async function parseResponsePayload(response: Response): Promise<unknown> {
 type RequestMethod = "GET" | "POST" | "PUT";
 
 
-async function request<TResponse>(
-  method: RequestMethod,
-  path: string,
-  config: RequestConfig & { body?: unknown } = {}
-): Promise<TResponse> {
-  const { query, body, headers, signal } = config;
+async function genericRequest<TResponse = any>(config: GenericRequestConfig): Promise<TResponse> {
+  const method = config.method ?? "GET";
+  const path = config.path ?? "";
+  const query = config.query;
+  const body = config.body;
+  const headers = { ...defaultConfig.headers, ...config.headers };
+  const signal = config.signal;
   const key = getRequestKey(method, path, body, query);
   console.log("[httpClient dedupe] key:", key);
   const now = Date.now();
 
-
-
   // Unified cache check
-  const cacheEntry = getCacheEntry(key, now);
+  const cacheEntry = getCacheEntry(key, now, inflightRequests, DEDUPE_WINDOW_MS);
   if (cacheEntry) {
     console.log("[httpClient dedupe] cache hit", cacheEntry.status);
     if (cacheEntry.status === "pending") {
@@ -184,10 +145,7 @@ async function request<TResponse>(
     try {
       const response = await fetch(url, {
         method,
-        headers: {
-          ...(isFormData ? {} : { "Content-Type": "application/json" }),
-          ...headers,
-        },
+        headers: isFormData ? { ...headers } : { "Content-Type": "application/json", ...headers },
         body: body === undefined ? undefined : isFormData ? (body as BodyInit) : JSON.stringify(body),
         signal,
       });
@@ -197,18 +155,18 @@ async function request<TResponse>(
       }
       // On success, cache the response for the dedupe window
       ts = Date.now();
-      setCacheEntry(key, { response: payload, timestamp: ts });
+      setCacheEntry(key, { response: payload, timestamp: ts }, inflightRequests);
       setTimeout(() => {
-        cleanupCacheEntry(key);
+        cleanupCacheEntry(key, inflightRequests);
       }, DEDUPE_WINDOW_MS);
       return payload as TResponse;
     } catch (err) {
       // On error, cache the error for the dedupe window
       ts = Date.now();
       const serialized = serializeError(err);
-      setCacheEntry(key, { error: serialized, timestamp: ts });
+      setCacheEntry(key, { error: serialized, timestamp: ts }, inflightRequests);
       setTimeout(() => {
-        cleanupCacheEntry(key);
+        cleanupCacheEntry(key, inflightRequests);
       }, DEDUPE_WINDOW_MS);
       throw err;
     }
@@ -249,40 +207,40 @@ function deserializeError(str: string): Error {
 }
 }
 
-export function httpGet<TResponse>(path: string, config: RequestConfig = {}) {
+export function httpGet<TResponse = any>(path: string, config: GenericRequestConfig = {}) {
+  const mergedConfig = { ...defaultConfig, ...config, method: "GET", path };
   const response = SHOULD_USE_DUMMY_DATA ? 
     returnDummyData("GET", path, config) : 
-    request<TResponse>("GET", path, config);
-  
+    genericRequest<TResponse>(mergedConfig);
   console.log(`HTTP GET: ${path} with config:`, config);  
   console.log(`HTTP GET RESPONSE:`, response);  
   return response;
 }
 
-export function httpPost<TResponse, TBody = unknown>(
+export function httpPost<TResponse = any, TBody = unknown>(
   path: string,
   body: TBody,
-  config: RequestConfig = {}
+  config: GenericRequestConfig = {}
 ) {
+  const mergedConfig = { ...defaultConfig, ...config, method: "POST", path, body };
   console.log(`HTTP POST: ${path} with payload:`, body);
   const response = SHOULD_USE_DUMMY_DATA ?
     <TResponse>returnDummyData("POST", path, body) :
-    request<TResponse>("POST", path, { ...config, body });
-
+    genericRequest<TResponse>(mergedConfig);
   console.log(`HTTP POST: ${path} with payload:`, body);  
   console.log(`HTTP POST RESPONSE:`, response); 
   return response;
 }
 
-export function httpPut<TResponse, TBody = unknown>(
+export function httpPut<TResponse = any, TBody = unknown>(
   path: string,
   body: TBody,
-  config: RequestConfig = {}
+  config: GenericRequestConfig = {}
 ) {
+  const mergedConfig = { ...defaultConfig, ...config, method: "PUT", path, body };
   const response = SHOULD_USE_DUMMY_DATA ?
     <TResponse>returnDummyData("PUT", path, body) :
-    request<TResponse>("PUT", path, { ...config, body });
-
+    genericRequest<TResponse>(mergedConfig);
   console.log(`HTTP PUT: ${path} with payload:`, body);  
   console.log(`HTTP PUT RESPONSE:`, response); 
   return response;

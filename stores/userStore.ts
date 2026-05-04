@@ -44,11 +44,11 @@ export const userStore = {
 		const { forceRefresh = false } = options;
 		if (selectedUser) {
 			if (selectedUser && !selectedUserNeedsRefresh && !forceRefresh) { return selectedUser; }
-			const user = await httpGet<UserProfile>("/api/users/get/" + selectedUser.id, config);
+			const user = await httpGet<UserProfile>("/users/get/" + selectedUser.id, config);
 			setSelectedUserState(user);
 			return user;
 		} else {
-			const user = await httpGet<UserProfile>("/api/users/me", config);
+			const user = await httpGet<UserProfile>("/users/me", config);
 			setSelectedUserState(user);
 			return user;
 		}
@@ -58,8 +58,8 @@ export const userStore = {
 	// login/logout methods for demonstration purposes - 
 	// in a real app these would likely involve more complex auth flows and token management
 
-	async loginWithGoogle(credential: string, config: UserStoreConfig = {}) {
-		const user = await httpPost<UserProfile, { credential: string }>("/api/users/login/google", { credential }, config);
+	async loginWithGoogle(idToken: string, config: UserStoreConfig = {}) {
+		const user = await httpPost<UserProfile, { idToken: string }>("/users/login/google", { idToken }, config);
 		console.log("Logged in user:", user);
 		setSelectedUserState(user);
 		return user;
@@ -75,14 +75,14 @@ export const userStore = {
 	// This method will be used to update the user's status or other profile information.
 
 	async updateCurrentProfile(payload?: any, config: UserStoreConfig = {}) {
-		const user = await httpPut<UserProfile, UserProfile>("/api/users/" + selectedUser?.id, payload, config);
+		const user = await httpPut<UserProfile, UserProfile>("/users/" + selectedUser?.id, payload, config);
 		setSelectedUserState(user);
 		return user;
 	},
 
 	async updateStatus(status: UserStatusType, config: UserStoreConfig = {}) {
 		const user = await httpPut<UserProfile, { status: UserStatusType }>(
-			"/api/users/updateStatus/" + selectedUser?.id, 
+			"/users/updateStatus/" + selectedUser?.id, 
 			{ status }, 
 			config
 		);
