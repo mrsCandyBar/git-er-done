@@ -12,6 +12,7 @@ import styles from "./page.module.scss";
 function UpdateTaskPageContent() {
   const router = useRouter();
   const selectedTask = taskStore.getSelectedTask();
+  taskStore.getAllTaskCategories(); // Preload categories for the form dropdown
   const payload = selectedTask ? (selectedTask as UpdateTaskPayload) : null;
 
 
@@ -46,17 +47,20 @@ function UpdateTaskPageContent() {
   /////////////////////////
 
   const handleSubmit = async (formData: Record<string, FormDataEntryValue>) => {
-    if (!payload?.id) return;
+    console.log("Form data submitted:", formData, payload);
+    if (!payload?._id) return;
     
     const payloadData = parseTaskPayload(payload, formData, checklist);
+    console.log("Parsed payload data:", payloadData);
     if (!payloadData) return;
     if (!checklistEnabled && checklist.length > 0) {
       payloadData.checklist = [];
     }
 
     try {
-      await taskStore.updateTask(payload.id, payloadData);
-      router.push("/tasks/task?id=" + payload.id);
+      console.log("Attempting to update task with ID:", payload);
+      await taskStore.updateTask(payload._id, payloadData);
+      router.push("/tasks/task?id=" + payload._id);
     } catch {}
   };
 

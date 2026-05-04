@@ -51,7 +51,7 @@ export default function Profile() {
       try {
         const [profile, completedTasks]:any = await Promise.all([
           userStore.getCurrentProfile(),
-          taskStore.getAllTasks({ status: "complete" }),
+          taskStore.getAllTasks({ state: "complete" }),
         ]);
 
         if (!isMounted) {
@@ -71,15 +71,15 @@ export default function Profile() {
         }
 
         setSingleCompletedTask({
-          id: latestTask.id,
-          icon: taskIconByCategory[latestTask.category],
-          status: latestTask.status,
+          _id: latestTask._id,
+          icon: taskIconByCategory[latestTask.category as keyof typeof taskIconByCategory] || "🎯",
+          state: latestTask.state,
           title: latestTask.name,
           description: latestTask.description,
           checklist: latestTask.checklist?.map((task, index) => ({
             label: task.label,
             checked: Boolean(task.checked),
-            id: task.id ?? `${latestTask.id}-${index}`,
+            _id: task._id ?? `${latestTask._id}-${index}`,
           })),
           category: latestTask.category,
           createdDate: toDisplayDate(latestTask.updatedDate),

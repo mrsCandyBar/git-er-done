@@ -11,13 +11,13 @@ type TaskChecklistItem = {
 };
 
 type SingleCompletedTask = {
-  id: string;
+  _id: string;
   icon: string;
-  status: "waiting" | "busy" | "complete";
+  state: "waiting" | "busy" | "complete";
   title: string;
   description: string;
   checklist?: TaskChecklistItem[];
-  category: "new" | "fun" | "quest";
+  category: string;
   createdDate: string;
   startedDate: string;
   startedAt?: string;

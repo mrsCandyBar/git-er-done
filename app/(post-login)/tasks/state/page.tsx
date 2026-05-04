@@ -17,13 +17,13 @@ export default function TasksPage() {
     async function loadPageData() {
       try {
         const [tasks]:any = await Promise.all([
-          taskStore.getAllTasks({ status: getPropFromUrl("status") as Column["status"] ?? undefined }),
+          taskStore.getAllTasks({ state: getPropFromUrl("state") as Column["state"] ?? undefined }),
         ]);
 
         if (!isMounted) { return; }
 
         const hasTasks = tasks && (tasks.length > 0);
-        const dynamicCards = hasTasks ? createStackCards(tasks, getPropFromUrl("status")) : createStackCards([], getPropFromUrl("status"));
+        const dynamicCards = hasTasks ? createStackCards(tasks, getPropFromUrl("state")) : createStackCards([], getPropFromUrl("state"));
         setCards(dynamicCards);
 
       } catch {

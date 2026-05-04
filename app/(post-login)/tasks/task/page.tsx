@@ -32,6 +32,7 @@ export default function Task() {
 
     async function loadTasks() {
       try {
+        if (!selectedTaskId) { return; }
         const task = await taskStore.getTaskById(selectedTaskId ?? "", {}, { forceRefresh: true });
         const foundTask: TaskRecord | null = task ? task : null;
         const taskDetailCard = foundTask ? toDetailCard(foundTask) : null;
@@ -57,7 +58,6 @@ export default function Task() {
   }, [selectedTaskId]);
 
   
-
   const openTaskModal = (method: string, task: detailCard) => {
     const url = updateTaskModal(method, task);
     router.push(url);
@@ -91,7 +91,7 @@ export default function Task() {
           : task);
 
     void taskStore.updateTask(
-      selectedTask.id, { ...selectedTask, checklist: updateTaskList }).then((updatedTask) => {
+      selectedTask._id, { ...selectedTask, checklist: updateTaskList }).then((updatedTask) => {
         if (updatedTask) {
           setSelectedTask(updatedTask);
           setSelectedTaskCard(toDetailCard(updatedTask));
@@ -133,7 +133,7 @@ export default function Task() {
 
         {selectedTaskCard && (
           <>
-            {selectedTaskCard.status === "waiting" && (
+            {selectedTaskCard.state === "waiting" && (
               <TaskWaitingPage
                 task={selectedTaskCard}
                 onStartTask={() => updateTask("start")}
@@ -142,7 +142,7 @@ export default function Task() {
               />
             )}
 
-          {selectedTaskCard.status === "busy" && (
+          {selectedTaskCard.state === "busy" && (
             <TaskBusyPage
                 task={selectedTaskCard}
                 onOpenCompleteTask={(task) => openTaskModal("complete", task)}
@@ -151,7 +151,7 @@ export default function Task() {
               />
             )}
 
-          {selectedTaskCard.status === "complete" && (
+          {selectedTaskCard.state === "complete" && (
             <TaskCompletePage
               task={selectedTaskCard}
             />

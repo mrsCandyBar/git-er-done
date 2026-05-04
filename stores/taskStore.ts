@@ -3,11 +3,11 @@ import type { TaskCategory, TaskCategoryModel } from "../models/userProfile";
 import { httpGet, httpPost, httpPut, type GenericRequestConfig } from "./httpClient";
 
 export type TaskRecord = {
-	id: string;
-	category: TaskCategory;
+	_id: string;
+	category: string;
 	name: string;
 	description: string;
-	status: Column["status"];
+	state: Column["state"];
 	checklist?: Task[];
 	createdDate?: string;
 	startedDate?: string;
@@ -22,17 +22,17 @@ export type TaskRecord = {
 };
 
 export type CreateTaskPayload = {
-	category: TaskCategory;
+	category: string;
 	name: string;
 	description: string;
 	checklist?: Task[];
 };
 
 export type UpdateTaskPayload = {
-	category: TaskCategory;
+	category: string;
 	name: string;
 	description: string;
-	status?: Column["status"];
+	state?: Column["state"];
 	checklist?: Task[];
 };
 
@@ -45,9 +45,9 @@ export type CompleteTaskPayload = {
 };
 
 export type TaskListQuery = {
-	category?: TaskCategory;
+	category?: string;
 	recurId?: Column["recurId"];
-	status?: Column["status"];
+	state?: Column["state"];
 	limit?: number;
 };
 
@@ -62,7 +62,7 @@ let selectedTaskNeedsRefresh = false;
 function setSelectedTaskState(task: TaskRecord) {
 	if (task) {
 		selectedTask = task;
-		selectedTaskId = task.id;
+		selectedTaskId = task._id;
 		selectedTaskNeedsRefresh = false;
 	}
 }
@@ -107,17 +107,22 @@ export const taskStore = {
 			return selectedTask;
 		}
 
+		if (!taskId) { return null; }
 		const task:any = await httpGet<TaskRecord>(`/tasks/get/${taskId}`, config);
 		task && setSelectedTaskState(task);
 		return task;
 	},
 
 	async createTask(payload: CreateTaskPayload, config: TaskStoreConfig = {}) {
+		payload.category = selectedTaskCategories?.find((cat) => cat.name == payload.category)?._id || payload.category;
+		console.log("Creating task with payload:", payload, selectedTaskCategories, selectedTaskCategories?.find((cat) => cat.name == payload.category)?._id);
 		const task = await httpPost<TaskRecord, CreateTaskPayload>("/tasks/create", payload, config);
 		return task;
 	},
 
 	async updateTask(taskId: string, payload: UpdateTaskPayload, config: TaskStoreConfig = {}) {
+		payload.category = selectedTaskCategories?.find((cat) => cat.name == payload.category)?._id || payload.category;
+		console.log("Updating task with payload:", payload, selectedTaskCategories, selectedTaskCategories?.find((cat) => cat.name == payload.category)?._id);
 		if (!selectedTask || selectedTaskId !== taskId) {
 			throw new Error("Can only update the currently selected task. Please call getTaskById first to select the task.");
 		}

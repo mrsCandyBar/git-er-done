@@ -3,15 +3,15 @@ import { TaskRecord } from "./taskStore";
 
 export const dummyTasks: TaskRecord[] = [
     {
-        id: "dummy-dance-class",
+        _id: "dummy-dance-class",
         category: "fun",
         name: "Dance Class for Beginners",
         description: "Let's get those feet moving! This beginner-friendly dance class is perfect for anyone looking to have fun.",
-        status: "waiting",
+        state: "waiting",
         checklist: [
-            { id: "dummy-dance-class-1", label: "Book an appointment", checked: true },
-            { id: "dummy-dance-class-2", label: "Arrange transportation", checked: true },
-            { id: "dummy-dance-class-3", label: "Take a keepsake photo", checked: false },
+            { _id: "dummy-dance-class-1", label: "Book an appointment", checked: true },
+            { _id: "dummy-dance-class-2", label: "Arrange transportation", checked: true },
+            { _id: "dummy-dance-class-3", label: "Take a keepsake photo", checked: false },
         ],
         updatedDate: new Date().toISOString(),
     },
@@ -70,9 +70,9 @@ export function returnDummyData(method: string, path: string, body?: any) {
     } else if (path.includes("/api/tasks/getAll")) {
       let filteredTasks = dummyTaskListCache;
       if (body && body.query && body.query) {
-        if (body.query.status) {
+        if (body.query.state) {
           filteredTasks = filteredTasks.length > 0 ?
-              filteredTasks.filter((task) => task.status === body.query.status) : [];
+              filteredTasks.filter((task) => task.state === body.query.state) : [];
         } else if (body.query.category) {
           filteredTasks = filteredTasks.length > 0 ?
               filteredTasks.filter((task) => task.category === body.query.category) : [];
@@ -82,7 +82,7 @@ export function returnDummyData(method: string, path: string, body?: any) {
 
     } else if (path.includes("/api/tasks/")) {
       const taskId = path.split("/").pop();
-      const foundTask = dummyTasks.find((entry) => entry.id === taskId);
+      const foundTask = dummyTasks.find((entry) => entry._id === taskId);
       if (!foundTask) { throw new Error(`Task ${taskId} not found`); }
       dummySelectedTask = foundTask;
       return dummySelectedTask;
@@ -116,10 +116,10 @@ export function returnDummyData(method: string, path: string, body?: any) {
     } else if (path.includes("/api/tasks/start/")) {
       dummySelectedTask = dummySelectedTask ? {
 				...dummySelectedTask,
-				status: "busy"
+				state: "busy"
 			} : {
         ...dummyTasks[0],
-        status: "busy"
+        state: "busy"
       };
 
       return dummySelectedTask;
@@ -127,10 +127,10 @@ export function returnDummyData(method: string, path: string, body?: any) {
     } else if (path.includes("/api/tasks/pause/")) {
       dummySelectedTask = dummySelectedTask ? {
 				...dummySelectedTask,
-				status: "waiting"
+				state: "waiting"
 			} : {
         ...dummyTasks[0],
-        status: "waiting"
+        state: "waiting"
       };
 
       return dummySelectedTask;
@@ -150,11 +150,11 @@ export function returnDummyData(method: string, path: string, body?: any) {
       if (body) {
         dummySelectedTask = dummySelectedTask ? {
           ...dummySelectedTask,
-          status: "complete",
+          state: "complete",
           completed: { ...body },
         } : {
           ...dummyTasks[0],
-          status: "complete",
+          state: "complete",
           completed: { ...body },
         };
         return dummySelectedTask;

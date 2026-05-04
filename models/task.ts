@@ -20,23 +20,23 @@ export type TaskCard = {
 
 // Helper to convert TaskCard payloads to CardStackItem format
 
-export function createStackCards(tasks: { name: string; description: string; id: string }[], status?: string): CardStackItem[] {
+export function createStackCards(tasks: { name: string; description: string; _id: string }[], status?: string): CardStackItem[] {
   return tasks.map((task) => ({
     title: task.name,
     description: task.description,
     ctaLabel: status ? (status === "complete" ? "Open 📑" : "Continue 🔖") : "Start! 🚀",
-    ctaHref: `/tasks/task?id=${task.id}`,
+    ctaHref: `/tasks/task?id=${task._id}`,
   }));
 }
 
-export function createRecurStackCards(tasks: { name: string; description: string; id: string }[]): CardStackItem[] {
+export function createRecurStackCards(tasks: { name: string; description: string; _id: string }[]): CardStackItem[] {
   return tasks.map((task) => ({
     title: task.name,
     description: task.description,
     ctaLabel: "Show History 🚀",
-    ctaHref: `/tasks/recur/task?id=${task.id}`,
+    ctaHref: `/tasks/recur/task?id=${task._id}`,
     cta2Label: "Start! 🚀",
-    cta2Href: `/tasks/task?id=${task.id}`,
+    cta2Href: `/tasks/task?id=${task._id}`,
   }));
 }
 
@@ -131,7 +131,7 @@ export type Task = { id?: string; label: string; checked?: boolean };
 export type Mood = TaskMood;
 
 export type detailCard = {
-  id: string;
+  _id: string;
   eyebrow: string;
   icon: string;
   title: string;
@@ -147,15 +147,15 @@ export type detailCard = {
     recur?: boolean;
     keepsakeUrl?: string;
   }
-  status: "waiting" | "busy" | "complete";
+  state: "waiting" | "busy" | "complete";
 };
 
 export function toDetailCard(task: TaskRecord): detailCard {
   return {
-    id: task.id,
+    _id: task._id,
     eyebrow: task.category.toUpperCase(),
-    icon: taskIconByCategory[task.category],
-    status: task.status,
+    icon:  taskIconByCategory[task.category as TaskCategory] || "🎯",
+    state: task.state,
     title: task.name,
     description: task.description,
     checklist: task.checklist,
@@ -170,20 +170,20 @@ export function toDetailCard(task: TaskRecord): detailCard {
 export function updateTaskModal(method: string, column: detailCard): any {
   if (method === "update") {
     const taskPayload = {
-      id: column.id,
+      _id: column._id,
       title: column.title,
       description: column.description,
       checklist: column.checklist?.map((task) => task.label) ?? undefined,
     };
-    return `/tasks/form/update?id=${taskPayload.id}`;
+    return `/tasks/form/update?id=${taskPayload._id}`;
   };
 
   if (method === "complete") {
     const completionPayload = {
-      id: column.id,
+      _id: column._id,
       startedAt: column.updatedDate,
     };
-    return `/tasks/form/complete?id=${completionPayload.id}`;
+    return `/tasks/form/complete?id=${completionPayload._id}`;
   };
 }
 
@@ -200,7 +200,7 @@ export type DraftUpdateTask = {
 };
 
 export type UpdateTaskPayload = {
-  id?: string;
+  _id?: string;
   name?: string;
   description?: string;
   checklist?: { label: string; checked: boolean }[];

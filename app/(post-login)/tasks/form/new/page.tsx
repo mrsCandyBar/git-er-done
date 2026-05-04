@@ -29,7 +29,7 @@ export default function NewTaskPage() {
         const [profile, taskCategories, tasks]:any = await Promise.all([
           userStore.getCurrentProfile(),
           taskStore.getAllTaskCategories(),
-          taskStore.getAllTasks({ status: "waiting" }),
+          taskStore.getAllTasks({ state: "waiting" }),
         ]);
 
         if (!isMounted) {

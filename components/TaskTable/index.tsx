@@ -1,7 +1,7 @@
 import styles from "./TaskTable.module.scss";
 
 export type TaskTableItem = {
-  id?: string;
+  _id?: string;
   label: string;
   description?: string;
   checked?: boolean;
@@ -52,11 +52,11 @@ export default function TaskTable({
             : useIcons
               ? styles.iconUnCheckedRow
               : "";
-          const rowClassName = `${styles.row}${task.id ? ` ${styles.targetRow}` : ""}${checkedClassName ? ` ${checkedClassName}` : ""}`;
+          const rowClassName = `${styles.row}${task._id ? ` ${styles.targetRow}` : ""}${checkedClassName ? ` ${checkedClassName}` : ""}`;
           const statusText = isChecked ? resolvedCompletedLabel : resolvedPendingLabel;
 
           return (
-            <tr key={task.id ?? `${task.label}-${taskIndex}`} id={task.id} className={rowClassName}>
+            <tr key={task._id ?? `${task.label}-${taskIndex}`} id={task._id} className={rowClassName}>
               <td className={styles.nameCell}>{task.label}<br/><small>{task.description}</small></td>
               <td className={styles.statusCell}>
                 {showCheckbox && onToggleTask ? (

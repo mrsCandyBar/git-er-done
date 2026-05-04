@@ -2,7 +2,7 @@ export type UserStatusType = "friend" | "friend_new" | "friend_dear" | "friend_c
 
 export type TaskCategory = "new" | "fun" | "quest";
 export type TaskCategoryModel = {
-  id?: string;
+  _id?: string;
   name: string;
   description: string;
 };

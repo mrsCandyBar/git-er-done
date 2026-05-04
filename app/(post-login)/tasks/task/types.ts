@@ -1,11 +1,11 @@
 import type { TaskMood } from "../../../../models/taskMood";
 
-export type Task = { id?: string; label: string; checked?: boolean };
+export type Task = { _id?: string; label: string; checked?: boolean };
 
 export type Mood = TaskMood;
 
 export type Column = {
-  id: string;
+  _id: string;
   eyebrow: string;
   icon: string;
   title: string;
@@ -18,5 +18,5 @@ export type Column = {
   recur?: boolean;
   recurId?: string;
   keepsakeUrl?: string;
-  status: "waiting" | "busy" | "complete";
+  state: "waiting" | "busy" | "complete";
 };
