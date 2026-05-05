@@ -18,12 +18,12 @@ export default function MultiTaskCompletionInsights({
   const aspirationCounts = {
     new: currentUserProfile.aspirations.new.length,
     fun: currentUserProfile.aspirations.fun.length,
-    task: currentUserProfile.aspirations.task.length,
+    quest: currentUserProfile.aspirations.quest.length,
   };
 
   const achievementTotals = currentUserProfile.achievements.reduce(
     (acc, entry) => {
-      const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.task.length;
+      const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.quest.length;
       const recognisedCount = entry.recognised.length;
 
       return {
@@ -39,16 +39,16 @@ export default function MultiTaskCompletionInsights({
   }
 
   const dominantAspirationCategory =
-    aspirationCounts.new >= aspirationCounts.fun && aspirationCounts.new >= aspirationCounts.task
+    aspirationCounts.new >= aspirationCounts.fun && aspirationCounts.new >= aspirationCounts.quest
       ? "new"
-      : aspirationCounts.task >= aspirationCounts.fun
-        ? "task"
+      : aspirationCounts.quest >= aspirationCounts.fun
+        ? "quest"
         : "fun";
 
   const mindsetSummary =
     dominantAspirationCategory === "new"
       ? "You are leaning into growth and choosing fresh experiences to motivate positive change."
-      : dominantAspirationCategory === "task"
+      : dominantAspirationCategory === "quest"
         ? "You are in momentum, focused on getting ahead of your day-to-day commitments."
         : "You are signaling a healthy need for personal time, joy, and restorative space.";
 
@@ -80,7 +80,7 @@ export default function MultiTaskCompletionInsights({
     <>
       <Text as="p" tone="secondary">
         Your current aspirations are mapped across <br/>
-        <b>new</b> ({aspirationCounts.new}), <b>fun</b> ({aspirationCounts.fun}), and <b>quest</b> ({aspirationCounts.task}). <br/>
+        <b>new</b> ({aspirationCounts.new}), <b>fun</b> ({aspirationCounts.fun}), and <b>quest</b> ({aspirationCounts.quest}). <br/>
       </Text>
 
       <Text as="h4" align="center" fullWidth>Progress & Wins</Text>

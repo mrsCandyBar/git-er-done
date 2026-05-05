@@ -45,7 +45,7 @@ export const dummyCurrentUser: UserProfile = {
       completed: {
         new: ["1","2","3","4","5"],
         fun: ["6","7","8"],
-        task: ["9"],
+        quest: ["9"],
       },
       recognised: ["11","12"],
     },
@@ -53,7 +53,7 @@ export const dummyCurrentUser: UserProfile = {
   aspirations: {
     new: ["1","2","3","4","5"],
     fun: ["6","7","8"],
-    task: ["9"],
+    quest: ["9"],
   },
 };
 
