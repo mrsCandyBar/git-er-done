@@ -37,7 +37,7 @@ export default function Profile() {
   const card = currentUserProfile ? friendStatusActionContent[currentUserProfile.status] : undefined;
   const completedTasksCount = currentUserProfile ? currentUserProfile?.achievements.reduce(
     (acc, entry) => {
-      const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.quest.length;
+      const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.task.length;
       return acc + completedCount;
     },
     0

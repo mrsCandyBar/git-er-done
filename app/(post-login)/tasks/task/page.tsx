@@ -84,19 +84,21 @@ export default function Task() {
   };
   
   const updateTaskToggle = (selectedTask: TaskRecord, taskGoalIndex: number) => {
-    const updateTaskList = selectedTask.checklist?.map(
-      (task, index) => 
-        index === taskGoalIndex ? 
-          { ...task, checked: !task.checked } 
-          : task);
+    if (selectedTask) {
 
-    void taskStore.updateTask(
-      selectedTask._id, { ...selectedTask, checklist: updateTaskList }).then((updatedTask) => {
-        if (updatedTask) {
-          setSelectedTask(updatedTask);
-          setSelectedTaskCard(toDetailCard(updatedTask));
-        }
-      })
+      const updateTaskList = selectedTask.checklist?.map(
+        (task, index) => 
+          index === taskGoalIndex ? 
+            { ...task, checked: !task.checked, updateDate: new Date() }
+            : task);
+
+      void taskStore.updateTask(selectedTask._id, { ...selectedTask, checklist: updateTaskList }).then((updatedTask) => {
+          if (updatedTask) {
+            setSelectedTask(updatedTask);
+            setSelectedTaskCard(toDetailCard(updatedTask));
+          }
+        })
+    };
   };
 
   useEffect(() => {

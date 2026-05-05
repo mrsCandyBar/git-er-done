@@ -8,7 +8,7 @@ const links = [
   //{ href: "/dashboard", label: "Dashboard" },
   { href: "/tasks", label: "Tasks" },
   { href: "/profile", label: "Profile" },
-  { href: "/tasks/state?status=complete", label: "Completed Tasks" },
+  { href: "/tasks/state?state=complete", label: "Completed Tasks" },
 ];
 
 export default function PostLoginNav() {

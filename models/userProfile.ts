@@ -1,6 +1,6 @@
 export type UserStatusType = "friend" | "friend_new" | "friend_dear" | "friend_close";
 
-export type TaskCategory = "new" | "fun" | "quest";
+export type TaskCategory = "new" | "fun" | "task";
 export type TaskCategoryModel = {
   _id?: string;
   name: string;

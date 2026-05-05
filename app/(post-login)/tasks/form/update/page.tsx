@@ -34,7 +34,7 @@ function UpdateTaskPageContent() {
       const addChecklistItem = () => {
         const nextItem = checklistDraft.trim();
         if (!nextItem) return; 
-        setChecklist((prev) => [...prev, { label: nextItem, checked: false }]);
+        setChecklist((prev) => [...prev, { label: nextItem, checked: false, updateDate: new Date() }]);
         setChecklistDraft("");
       };
 

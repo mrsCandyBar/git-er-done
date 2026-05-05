@@ -105,7 +105,7 @@ export function countCompletedTasks(profile: UserProfile): number {
         count +
         (completed?.new?.length ?? 0) +
         (completed?.fun?.length ?? 0) +
-        (completed?.quest?.length ?? 0)
+        (completed?.task?.length ?? 0)
         );
     }, 0)
     : 0;
@@ -140,6 +140,7 @@ export type detailCard = {
   createdDate?: string;
   startedDate?: string;
   updatedDate?: string;
+  recurId?: string;
   completed?: {
     completedDate?: string;
     finalNotes?: string;
@@ -157,6 +158,7 @@ export function toDetailCard(task: TaskRecord): detailCard {
     icon:  taskIconByCategory[task.category as TaskCategory] || "🎯",
     state: task.state,
     title: task.name,
+    recurId: task.recurId,
     description: task.description,
     checklist: task.checklist,
     createdDate: task.updatedDate,

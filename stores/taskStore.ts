@@ -8,6 +8,7 @@ export type TaskRecord = {
 	name: string;
 	description: string;
 	state: Column["state"];
+	recurId?: string;
 	checklist?: Task[];
 	createdDate?: string;
 	startedDate?: string;

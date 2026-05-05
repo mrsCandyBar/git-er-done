@@ -39,15 +39,19 @@ DONE:
 - [BE] add auth token to BE 05/04
 - [BE] have auth token return with google login 05/04
 - [BE] use auth token to call for queries that requires user specific data 05/04
+- [BE] add auth for task requests 05/04
+- start, pause and complete tasks
 
 TODO:
 - Test flow and payloads
+  - update profile requests
+  -------------------------
   - isNewUser, prompt the user to create a recognisable pattern that they can use to login to their account later on 
     - hold onto it for 1 month
     - if user leaves page for 30 mins, add a user check. simple prop check for reinit purpose in the user payload
     - if user returns a day later 
       - let the user to use the token to call the data and then prompt them for the prop check
-  
+
 - profile page
 - recurring task page polish and timeline
 
