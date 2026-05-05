@@ -248,3 +248,15 @@ export function httpPut<TResponse = any, TBody = unknown>(
     genericRequest<TResponse>(mergedConfig);
   return response;
 }
+
+export function httpPatch<TResponse = any, TBody = unknown>(
+  path: string,
+  body: TBody,
+  config: GenericRequestConfig = {}
+) {
+  const mergedConfig = { ...defaultConfig, ...config, method: "PATCH", path, body };
+  const response = SHOULD_USE_DUMMY_DATA ?
+    <TResponse>returnDummyData("PATCH", path, body) :
+    genericRequest<TResponse>(mergedConfig);
+  return response;
+}

@@ -83,7 +83,7 @@ export default function RecurTaskPage() {
         </Text>
 
         <Text as="h1" align="center" fullWidth>
-          {recurTask?.name || "The title of the recurring task goes here"}
+          {recurTask?.name || " ... "}
         </Text>
 
         <br/>

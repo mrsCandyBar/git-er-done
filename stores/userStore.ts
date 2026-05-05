@@ -1,5 +1,5 @@
 import type { UserProfile, UserStatusType } from "../models/userProfile";
-import { httpGet, httpPost, httpPut, type GenericRequestConfig, setAuthToken } from "./httpClient";
+import { httpGet, httpPost, httpPut, type GenericRequestConfig, setAuthToken, httpPatch } from "./httpClient";
 import { encryptPayload, decryptPayload } from "../utilities/helper";
 
 export type CreateUserPayload = Omit<UserProfile, "updatedDate" | "lastLoginDate">;
@@ -38,10 +38,8 @@ export const userStore = {
 	},
 
 
-	async getCurrentProfile(config: UserStoreConfig = {}, options: SelectedFetchOptions = {}) {
-		const { forceRefresh = false } = options;
-		if (selectedUser && !selectedUserNeedsRefresh && !forceRefresh) { return selectedUser; }
-
+	async getCurrentProfile(config: UserStoreConfig = {}) {
+		console.log("Fetching current user profile...");
 		const user:any = await httpGet<UserProfile>("/users/get/me", config);
 		setSelectedUserState(user);
 		return user;
@@ -112,8 +110,8 @@ export const userStore = {
 	},
 
 	async updateStatus(status: UserStatusType, config: UserStoreConfig = {}) {
-		const user = await httpPut<UserProfile, { status: UserStatusType }>(
-			"/users/updateStatus/me", 
+		const user = await httpPatch<UserProfile, { status: UserStatusType }>(
+			"/users/update-status/me", 
 			{ status }, 
 			config
 		);

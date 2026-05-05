@@ -45,15 +45,15 @@ export const dummyCurrentUser: UserProfile = {
       completed: {
         new: ["1","2","3","4","5"],
         fun: ["6","7","8"],
-        quest: ["9"],
+        task: ["9"],
       },
-      recognized: ["11","12"],
+      recognised: ["11","12"],
     },
   ],
   aspirations: {
     new: ["1","2","3","4","5"],
     fun: ["6","7","8"],
-    quest: ["9"],
+    task: ["9"],
   },
 };
 

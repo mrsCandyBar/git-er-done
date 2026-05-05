@@ -1,6 +1,6 @@
 import { CardStackItem } from "@/components/CardStack";
 import { UserProfile } from "./userProfile";
-import { TaskRecord } from "@/stores/taskStore";
+import { TaskRecord, taskStore } from "@/stores/taskStore";
 import { isTaskMood, TASK_MOOD_OPTIONS, TaskMood } from "./taskMood";
 import { FormFieldConfig } from "@/components/Form";
 
@@ -152,9 +152,10 @@ export type detailCard = {
 };
 
 export function toDetailCard(task: TaskRecord): detailCard {
+  const categoryName = taskStore.getTaskCategoryName(task.category);
   return {
     _id: task._id,
-    eyebrow: task.category.toUpperCase(),
+    eyebrow: categoryName.toUpperCase(),
     icon:  taskIconByCategory[task.category as TaskCategory] || "🎯",
     state: task.state,
     title: task.name,

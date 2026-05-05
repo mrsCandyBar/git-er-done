@@ -41,18 +41,18 @@ DONE:
 - [BE] use auth token to call for queries that requires user specific data 05/04
 - [BE] add auth for task requests 05/04
 - [BE] start, pause and complete tasks 05/04
-- [BE] update profile requests 05/04
-- create task page featuring all recurring tasks (FE and BE) 05/04
-- recurring task page and timeline 05/04
-- compile recurring page info about the recursion task 05/04
+- [BE] update profile requests 05/05
+- create task page featuring all recurring tasks (FE and BE) 05/05
+- recurring task page and timeline 05/05
+- compile recurring page info about the recursion task 05/05
+- replace eyebrow with mapping to the correct category type 05/05
+- [BE] achievement notification settings (Progress Update Push) 05/05
+- Update profile status [FE]
 
 TODO:
 - Test flow and payloads
 - profile page
-- replace eyebrow with mapping to the correct category type
-
-- [BE] achievement notification settings (Progress Update Push)
-- set achievement notification settings
+- set achievement notification settings (FE)
 - achievements can be gained via FE
   - achievements for completion in a week is task count: 6, 12 and 18 (max tasks)
   - achievements for duration: quick thinker: 5 minutes and under, focused: 15 - 30 minutes, locked-in: 30 minutes - 2 hours, mountaineer: 2 hours and higher

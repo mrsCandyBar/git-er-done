@@ -17,7 +17,7 @@ export type UserInspiration = {
 
 export type UserAchievement = {
   completed: CategoryBuckets;
-  recognized: string[];
+  recognised: string[];
 };
 
 export type UserProfile = {

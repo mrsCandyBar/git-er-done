@@ -3,6 +3,8 @@
 import { Button, Badge, Card, TaskTable, Text } from "@/components/index";
 import type { UserProfile } from "@/models/userProfile";
 import styles from "../page.module.scss";
+import { taskStore } from "@/stores/taskStore";
+import { useEffect, useState } from "react";
 
 type MultiTaskCompletionInsightsProps = {
   currentUserProfile: UserProfile;
@@ -11,23 +13,25 @@ type MultiTaskCompletionInsightsProps = {
 export default function MultiTaskCompletionInsights({
   currentUserProfile,
 }: MultiTaskCompletionInsightsProps) {
+  const [userTasks, setUserTasks] = useState([]);
+  
   const aspirationCounts = {
     new: currentUserProfile.aspirations.new.length,
     fun: currentUserProfile.aspirations.fun.length,
-    quest: currentUserProfile.aspirations.task.length,
+    task: currentUserProfile.aspirations.task.length,
   };
 
   const achievementTotals = currentUserProfile.achievements.reduce(
     (acc, entry) => {
       const completedCount = entry.completed.new.length + entry.completed.fun.length + entry.completed.task.length;
-      const recognizedCount = entry.recognized.length;
+      const recognisedCount = entry.recognised.length;
 
       return {
         completed: acc.completed + completedCount,
-        recognized: acc.recognized + recognizedCount,
+        recognised: acc.recognised + recognisedCount,
       };
     },
-    { completed: 0, recognized: 0 }
+    { completed: 0, recognised: 0 }
   );
 
   if (achievementTotals.completed < 2) {
@@ -43,9 +47,9 @@ export default function MultiTaskCompletionInsights({
 
   const mindsetSummary =
     dominantAspirationCategory === "new"
-      ? "You are leaning into growth mode and choosing fresh experiences to motivate positive change."
+      ? "You are leaning into growth and choosing fresh experiences to motivate positive change."
       : dominantAspirationCategory === "task"
-        ? "You are in momentum mode, focused on getting ahead of your day-to-day commitments."
+        ? "You are in momentum, focused on getting ahead of your day-to-day commitments."
         : "You are signaling a healthy need for personal time, joy, and restorative space.";
 
   const primaryInspiration = currentUserProfile.inspirations[0];
@@ -56,13 +60,21 @@ export default function MultiTaskCompletionInsights({
     ? Math.max(0, Math.ceil((updatedAt - startedAt) / (1000 * 60 * 60)))
     : 0;
 
-  const fantasyQuestTasks = [
-    { label: "Forge a moonsteel dagger", checked: true },
-    { label: "Map the Whispering Woods", checked: false },
-    { label: "Negotiate peace with the dragon envoy", checked: true },
-    { label: "Recover the Crystal of Dawn", checked: false },
-    { label: "Defend the keep at first light", checked: true },
-  ];
+  useEffect(() => {
+    async function loadTasks() {
+      const allTasks:any = await taskStore.getAllTasks();
+      const tasksForTable = allTasks.map((task:any) => {
+        return {
+          label: task.name,
+          description: task.description,
+          checked: task.state == "complete",
+        }
+      });
+      setUserTasks(tasksForTable);
+    }
+    loadTasks();
+  }, []);
+
 
   return (
     <>
@@ -75,7 +87,7 @@ export default function MultiTaskCompletionInsights({
       <Text as="p" tone="secondary">
         You have completed <b>{achievementTotals.completed}</b> self-prioritized time slots<br/>
         within the timespan of {elapsedHours} hours, <br/>
-        and earned <b>{achievementTotals.recognized}</b> badges of recognition so far.
+        and earned <b>{achievementTotals.recognised}</b> badges of recognition so far.
       </Text>
 
       <div className={styles.badgeRow}>
@@ -114,7 +126,7 @@ export default function MultiTaskCompletionInsights({
         </Text>
 
         <TaskTable
-          tasks={fantasyQuestTasks}
+          tasks={userTasks}
           taskHeader="The Quests You have Acknowledged"
           statusHeader="Status"
           useIcons

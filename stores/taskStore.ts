@@ -107,6 +107,18 @@ export const taskStore = {
 		return selectedTaskCategories;
 	},
 
+	getTaskCategoryName(id: string) {
+		if (!selectedTaskCategories) {
+			return "";
+		} else {
+			const foundCategory = selectedTaskCategories.find((cat) => cat._id === id);
+			if (foundCategory) {
+				return foundCategory.name;
+			}
+		}
+		return "";
+	},
+
 	async getTaskById(taskId: string, config: TaskStoreConfig = {}, options: SelectedFetchOptions = {}) {
 		const { forceRefresh = false } = options;
 		if (selectedTask && selectedTaskId === taskId && !selectedTaskNeedsRefresh && !forceRefresh) {

@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { Button, TaskTable, Text, Card, Badge } from "@/components/index";
 import { getTaskMoodLabel, type TaskMood } from "@/models/taskMood";
 import { closeProfileActionContent } from "../../../../models/actionContent";
+import moment from "moment";
+import { taskStore } from "@/stores/taskStore";
 
 type TaskChecklistItem = {
   label: string;
@@ -40,38 +42,6 @@ type SingleTaskCompletionInsightsProps = {
   children?: ReactNode;
 };
 
-function getDurationLabel(startValue?: string, endValue?: string) {
-  if (!startValue || !endValue) {
-    return null;
-  }
-
-  const start = new Date(startValue).getTime();
-  const end = new Date(endValue).getTime();
-
-  if (Number.isNaN(start) || Number.isNaN(end) || end <= start) {
-    return null;
-  }
-
-  const durationMs = end - start;
-  const totalMinutes = Math.floor(durationMs / (1000 * 60));
-  const days = Math.floor(totalMinutes / (60 * 24));
-  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
-  const minutes = totalMinutes % 60;
-
-  const parts: string[] = [];
-  if (days > 0) {
-    parts.push(`${days} day${days === 1 ? "" : "s"}`);
-  }
-  if (hours > 0) {
-    parts.push(`${hours} hour${hours === 1 ? "" : "s"}`);
-  }
-  if (minutes > 0) {
-    parts.push(`${minutes} minute${minutes === 1 ? "" : "s"}`);
-  }
-
-  return parts.length > 0 ? parts.join(" ") : "less than 1 minute";
-}
-
 export default function SingleTaskCompletionInsights({
   task,
   profileName,
@@ -82,10 +52,6 @@ export default function SingleTaskCompletionInsights({
 }: SingleTaskCompletionInsightsProps) {
   const card = closeProfileActionContent;
   const completedChecklistCount = task.checklist?.filter((item) => item.checked).length ?? 0;
-  const durationLabel = getDurationLabel(
-    task.startedDate,
-    task.completed?.completedDate
-  );
 
   return (
     <Card
@@ -111,13 +77,13 @@ export default function SingleTaskCompletionInsights({
                 <>
                   <Badge label="Mission Complete!" variant="sunshine" />
                   <Text as="p">
-                    This was: <b>{task.category}</b>, {task?.checklist? "and had a list of goals that could be achieved" : "and easy to accomplish"}<br/><br/>
+                    This was: <b>{taskStore.getTaskCategoryName(task.category)}</b>, {task?.checklist? "and had a list of goals that could be achieved" : "and easy to accomplish"}<br/><br/>
                   </Text>
 
                   
                   <Text as="h3" align="center" fullWidth>What 🫵 have achieved</Text>
                   <Text as="p" tone="secondary">
-                    You did this on <b>{task.completed?.completedDate}</b>{durationLabel ? <> over <b>{durationLabel}</b></> : null}.<br/>
+                    You did this on <b>{moment(task.completed?.completedDate).format("MMMM Do, YYYY")}</b>{task.startedDate ? <> over <b>{moment(task.completed?.completedDate).diff(moment(task.startedDate), "hours")} hours</b></> : null}.<br/>
                     it made you feel <b>{task.completed && task.completed.mood && getTaskMoodLabel(task.completed.mood)}</b><br/>
                   </Text>
                   <Badge label="Mood Check" variant="sunshine" />
