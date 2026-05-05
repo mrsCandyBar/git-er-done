@@ -4,6 +4,7 @@ import { Badge, Button, Card, Text } from "@/components/index";
 import { getTaskMoodLabel } from "@/models/taskMood";
 import type { detailCard } from "@/models/task";
 import styles from "../page.module.scss";
+import moment from "moment";
 
 type TaskCompletePageProps = {
   task: detailCard;
@@ -46,7 +47,7 @@ export default function TaskCompletePage({ task }: TaskCompletePageProps) {
           <>
             {task.completed.completedDate && (
               <Text as="p" tone="secondary" className={styles.completedDate}>
-                Completed {task.completed.completedDate}
+                Completed {moment(task.completed.completedDate).format("MMMM Do, YYYY")}
               </Text>
             )}
             {task.completed.finalNotes && (
