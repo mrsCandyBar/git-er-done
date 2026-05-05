@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { CardStackItem } from "@/components/CardStack";
-import { taskCardPayloads, createStackCards, createRecurStackCards } from "@/models/task";
+import { createStackCards, createRecurStackCards } from "@/models/task";
 import { taskStore } from "../../../../stores";
 import styles from "./page.module.scss";
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
@@ -10,7 +10,7 @@ import { Column } from "../task/types";
 import { getPropFromUrl } from "@/utilities/helper";
 
 export default function RecurringTasksPage() {
-  const [cards, setCards] = useState<CardStackItem[]>(createRecurStackCards(taskCardPayloads));
+  const [cards, setCards] = useState<CardStackItem[]>(createRecurStackCards([]));
 
   useEffect(() => {
     let isMounted = true;
@@ -24,12 +24,12 @@ export default function RecurringTasksPage() {
 
         // SET CARDS TO TASKS
         const hasTasks = tasks && (tasks.length > 0);
-        const dynamicCards = hasTasks ? createRecurStackCards(tasks) : createRecurStackCards(taskCardPayloads);
+        const dynamicCards = hasTasks ? createRecurStackCards(tasks) : createRecurStackCards([]);
         setCards(dynamicCards);
         
       } catch {
         if (isMounted) {
-          setCards(createStackCards(taskCardPayloads));
+          setCards(createStackCards([]));
         }
       }
     }

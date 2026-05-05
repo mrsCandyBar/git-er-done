@@ -106,7 +106,7 @@ export const userStore = {
 	// This method will be used to update the user's status or other profile information.
 
 	async updateCurrentProfile(payload?: any, config: UserStoreConfig = {}) {
-		const user = await httpPut<UserProfile, UserProfile>("/users/me", payload, config);
+		const user = await httpPut<UserProfile, UserProfile>("/users/update/me", payload, config);
 		setSelectedUserState(user);
 		return user;
 	},

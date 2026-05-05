@@ -29,7 +29,7 @@ export default function TaskCompletePage({ task }: TaskCompletePageProps) {
               {task.completed.recur && (
                 <>
                   <Badge label="We're doing this one again!" variant="sky" />
-                  <Button href={`/tasks/recur?id=${task.recurId}`} variant="ghost" className={styles.recurProgressLink}>
+                  <Button href={`/tasks/recur?recurId=${task.recurId}`} variant="ghost" className={styles.recurProgressLink}>
                     Track your progress
                   </Button>
                 </>
