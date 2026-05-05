@@ -47,6 +47,7 @@ export type CompleteTaskPayload = {
 
 export type TaskListQuery = {
 	category?: string;
+	recurringTasks?: boolean;
 	recurId?: Column["recurId"];
 	state?: Column["state"];
 	limit?: number;
@@ -93,6 +94,10 @@ export const taskStore = {
 		return httpGet<TaskRecord[]>("/tasks/getAll", { ...config, query });
 	},
 
+	getAllRecurringTasks(query: TaskListQuery = {}, config: TaskStoreConfig = {}) {
+		return httpGet<TaskRecord[]>("/recurring-tasks/getAll", { ...config, query });
+	},
+
 	async getAllTaskCategories(query: TaskListQuery = {}, config: TaskStoreConfig = {}) {
 		if (selectedTaskCategories) {
 			return selectedTaskCategories;
@@ -112,6 +117,10 @@ export const taskStore = {
 		const task:any = await httpGet<TaskRecord>(`/tasks/get/${taskId}`, config);
 		task && setSelectedTaskState(task);
 		return task;
+	},
+
+	getRecurringTask(taskId: string, config: TaskStoreConfig = {}) {
+		return httpGet<TaskRecord[]>(`/recurring-tasks/get/${taskId}`, config);
 	},
 
 	async createTask(payload: CreateTaskPayload, config: TaskStoreConfig = {}) {

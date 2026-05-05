@@ -40,20 +40,16 @@ DONE:
 - [BE] have auth token return with google login 05/04
 - [BE] use auth token to call for queries that requires user specific data 05/04
 - [BE] add auth for task requests 05/04
-- start, pause and complete tasks
+- [BE] start, pause and complete tasks 05/04
+- [BE] update profile requests 05/04
+- create task page featuring all recurring tasks (FE and BE) 05/04
+- recurring task page and timeline 05/04
+- compile recurring page info about the recursion task 05/04
 
 TODO:
 - Test flow and payloads
-  - update profile requests
-  -------------------------
-  - isNewUser, prompt the user to create a recognisable pattern that they can use to login to their account later on 
-    - hold onto it for 1 month
-    - if user leaves page for 30 mins, add a user check. simple prop check for reinit purpose in the user payload
-    - if user returns a day later 
-      - let the user to use the token to call the data and then prompt them for the prop check
-
 - profile page
-- recurring task page polish and timeline
+- replace eyebrow with mapping to the correct category type
 
 - [BE] achievement notification settings (Progress Update Push)
 - set achievement notification settings
@@ -69,7 +65,7 @@ TODO:
       870 tasks, 
       1750 tasks, 
       3510 tasks 
-
+ 
 - achievements over given time frame
 - achievements page overview
 - achievements calendar
@@ -79,4 +75,11 @@ THEN
 - MAKE PRETTY !!!!
 
 MUCH LATER:
+Extra Auth
+  - isNewUser, prompt the user to create a recognisable pattern that they can use to login to their account later on 
+    - hold onto it for 1 month
+    - if user leaves page for 30 mins, add a user check. simple prop check for reinit purpose in the user payload
+    - if user returns a day later 
+      - let the user to use the token to call the data and then prompt them for the prop check
+- Add recurring badge achievements [BE and FE]
 - BucketList

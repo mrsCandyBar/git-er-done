@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { CardStackItem } from "@/components/CardStack";
 import { createStackCards, createRecurStackCards } from "@/models/task";
-import { taskStore } from "../../../../stores";
+import { taskStore } from "@/stores";
 import styles from "./page.module.scss";
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
 import { Column } from "../task/types";
@@ -17,7 +17,7 @@ export default function RecurringTasksPage() {
     async function loadPageData() {
       try {
         const [tasks]:any = await Promise.all([
-          taskStore.getAllTasks({ recurId: getPropFromUrl("recurId") as Column["recurId"] ?? undefined }),
+          taskStore.getAllRecurringTasks(),
         ]);
 
         if (!isMounted) { return; }

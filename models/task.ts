@@ -34,7 +34,7 @@ export function createRecurStackCards(tasks: { name: string; description: string
     title: task.name,
     description: task.description,
     ctaLabel: "Show History 🚀",
-    ctaHref: `/tasks/recur/task?id=${task._id}`,
+    ctaHref: `/tasks/recur/task?recurId=${task._id}`,
     cta2Label: "Start! 🚀",
     cta2Href: `/tasks/task?id=${task._id}`,
   }));
