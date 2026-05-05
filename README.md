@@ -48,9 +48,10 @@ DONE:
 - replace eyebrow with mapping to the correct category type 05/05
 - [BE] achievement notification settings (Progress Update Push) 05/05
 - Update profile status [FE]
+- Test flow and payloads
 
 TODO:
-- Test flow and payloads
+- smoother transition effects (the no-load look)
 - profile page
 - set achievement notification settings (FE)
 - achievements can be gained via FE
@@ -69,6 +70,7 @@ TODO:
 - achievements over given time frame
 - achievements page overview
 - achievements calendar
+- Test flow and payloads
 
 
 THEN
