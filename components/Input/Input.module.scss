@@ -1,0 +1,143 @@
+@use '../../assets/styles/variables' as v;
+@use '../../assets/styles/mixins' as m;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-xs;
+
+  label {
+    font-weight: v.$font-weight-medium;
+    font-size: v.$font-size-base;
+    color: var(--color-text-primary);
+  }
+}
+
+.input {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: v.$font-size-base;
+  line-height: 1.45em;
+  color: var(--color-text-primary);
+  background: transparent;
+  transition: border-color v.$transition-base, box-shadow v.$transition-base;
+
+  &::placeholder {
+    color: var(--color-text-secondary);
+  }
+
+  @include m.hover {
+    border-color: var(--color-text-primary);
+    background: var(--color-btn-secondary-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--color-text-primary);
+    background: var(--color-bg);
+    box-shadow: inset 0 0 0 2px var(--color-text-primary);
+  }
+
+  &:active {
+    border-color: var(--color-text-primary);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    border-color: var(--color-border-subtle);
+  }
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-xs;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: row;
+  gap: v.$spacing-xs;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.optionLabel {
+  display: flex;
+  align-items: center;
+  gap: v.$spacing-xs;
+  font-weight: v.$font-weight-normal;
+  font-size: v.$font-size-base;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.optionInput {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-text-primary);
+
+  &:focus-visible {
+    outline: 2px solid var(--color-text-primary);
+    outline-offset: 2px;
+  }
+}
+
+.radioOptionLabel {
+  position: relative;
+}
+
+.radioOptionInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radioOptionText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 7px 12px;
+  gap: 6px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 999px;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  transition: border-color v.$transition-base, background-color v.$transition-base, box-shadow v.$transition-base;
+}
+
+.radioOptionText::first-letter {
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+.radioOptionLabel:hover .radioOptionText {
+  border-color: var(--color-text-primary);
+  background: var(--color-btn-secondary-hover);
+}
+
+.radioOptionInput:checked + .radioOptionText {
+  border-color: var(--color-text-primary);
+  background: var(--color-btn-secondary-hover);
+  box-shadow: inset 0 0 0 1px var(--color-text-primary);
+}
+
+.radioOptionInput:focus-visible + .radioOptionText {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}

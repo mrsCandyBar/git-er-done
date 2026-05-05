@@ -1,0 +1,19 @@
+@use '../../../assets/styles/variables' as v;
+
+.page {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: v.$spacing-md;
+}
+
+.cards {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: v.$spacing-sm;
+	align-items: stretch;
+
+	@media (max-width: v.$breakpoint-sm) {
+		grid-template-columns: 1fr;
+	}
+}

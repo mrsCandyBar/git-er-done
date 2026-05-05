@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import "../../assets/globals.scss";
 import styles from "./Layout.module.scss";
+
+config.autoAddCss = false;
 
 export const metadata: Metadata = {
   title: "Git-Er-Done",

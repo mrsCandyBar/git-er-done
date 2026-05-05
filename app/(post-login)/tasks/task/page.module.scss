@@ -1,0 +1,68 @@
+@use '../../../../assets/styles/variables' as v;
+
+.page {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: v.$spacing-md;
+}
+
+.cards {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: v.$spacing-sm;
+	align-items: stretch;
+
+	@media (max-width: v.$breakpoint-sm) {
+		grid-template-columns: 1fr;
+	}
+}
+
+.secondary {
+	opacity: 0.6;
+}
+
+.stickerStackFloat {
+	position: absolute;
+	top: v.$spacing-sm;
+	right: v.$spacing-sm;
+	z-index: 3;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+
+	@media (max-width: v.$breakpoint-sm) {
+		right: v.$spacing-xs;
+		top: v.$spacing-xs;
+	}
+}
+
+.recurProgressLink {
+	font-size: 0.78rem;
+	padding: 2px 0;
+	min-height: 0;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.completedMeta {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: v.$spacing-xs;
+	margin-bottom: v.$spacing-xs;
+}
+
+.completedDate {
+	margin: 0;
+	font-size: 0.85rem;
+	text-align: center;
+}
+
+.finalNote {
+	margin: 0;
+	text-align: center;
+	max-width: 60ch;
+}

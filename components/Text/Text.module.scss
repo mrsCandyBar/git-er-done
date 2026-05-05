@@ -1,0 +1,116 @@
+@use '../../assets/styles/variables' as v;
+
+.base {
+  color: var(--color-text-primary);
+}
+
+.primary {
+  color: var(--color-text-primary);
+}
+
+.secondary {
+  color: var(--color-text-secondary);
+}
+
+.quote {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  border-left: 3px solid var(--color-border-subtle);
+  padding-left: v.$spacing-sm;
+}
+
+.fullWidth {
+  width: 100%;
+  max-width: 100% !important;
+}
+
+.alignLeft {
+  text-align: left;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  max-width: v.$max-width-heading;
+}
+
+.h1 {
+  font-size: v.$font-size-xl;
+  font-weight: v.$font-weight-semibold;
+  line-height: v.$line-height-xl;
+}
+
+.h2 {
+  font-size: v.$font-size-lg;
+  font-weight: v.$font-weight-semibold;
+  line-height: v.$line-height-lg;
+}
+
+.h3 {
+  font-size: 24px;
+  font-weight: v.$font-weight-semibold;
+  line-height: 1.35;
+}
+
+.h4,
+.h5,
+.h6 {
+  font-size: v.$font-size-base;
+  font-weight: v.$font-weight-semibold;
+  line-height: v.$line-height-base;
+}
+
+.p, .span {
+  max-width: 70ch;
+  line-height: 1.7em;
+}
+
+.span {
+  display: block;
+}
+
+.strong {
+  font-weight: v.$font-weight-semibold;
+}
+
+.em {
+  font-style: italic;
+}
+
+.blockquote {
+  max-width: 70ch;
+  padding-left: v.$spacing-sm;
+  border-left: 3px solid var(--color-border-subtle);
+}
+
+.ul,
+.ol {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-xs;
+  padding-left: v.$spacing-md;
+}
+
+.a {
+  font-weight: v.$font-weight-medium;
+  color: var(--color-text-primary);
+  text-underline-offset: 2px;
+}
+
+@media (max-width: v.$breakpoint-sm) {
+  .h1 {
+    font-size: v.$font-size-lg;
+    line-height: v.$line-height-lg;
+  }
+}

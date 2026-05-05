@@ -1,0 +1,179 @@
+@use '../../../assets/styles/variables' as v;
+
+.wrapper {
+  width: 100%;
+  max-width: v.$max-width-content;
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-lg;
+  color: var(--color-text-primary);
+}
+
+.wrapper[data-theme='light'] {
+  --color-bg: #{v.$color-bg-light};
+  --color-fg: #{v.$color-fg-light};
+  --color-text-primary: #{v.$color-text-primary};
+  --color-text-secondary: #{v.$color-text-secondary};
+  --color-btn-primary-hover: #{v.$color-btn-primary-hover};
+  --color-btn-secondary-hover: #{v.$color-btn-secondary-hover};
+  --color-btn-secondary-border: #{v.$color-btn-secondary-border};
+  --color-border-subtle: #{v.$color-border-subtle-light};
+}
+
+.wrapper[data-theme='dark'] {
+  --color-bg: #{v.$color-bg-dark};
+  --color-fg: #{v.$color-fg-dark};
+  --color-text-primary: #{v.$color-text-primary-dark};
+  --color-text-secondary: #{v.$color-text-secondary-dark};
+  --color-btn-primary-hover: #{v.$color-btn-primary-hover-dark};
+  --color-btn-secondary-hover: #{v.$color-btn-secondary-hover-dark};
+  --color-btn-secondary-border: #{v.$color-btn-secondary-border-dark};
+  --color-border-subtle: #{v.$color-border-subtle-dark};
+}
+
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-sm;
+
+  p {
+    max-width: 70ch;
+    color: var(--color-text-secondary);
+  }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-sm;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: v.$spacing-sm;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: v.$spacing-sm;
+  width: 100%;
+}
+
+.badgeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: v.$spacing-sm;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-xs;
+  max-width: 480px;
+}
+
+.helperText {
+  max-width: 70ch;
+  color: var(--color-text-secondary);
+}
+
+.previewHover {
+  background: var(--color-btn-primary-hover);
+}
+
+.previewActive {
+  background: var(--color-btn-primary-hover);
+  transform: translateY(1px);
+}
+
+.previewFocus {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.selectWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-xs;
+
+  label {
+    font-weight: v.$font-weight-medium;
+    font-size: v.$font-size-base;
+    color: var(--color-text-primary);
+  }
+}
+
+.inputPreviewHover {
+  border-color: var(--color-text-primary);
+  background: var(--color-btn-secondary-hover);
+}
+
+.inputPreviewFocus {
+  border-color: var(--color-text-primary);
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 2px var(--color-text-primary);
+}
+
+.select {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: v.$font-size-base;
+  color: transparent;
+  background: transparent url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 8px center / 20px;
+  padding-right: 36px;
+  cursor: pointer;
+  transition: border-color v.$transition-base, background-color v.$transition-base;
+  appearance: none;
+  text-shadow: 0 0 0 var(--color-text-primary);
+
+  &:hover {
+    border-color: var(--color-text-primary);
+    background-color: var(--color-btn-secondary-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--color-text-primary);
+    background-color: var(--color-bg);
+    box-shadow: inset 0 0 0 2px var(--color-text-primary);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    border-color: var(--color-border-subtle);
+  }
+
+  option {
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    padding: 12px v.$spacing-sm;
+    margin: 4px 0;
+    border-radius: 4px;
+  }
+
+  option:checked {
+    background: var(--color-btn-secondary-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+@media (max-width: v.$breakpoint-sm) {
+  .wrapper {
+    gap: v.$spacing-md;
+  }
+
+}
+
+.wrapper select {
+  @extend .select;
+}

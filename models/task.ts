@@ -1,0 +1,329 @@
+import { CardStackItem } from "@/components/CardStack";
+import { UserProfile } from "./userProfile";
+import { TaskRecord, taskStore } from "@/stores/taskStore";
+import { isTaskMood, TASK_MOOD_OPTIONS, TaskMood } from "./taskMood";
+import { FormFieldConfig } from "@/components/Form";
+
+
+// SEARCH PAGE
+//////////////
+
+// This file defines the TaskCard type, which represents 
+// the structure of a task card in the application.
+
+export type TaskCard = {
+  type: "fun" | "new" | "quest";
+  id: string;
+  name: string;
+  description: string;
+};
+
+// Helper to convert TaskCard payloads to CardStackItem format
+
+export function createStackCards(tasks: { name: string; description: string; _id: string }[], status?: string): CardStackItem[] {
+  return tasks.map((task) => ({
+    title: task.name,
+    description: task.description,
+    ctaLabel: status ? (status === "complete" ? "Open 📑" : "Continue 🔖") : "Start! 🚀",
+    ctaHref: `/tasks/task?id=${task._id}`,
+  }));
+}
+
+export function createRecurStackCards(tasks: { name: string; description: string; _id: string }[]): CardStackItem[] {
+  return tasks.map((task) => ({
+    title: task.name,
+    description: task.description,
+    ctaLabel: "Show History 🚀",
+    ctaHref: `/tasks/recur/task?recurId=${task._id}`,
+    cta2Label: "Start! 🚀",
+    cta2Href: `/tasks/task?id=${task._id}`,
+  }));
+}
+
+// Payloads for default task cards, 
+// which are shown when users have no tasks yet.
+
+export const taskCardPayloads: TaskCard[] = [
+  {
+    type: "fun",
+    id: "dance-class-for-beginners",
+    name: "Dance Class for Beginners",
+    description: "Start simple and stay playful. Build confidence one small rhythm at a time.",
+  },
+  {
+    type: "fun",
+    id: "learn-pottery",
+    name: "Weekend Pottery Session",
+    description: "Get your hands messy and make something real. Perfection is not required.",
+  },
+  {
+    type: "fun",
+    id: "karaoke-night",
+    name: "Karaoke Night",
+    description: "Pick one song, show up, and have fun with it. No perfect notes needed.",
+  },
+  {
+    type: "new",
+    id: "hike-sunrise-trail",
+    name: "Sunrise Trail Hike",
+    description: "Start your day with momentum. A short trail is enough to reset your headspace.",
+  },
+  {
+    type: "new",
+    id: "first-climbing-gym",
+    name: "First Climbing Gym Session",
+    description: "Learn the basics and complete one route that challenges you.",
+  },
+  {
+    type: "quest",
+    id: "write-5k-plan",
+    name: "Build a 5K Training Plan",
+    description: "Create a realistic weekly plan and schedule your first run.",
+  },
+  {
+    type: "quest",
+    id: "portfolio-refresh",
+    name: "Refresh Your Portfolio",
+    description: "Update your headline, one project case study, and contact section.",
+  },
+  {
+    type: "quest",
+    id: "creative-30-day",
+    name: "30-Day Creative Challenge",
+    description: "Pick one medium and commit to a short daily output streak.",
+  },
+];
+
+// Task Helper Functions
+// Cleanups for the views
+
+export function countCompletedTasks(profile: UserProfile): number {
+    const completedTasksCount = Array.isArray(profile.achievements)
+    ? profile.achievements.reduce((count, achievement) => {
+        const completed = achievement?.completed;
+        return (
+        count +
+        (completed?.new?.length ?? 0) +
+        (completed?.fun?.length ?? 0) +
+        (completed?.task?.length ?? 0)
+        );
+    }, 0)
+    : 0;
+    
+    return completedTasksCount;
+}
+
+// END SEARCH PAGE
+//////////////////
+
+
+// START TASK PAGE
+//////////////////
+
+const taskIconByCategory = {
+  new: "🌱",
+  fun: "🎉",
+  quest: "🗺️",
+} as const;
+
+export type Task = { id?: string; label: string; checked?: boolean };
+
+export type Mood = TaskMood;
+
+export type detailCard = {
+  _id: string;
+  eyebrow: string;
+  icon: string;
+  title: string;
+  description: string;
+  checklist?: Task[];
+  createdDate?: string;
+  startedDate?: string;
+  updatedDate?: string;
+  recurId?: string;
+  completed?: {
+    completedDate?: string;
+    finalNotes?: string;
+    mood?: Mood;
+    recur?: boolean;
+    keepsakeUrl?: string;
+  }
+  state: "waiting" | "busy" | "complete";
+};
+
+export function toDetailCard(task: TaskRecord): detailCard {
+  const categoryName = taskStore.getTaskCategoryName(task.category);
+  return {
+    _id: task._id,
+    eyebrow: categoryName.toUpperCase(),
+    icon:  taskIconByCategory[task.category as TaskCategory] || "🎯",
+    state: task.state,
+    title: task.name,
+    recurId: task.recurId,
+    description: task.description,
+    checklist: task.checklist,
+    createdDate: task.updatedDate,
+    completed: task.completed
+  };
+}
+
+// Actions
+//////////
+
+export function updateTaskModal(method: string, column: detailCard): any {
+  if (method === "update") {
+    const taskPayload = {
+      _id: column._id,
+      title: column.title,
+      description: column.description,
+      checklist: column.checklist?.map((task) => task.label) ?? undefined,
+    };
+    return `/tasks/form/update?id=${taskPayload._id}`;
+  };
+
+  if (method === "complete") {
+    const completionPayload = {
+      _id: column._id,
+      startedAt: column.updatedDate,
+    };
+    return `/tasks/form/complete?id=${completionPayload._id}`;
+  };
+}
+
+// FORMS
+////////
+
+export type TaskCategory = "fun" | "new" | "quest";
+
+export type DraftUpdateTask = {
+  title: string;
+  description: string;
+  category: TaskCategory;
+  checklist: string[];
+};
+
+export type UpdateTaskPayload = {
+  _id?: string;
+  name?: string;
+  description?: string;
+  checklist?: { label: string; checked: boolean }[];
+};
+
+export const taskCategoryOptions: Array<{ value: TaskCategory; label: string }> = [
+  { value: "new", label: "Something New" },
+  { value: "fun", label: "Just for Fun" },
+  { value: "quest", label: "Quest!" },
+];
+
+
+// FORM INPUTS
+//////////////
+
+export function buildTaskForm(payload: any): any {
+  const fields: FormFieldConfig[] = [
+    {
+      label: "Tag it!",
+      name: "category",
+      type: "radio",
+      hideLabel: true,
+      options: taskCategoryOptions,
+      defaultValue: payload?.category ?? undefined,
+      required: true,
+    },
+    {
+      name: "name",
+      label: "Let's give your quest a title! 🏷️",
+      hideLabel: true,
+      type: "text",
+      defaultValue: payload?.name ?? "",
+      placeholder: "What do you want to do?",
+      required: true,
+    },
+    {
+      name: "description",
+      label: "Describe your quest! 📝",
+      hideLabel: true,
+      type: "textarea",
+      rows: 4,
+      defaultValue: payload?.description ?? "",
+      placeholder: "What will you do? Where? When?",
+      required: true,
+    },
+  ];
+
+  return fields;
+}
+
+export function parseTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, checklist: any[]) {
+  const name = String(formData.name ?? "").trim();
+  const description = String(formData.description ?? "").trim();
+  const rawCategory = String(formData.category ?? "fun");
+  const category: TaskCategory = rawCategory as TaskCategory;
+
+  if (!name || !description) {
+    if (payload && !payload.id) { return; }
+    else if (!payload) { return; }
+  }
+
+  // If new task, format the checklist 
+  // from array of strings to an
+  // array of { label, checked } objects
+
+  if (checklist.length > 0) {
+    if (!payload) {
+      checklist = checklist.map((item) => {
+        return { label: item, checked: false };
+      });
+    }
+  }
+
+  return {
+    name,
+    description,
+    category,
+    checklist
+  }
+}
+
+export function buildTaskCompleteForm(payload: any): any {
+  const fields: FormFieldConfig[] = [
+    {
+      name: "mood",
+      label: "How did this task make you feel?",
+      type: "radio",
+      options: TASK_MOOD_OPTIONS,
+      required: true,
+    },
+    {
+      name: "finalNotes",
+      label: "Final Notes",
+      type: "textarea",
+      hideLabel: true,
+      placeholder: "(optional) Any last words about this adventure? How did it go? What was the highlight? Would you do it again?",
+    },
+    {
+      name: "keepsake",
+      label: "Add a link to a post, photo, journal entry, or anything else that helps you remember the journey!",
+      type: "text",
+      placeholder: "(optional) Paste a keepsake URL",
+    }
+  ];
+
+  return fields;
+}
+
+export function parseCompleteTaskPayload(payload: any, formData: Record<string, FormDataEntryValue>, recur: boolean) {
+  const rawMood = String(formData.mood ?? "").trim();
+  const finalNotes = String(formData.finalNotes ?? "").trim();
+  const keepsake = String(formData.keepsake ?? "").trim();
+
+  if (!rawMood || !payload?.id) return;
+
+  return {
+    completedDate: new Date().toISOString(),
+    mood: rawMood as TaskMood,
+    finalNotes,
+    recur,
+    keepsakeUrl: keepsake || undefined,
+  }
+}

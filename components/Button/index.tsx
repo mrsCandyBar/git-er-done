@@ -1,38 +1,62 @@
-import type { ReactNode } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
 import Link from "next/link";
 import styles from "./Button.module.scss";
 
-type ButtonProps = {
-  href: string;
+type CommonButtonProps = {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "active";
-  target?: "_blank" | "_self" | "_parent" | "_top";
-  rel?: string;
+  variant?: "primary" | "secondary" | "active" | "filled" | "outline" | "ghost";
   className?: string;
 };
 
-export default function Button({
-  href,
-  children,
-  variant = "secondary",
-  target,
-  rel,
-  className = "",
-}: ButtonProps) {
-  const buttonClassName = `${styles.button} ${styles[variant]} ${className}`.trim();
-  const isExternal = href.startsWith("http");
+type LinkButtonProps = CommonButtonProps & {
+  href: string;
+  target?: "_blank" | "_self" | "_parent" | "_top";
+  rel?: string;
+  type?: never;
+  disabled?: never;
+};
 
-  if (isExternal) {
+type NativeButtonProps = CommonButtonProps & {
+  href?: undefined;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  target?: never;
+  rel?: never;
+};
+
+type ButtonProps = LinkButtonProps | NativeButtonProps;
+
+export default function Button(props: ButtonProps) {
+  const { children, variant = "outline", className = "" } = props;
+  const buttonClassName = `${styles.button} ${styles[variant]} ${className}`.trim();
+
+  if (typeof props.href === "string") {
+    const isExternal = props.href.startsWith("http");
+
+    if (isExternal) {
+      return (
+        <a className={buttonClassName} href={props.href} target={props.target} rel={props.rel}>
+          {children}
+        </a>
+      );
+    }
+
     return (
-      <a className={buttonClassName} href={href} target={target} rel={rel}>
+      <Link className={buttonClassName} href={props.href}>
         {children}
-      </a>
+      </Link>
     );
   }
 
   return (
-    <Link className={buttonClassName} href={href}>
+    <button
+      className={buttonClassName}
+      type={props.type ?? "button"}
+      disabled={props.disabled}
+      onClick={props.onClick}
+    >
       {children}
-    </Link>
+    </button>
   );
 }
