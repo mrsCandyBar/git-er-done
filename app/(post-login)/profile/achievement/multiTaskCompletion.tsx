@@ -108,7 +108,7 @@ export default function MultiTaskCompletionInsights({
       </Text>
       <br/>
       <Card
-        title={<Text as="h2" align="center" fullWidth>Let's take a closer look 👀</Text>}
+        title={<Text as="h2">Let's take a closer look 👀</Text>}
         description={
           <>
             <Text as="p" tone="secondary">
@@ -118,12 +118,10 @@ export default function MultiTaskCompletionInsights({
           </>}
       >
         <br/>
-        <Text as="p">
-          The type of quests you create counts, it tells us:
-        </Text>
         <Text as="blockquote" tone="secondary">
           {mindsetSummary}
         </Text>
+        <br/>
 
         <TaskTable
           tasks={userTasks}
@@ -135,7 +133,7 @@ export default function MultiTaskCompletionInsights({
         />
 
         <br/>
-        <Text as="p" tone="secondary">
+        <Text as="blockquote" align="center" tone="secondary">
           When you look at the titles of these quests,<br/>
           do they feel like something your inspiration would say?
         </Text>
@@ -155,7 +153,7 @@ export default function MultiTaskCompletionInsights({
             <br/>
             <Text as="h1" align="center" fullWidth> 🧙‍♀️🚞🤴🏰💂</Text>
             <br/>
-            <Text as="p" tone="secondary">
+            <Text as="p" align="center" tone="secondary">
               You have achieved all this since we met<br/>
               Let's turn 🫵 aspirations & goals into reality!
             </Text>
@@ -163,7 +161,6 @@ export default function MultiTaskCompletionInsights({
         }
         actions={(
           <>
-            <br/>
             <Button href="/profile/account" variant="filled">
               Shall we continue questing together?
             </Button>

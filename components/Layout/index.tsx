@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className={styles.page}>
+        <div id="root" className={styles.page}>
           <main className={styles.main}>{children}</main>
         </div>
       </body>

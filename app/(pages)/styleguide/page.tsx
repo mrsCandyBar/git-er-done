@@ -18,7 +18,7 @@ export default function Styleguide() {
   const { toasts, pushToast, dismissToast } = useToastSystem();
 
   return (
-    <>
+    <div className={styles.page}>
       <Header />
 
       <main id="styleguide-root" className={styles.wrapper}>
@@ -36,7 +36,7 @@ export default function Styleguide() {
             Toggle this page between light and dark previews without changing your system appearance.
           </Text>
           <div className={styles.row}>
-            <StyleguideThemeToggle targetId="styleguide-root" />
+            <StyleguideThemeToggle targetId="root" />
           </div>
         </section>
 
@@ -53,8 +53,8 @@ export default function Styleguide() {
             </Text>
             <Text as="p" tone="secondary">
               This project uses shared typography and spacing tokens, so this section is a useful smoke
-              test after global style changes.
-              <Text as="strong">Bold text</Text> and <Text as="em">italic text</Text> can be composed
+              test after global style changes. 
+               <Text as="strong"> Bold text</Text> and <Text as="em">italic text to the 'nth degrees</Text> can be composed
               inline through the same component.
             </Text>
             <br/>
@@ -71,9 +71,13 @@ export default function Styleguide() {
               test after global style changes. <span>- Written by Me on {new Date().toLocaleDateString()}</span>
             </Text>
             <Text as="ul">
-              <Text as="li">Unordered and ordered list items looks the same one</Text>
-              <Text as="li">Unordered list item, same as above two</Text>
-              <Text as="li">Unordered list item three</Text>
+              <Text as="li" tone="secondary">Unordered and ordered list items looks the same one</Text>
+              <Text as="li" tone="secondary">Unordered list item, same as above two</Text>
+              <Text as="li" tone="secondary">Unordered list item three. 
+                &nbsp;<Text as="a" href="https://nextjs.org/docs" target="_blank" rel="noreferrer noopener">
+                  Link text example
+                </Text>
+              </Text>
             </Text>
           </div>
         </section>
@@ -91,6 +95,8 @@ export default function Styleguide() {
               Ghost
             </Button>
           </div>
+          <br/>
+          
           <Text as="h3">State Preview</Text>
           <div className={styles.row}>
             <Button type="button" variant="filled">
@@ -114,8 +120,11 @@ export default function Styleguide() {
         <section className={styles.section}>
           <Text as="h2">Badges</Text>
           <Text as="p" tone="secondary">
-            Reusable motivational and reward badges. Mix variants to fit context and mood.
+            Reusable motivational and reward badges. <br/>
+            Mix variants to fit context and mood.
           </Text>
+          <br/>
+          
           <div className={styles.badgeGrid}>
             <Badge label="You got this" variant="sunshine" />
             <Badge label="You did it!" subtitle="Started Apr 14, 2026" variant="mint" />
@@ -127,15 +136,13 @@ export default function Styleguide() {
 
         <section className={styles.section}>
           <Text as="h2">Input Fields</Text>
+          <br/>
+
           <div className={styles.stack}>
             <Input label="Text Input" type="text" placeholder="Type here" />
-
             <Input label="Number Input" type="number" placeholder="0" />
-
             <Input label="Password Input" type="password" placeholder="••••••" />
-
             <Input label="Email Input" type="email" placeholder="name@example.com" />
-
             <div className={styles.selectWrapper}>
               <label htmlFor="select-input">Select</label>
               <select id="select-input" className={styles.select}>
@@ -153,11 +160,12 @@ export default function Styleguide() {
               type="checkbox"
               name="interests"
               options={[
-                { value: "design", label: "Design" },
-                { value: "development", label: "Development" },
-                { value: "writing", label: "Writing" },
+                { value: "design", label: "Get started on Design" },
+                { value: "development", label: "Get started on Development" },
+                { value: "writing", label: "Get started on Writing" },
               ]}
             />
+            <br/>
 
             <Input
               label="Radio Buttons"
@@ -174,6 +182,8 @@ export default function Styleguide() {
 
         <section className={styles.section}>
           <Text as="h2">Form Example</Text>
+          <br/>
+
           <Form
             fields={[
               {
@@ -201,6 +211,8 @@ export default function Styleguide() {
           <Text as="p" tone="secondary">
             The Form component auto-generates fields from a configuration array, reducing boilerplate for new forms.
           </Text>
+          <br/>
+
           <Form
             fields={[
               {
@@ -245,6 +257,8 @@ export default function Styleguide() {
           <Text as="p" tone="secondary">
             Forms can include checkbox groups for multiple selections and radio buttons for single selection.
           </Text>
+          <br/>
+
           <Form
             fields={[
               {
@@ -252,10 +266,10 @@ export default function Styleguide() {
                 label: "Your Interests",
                 type: "checkbox",
                 options: [
-                  { value: "design", label: "Design" },
-                  { value: "development", label: "Development" },
-                  { value: "writing", label: "Writing" },
-                  { value: "marketing", label: "Marketing" },
+                  { value: "design", label: "Totally interested in Design" },
+                  { value: "development", label: "Totally interested in Development" },
+                  { value: "writing", label: "Totally interested in Writing" },
+                  { value: "marketing", label: "Totally interested in Marketing" },
                 ],
               },
               {
@@ -279,6 +293,8 @@ export default function Styleguide() {
           <Text as="p" tone="secondary">
             The Form component supports error messages that display below each field.
           </Text>
+          <br/>
+
           <Form
             fields={[
               {
@@ -322,6 +338,8 @@ export default function Styleguide() {
           <Text as="p" tone="secondary">
             Card content is fully optional. Use only the blocks you need for each scenario.
           </Text>
+          <br/>
+
           <div className={styles.cardGrid}>
             <Card
               title="Weekly Planning"
@@ -331,6 +349,7 @@ export default function Styleguide() {
               ctaLabel="Open Board"
               ctaHref="/tasks/task"
             />
+            <br/>
 
             {showClosableCard ? (
               <Card
@@ -349,8 +368,12 @@ export default function Styleguide() {
                 onCtaClick={() => setShowClosableCard(true)}
               />
             )}
+            <br/>
 
             <Card title="Title Only" fullWidth />
+            <br/>
+            <br/>
+
           </div>
 
           <Text as="h3">Card Stack</Text>
@@ -378,6 +401,7 @@ export default function Styleguide() {
               },
             ]}
           />
+          <br/>
 
           <Text as="h3">Scattered Card Stack</Text>
           <Text as="p" tone="secondary">
@@ -409,6 +433,7 @@ export default function Styleguide() {
               }
             ]}
           />
+          <br/>
         </section>
 
         <section className={styles.section}>
@@ -627,19 +652,23 @@ export default function Styleguide() {
           <br/>
           
           <Logo version="brioh-card" />
-          <Text as="p">brioh-card</Text>
+          <Text as="p">brioh-card is used for Quest based features.</Text>
+          <br/>
 
           <Logo version="brioh-heart" />
-          <Text as="p">brioh-heart</Text>
+          <Text as="p">brioh-heart represents user favourite engagement. The fun quest</Text>
+          <br/>
         
           <Logo version="brioh-star" />
-          <Text as="p">brioh-star</Text>
+          <Text as="p">brioh-star represents achievements and milestones. New curious users can explore their progress.</Text>
           <br/>
+          <br/>
+
         </section>
       </main>
 
       <ToastRegion toasts={toasts} onDismiss={dismissToast} />
       <Footer activePage="styleguide" />
-    </>
+    </div>
   );
 }

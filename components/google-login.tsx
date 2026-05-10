@@ -3,7 +3,6 @@
 import Script from 'next/script';
 import { useEffect } from 'react';
 import { userStore } from "@/stores";
-import Button from './Button';
 import { useRouter } from "next/navigation";
 
 type GoogleCredentialResponse = {

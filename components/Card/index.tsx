@@ -4,6 +4,8 @@ import type { MouseEventHandler, ReactNode } from "react";
 import Button from "../Button";
 import Text from "../Text";
 import styles from "./Card.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 type CardProps = {
   children?: ReactNode;
@@ -66,7 +68,7 @@ export default function Card({
           onClick={onClose}
           aria-label="Close card"
         >
-          x
+          <FontAwesomeIcon icon={faClose} />
         </Button>
       )}
 
@@ -75,7 +77,7 @@ export default function Card({
 
       {title && (
         <div className={styles.title}>
-          {typeof title === "string" ? <Text as="h3">{title}</Text> : title}
+          {typeof title === "string" ? <Text as="h2">{title}</Text> : title}
         </div>
       )}
 

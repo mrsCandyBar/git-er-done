@@ -5,6 +5,8 @@ import type { ReactNode } from "react";
 import Button from "../Button";
 import Text from "../Text";
 import styles from "./Modal.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const MODAL_COUNT_ATTR = "data-modal-count";
 const MODAL_OPEN_ATTR = "data-modal-open";
@@ -104,9 +106,15 @@ export default function Modal({
         aria-describedby={description ? descriptionId : undefined}
       >
         {showCloseButton && (
-          <button type="button" className={styles.iconClose} onClick={onClose} aria-label="Close modal">
-            x
-          </button>
+          <Button
+            type="button"
+            variant="ghost"
+            className={styles.iconClose}
+            onClick={onClose}
+            aria-label="Close modal"
+          >
+            <FontAwesomeIcon icon={faClose} />
+          </Button>
         )}
 
         <div className={styles.body}>
@@ -116,11 +124,15 @@ export default function Modal({
             </Text>
           )}
           {description && (
-            <Text as="p" tone="secondary" className={styles.description}>
-              {description}
-            </Text>
+            <>
+              <Text as="p" tone="secondary" className={styles.description}>
+                {description}
+              </Text>
+              <br/>
+            </>
           )}
           {children}
+          <br/>
         </div>
 
         {(showFooterCloseButton || primaryActionLabel) && (

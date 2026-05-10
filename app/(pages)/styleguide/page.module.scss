@@ -1,5 +1,10 @@
 @use '../../../assets/styles/variables' as v;
 
+.page {
+  margin: 0 auto;
+  max-width: v.$max-width-content;
+}
+
 .wrapper {
   width: 100%;
   max-width: v.$max-width-content;
@@ -7,28 +12,6 @@
   flex-direction: column;
   gap: v.$spacing-lg;
   color: var(--color-text-primary);
-}
-
-.wrapper[data-theme='light'] {
-  --color-bg: #{v.$color-bg-light};
-  --color-fg: #{v.$color-fg-light};
-  --color-text-primary: #{v.$color-text-primary};
-  --color-text-secondary: #{v.$color-text-secondary};
-  --color-btn-primary-hover: #{v.$color-btn-primary-hover};
-  --color-btn-secondary-hover: #{v.$color-btn-secondary-hover};
-  --color-btn-secondary-border: #{v.$color-btn-secondary-border};
-  --color-border-subtle: #{v.$color-border-subtle-light};
-}
-
-.wrapper[data-theme='dark'] {
-  --color-bg: #{v.$color-bg-dark};
-  --color-fg: #{v.$color-fg-dark};
-  --color-text-primary: #{v.$color-text-primary-dark};
-  --color-text-secondary: #{v.$color-text-secondary-dark};
-  --color-btn-primary-hover: #{v.$color-btn-primary-hover-dark};
-  --color-btn-secondary-hover: #{v.$color-btn-secondary-hover-dark};
-  --color-btn-secondary-border: #{v.$color-btn-secondary-border-dark};
-  --color-border-subtle: #{v.$color-border-subtle-dark};
 }
 
 .section, .fixedSection {
@@ -39,7 +22,7 @@
 
   >:first-child {
     margin-top: 1em;
-    border-bottom: 3px solid var(--color-border-subtle);
+    border-bottom: 3px solid var(--color-text-primary);
   }
 
   p {
@@ -49,11 +32,16 @@
 }
 
 .fixedSection {
-  position: fixed;
-  width: 300px;
+  background: var(--color-bg);
   padding: 30px;
-  top: 50%;
-  left: 0px;
+
+  @media (min-width: 1480px) {
+    position: fixed;
+    background: var(--color-bg);
+    width: 300px;
+    top: 50%;
+    left: 0px;
+  }
 }
 
 .stack {

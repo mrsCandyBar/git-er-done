@@ -1,0 +1,13 @@
+@use '../../assets/styles/variables' as v;
+@use '../../assets/styles/mixins' as m;
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: v.$spacing-lg;
+}

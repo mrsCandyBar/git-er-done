@@ -35,11 +35,35 @@ export const Logo: React.FC<LogoProps> = ({ version = "brioh", alt = "Brioh Logo
   const [isDark, setIsDark] = React.useState(false);
 
   React.useEffect(() => {
-    const matcher = window.matchMedia("(prefers-color-scheme: dark)");
-    setIsDark(matcher.matches);
-    const listener = (e: MediaQueryListEvent) => setIsDark(e.matches);
-    matcher.addEventListener("change", listener);
-    return () => matcher.removeEventListener("change", listener);
+    const root = document.getElementById('root');
+    const matcher = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const updateTheme = () => {
+      const theme = root?.getAttribute('data-theme');
+      if (theme === 'dark') setIsDark(true);
+      else if (theme === 'light') setIsDark(false);
+      else setIsDark(matcher.matches);
+    };
+
+    updateTheme();
+
+    const mutationObserver = root
+      ? new MutationObserver(updateTheme)
+      : null;
+    if (mutationObserver && root) {
+      mutationObserver.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+
+    const mediaListener = (e: MediaQueryListEvent) => {
+      const theme = root?.getAttribute('data-theme');
+      if (!theme) setIsDark(e.matches);
+    };
+    matcher.addEventListener('change', mediaListener);
+
+    return () => {
+      mutationObserver?.disconnect();
+      matcher.removeEventListener('change', mediaListener);
+    };
   }, []);
 
   const src = isDark ? logoSources[version].dark : logoSources[version].light;

@@ -5,7 +5,13 @@
 }
 
 .intro {
-    width: 70%;
+    width: 80%;
+    margin-bottom: 10rem;
+
+    @media(max-width: 600px) {
+        width: 100%;
+        margin-bottom: 15rem;
+    }
 }
 
 .introText {

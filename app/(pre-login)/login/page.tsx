@@ -10,7 +10,9 @@ export default function Login() {
       </div>
       <div className={styles.intro}>
         <Text as="h0" className={styles.introText}>Let's do great things together</Text>
-        <GoogleLoginButton />
+        <div style={{ width: '300px' }}>
+          <GoogleLoginButton />
+        </div>
       </div>
       <Footer />
     </>

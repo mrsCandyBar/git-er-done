@@ -35,7 +35,7 @@
 .alignRight {
   text-align: right;
 }
-
+/*
 .h0,
 .h1,
 .h2,
@@ -44,7 +44,7 @@
 .h5,
 .h6 {
   max-width: v.$max-width-heading * 1.5;
-}
+}*/
 
 .h0 {
   font-size: v.$font-size-xl * 1.5;
@@ -96,22 +96,30 @@
 }
 
 .blockquote {
-  max-width: 70ch;
+  max-width: 60%;
   padding-left: v.$spacing-sm;
-  box-shadow: inset -1px -1px 0 var(--color-border-subtle);
   transform: rotate(0.5deg);
-  background: #333231;
+  background: var(--color-btn-secondary-hover);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
   padding: 20px 30px;
   text-align: left;
-  border-radius: 10px;
+  border-radius: 5px;
+
+  // Use Mansalva and Mynerve for block quote text
+  font-family: 'Mynerve', cursive, sans-serif;
+  font-size: 1.4em;
+  text-align: center;
+  line-height: 1.4em;
 
   span {
     display: block;
     margin-top: v.$spacing-sm;
-    font-size: v.$font-size-sm;
+    font-size: v.$font-size-sm * 1.2;
     font-style: italic;
+    font-weight: bold;
     text-align: right;
     color: var(--color-text-secondary);
+    font-family: 'Mynerve', cursive, sans-serif;
   }
 }
 
@@ -124,9 +132,12 @@
 }
 
 .a {
+  font-family: 'Mynerve', cursive, sans-serif;
+  text-decoration: underline;
   font-weight: v.$font-weight-medium;
   color: var(--color-text-primary);
   text-underline-offset: 2px;
+  transform: rotate(0.6deg);
 }
 
 @media (max-width: v.$breakpoint-sm) {

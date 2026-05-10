@@ -3,7 +3,7 @@
 .card {
   position: relative;
   border-radius: 20px;
-  padding: v.$spacing-md;
+  padding: v.$spacing-lg;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,6 +11,7 @@
   gap: v.$spacing-sm;
   text-align: center;
   border: 1px solid var(--color-border-subtle);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   background: var(--color-bg);
 }
 
@@ -43,33 +44,19 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 30px;
-  min-width: 30px;
-  height: 30px;
-  border: 1px solid var(--color-border-subtle);
-  border-radius: 50%;
-  color: var(--color-text-secondary);
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
   background: transparent;
   font-size: 14px;
   line-height: 1;
   padding: 0;
   transition: border-color v.$transition-base, color v.$transition-base, background v.$transition-base;
-
-  &:hover {
-    border-color: var(--color-text-primary);
-    color: var(--color-text-primary);
-    background: var(--color-btn-secondary-hover);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-text-primary);
-    outline-offset: 2px;
-  }
 }
 
 .title {
   width: 100%;
-  text-align: center;
+  text-align: left;
 
   > * {
     margin-inline: auto;
@@ -78,6 +65,7 @@
 
 .description {
   width: 100%;
+  text-align: left;
 }
 
 .figure {
@@ -99,16 +87,17 @@
 
 .imageDescription {
   margin: 0;
-  font-size: v.$font-size-sm;
+  font-family: "Mynerve", cursive, sans-serif;
   line-height: 1.5;
   max-width: 100%;
-  text-align: center;
+  text-align: left;
 }
 
 .actions {
+  margin-top: 3em;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   gap: v.$spacing-xs;
   width: 100%;
