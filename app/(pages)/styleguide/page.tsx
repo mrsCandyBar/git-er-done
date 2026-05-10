@@ -20,6 +20,7 @@ export default function Styleguide() {
   return (
     <>
       <Header />
+
       <main id="styleguide-root" className={styles.wrapper}>
         <section className={styles.section}>
           <Text as="h1">Styleguide</Text>
@@ -29,7 +30,7 @@ export default function Styleguide() {
           </Text>
         </section>
 
-        <section className={styles.section}>
+        <section className={styles.fixedSection}>
           <Text as="h2">Theme Preview</Text>
           <Text as="p" tone="secondary" className={styles.helperText}>
             Toggle this page between light and dark previews without changing your system appearance.
@@ -46,8 +47,6 @@ export default function Styleguide() {
             <Text as="h2">Heading 2</Text>
             <Text as="h3">Heading 3</Text>
             <Text as="h4">Heading 4</Text>
-            <Text as="h5">Heading 5</Text>
-            <Text as="h6">Heading 6</Text>
             <Text as="p" tone="secondary">
               The quick brown fox jumps over the lazy dog. This sample paragraph helps validate body
               copy readability, spacing, and line length.
@@ -55,26 +54,26 @@ export default function Styleguide() {
             <Text as="p" tone="secondary">
               This project uses shared typography and spacing tokens, so this section is a useful smoke
               test after global style changes.
-            </Text>
-            <Text as="p">
               <Text as="strong">Bold text</Text> and <Text as="em">italic text</Text> can be composed
               inline through the same component.
             </Text>
-            <Text as="blockquote" tone="secondary">
-              This is block text for callouts, quotes, and notes that need a little extra emphasis.
-            </Text>
-            <Text as="ul">
-              <Text as="li">Unordered list item one</Text>
-              <Text as="li">Unordered list item two</Text>
-              <Text as="li">Unordered list item three</Text>
-            </Text>
-            <Text as="ol">
-              <Text as="li">Ordered list item one</Text>
-              <Text as="li">Ordered list item two</Text>
-              <Text as="li">Ordered list item three</Text>
-            </Text>
+            <br/>
+
+            
+
             <Text as="a" href="https://nextjs.org/docs" target="_blank" rel="noreferrer noopener">
               Link text example
+            </Text>
+
+            <Text as="blockquote" tone="secondary">
+              This is block text for callouts, quotes, and notes that need a little extra emphasis. 
+              This project uses shared typography and spacing tokens, so this section is a useful smoke
+              test after global style changes. <span>- Written by Me on {new Date().toLocaleDateString()}</span>
+            </Text>
+            <Text as="ul">
+              <Text as="li">Unordered and ordered list items looks the same one</Text>
+              <Text as="li">Unordered list item, same as above two</Text>
+              <Text as="li">Unordered list item three</Text>
             </Text>
           </div>
         </section>

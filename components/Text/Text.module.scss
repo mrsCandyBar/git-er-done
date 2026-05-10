@@ -36,13 +36,20 @@
   text-align: right;
 }
 
+.h0,
 .h1,
 .h2,
 .h3,
 .h4,
 .h5,
 .h6 {
-  max-width: v.$max-width-heading;
+  max-width: v.$max-width-heading * 1.5;
+}
+
+.h0 {
+  font-size: v.$font-size-xl * 1.5;
+  font-weight: v.$font-weight-semibold;
+  line-height: v.$line-height-xl * 1.45;
 }
 
 .h1 {
@@ -91,7 +98,21 @@
 .blockquote {
   max-width: 70ch;
   padding-left: v.$spacing-sm;
-  border-left: 3px solid var(--color-border-subtle);
+  box-shadow: inset -1px -1px 0 var(--color-border-subtle);
+  transform: rotate(0.5deg);
+  background: #333231;
+  padding: 20px 30px;
+  text-align: left;
+  border-radius: 10px;
+
+  span {
+    display: block;
+    margin-top: v.$spacing-sm;
+    font-size: v.$font-size-sm;
+    font-style: italic;
+    text-align: right;
+    color: var(--color-text-secondary);
+  }
 }
 
 .ul,

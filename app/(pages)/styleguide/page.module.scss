@@ -31,16 +31,29 @@
   --color-border-subtle: #{v.$color-border-subtle-dark};
 }
 
-.section {
+.section, .fixedSection {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: v.$spacing-sm;
 
+  >:first-child {
+    margin-top: 1em;
+    border-bottom: 3px solid var(--color-border-subtle);
+  }
+
   p {
     max-width: 70ch;
     color: var(--color-text-secondary);
   }
+}
+
+.fixedSection {
+  position: fixed;
+  width: 300px;
+  padding: 30px;
+  top: 50%;
+  left: 0px;
 }
 
 .stack {
