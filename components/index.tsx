@@ -14,4 +14,5 @@ export { default as Tabs } from "./Tabs";
 export { default as TaskTable } from "./TaskTable";
 export { default as Text } from "./Text";
 export { default as ToastRegion } from "./Toast";
+export { Logo } from "./Logo";
 export { useToastSystem } from "./Toast/useToast";

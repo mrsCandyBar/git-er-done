@@ -1,0 +1,45 @@
+@use '../../assets/styles/variables' as v;
+@use '../../assets/styles/mixins' as m;
+
+.logoHolder {
+  width: 272px;
+  height: 84px;
+  max-width: 200px;
+  transition: transform 0.3s ease;
+  //transform: scale(0.85);
+  position: relative;
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.mainLogo {
+  width: 272px;
+  height: 84px;
+  max-width: 200px;
+  transition: transform 0.3s ease;
+}
+
+.icon {
+  position: absolute;
+  transition: transform 0.3s ease;
+  top: -20%;
+
+  &.brioh-card {
+    width: 24px;
+    height: 30px;
+    left: 43%;
+  }
+  &.brioh-heart {
+    width: 33px;
+    height: 31px;
+    left: 40%;
+  }
+  &.brioh-star {
+    width: 28px;
+    height: 29px;
+    left: 42%;
+  }
+}
+
+
