@@ -13,13 +13,11 @@ h1 {
   font-size: v.$font-size-xl;
   font-weight: v.$font-weight-semibold;
   line-height: v.$line-height-xl;
-  letter-spacing: -2.4px;
   text-wrap: balance;
 
   @include m.mobile {
     font-size: v.$font-size-lg;
     line-height: v.$line-height-lg;
-    letter-spacing: -1.92px;
   }
 }
 

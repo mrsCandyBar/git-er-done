@@ -2,6 +2,7 @@
 @use './styles/reset';
 @use './styles/typography';
 @use './styles/buttons';
+@import "./styles/_google-sans.scss";
 
 // ─── CSS Custom Properties ────────────────────────────────────────────────────
 
@@ -43,6 +44,7 @@ body {
   color: var(--color-text-primary);
   background: var(--color-bg);
   line-height: 1.4em;
+  font-family: 'Google Sans', Arial, Helvetica, sans-serif;
 }
 
 body::after {

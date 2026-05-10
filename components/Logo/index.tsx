@@ -1,5 +1,6 @@
-import React from "react";
+'use client';
 
+import React from "react";
 export type LogoVersion = "brioh" | "brioh-card" | "brioh-heart" | "brioh-star";
 import styles from "./Logo.module.scss";
 
@@ -44,11 +45,13 @@ export const Logo: React.FC<LogoProps> = ({ version = "brioh", alt = "Brioh Logo
   const src = isDark ? logoSources[version].dark : logoSources[version].light;
 
   return (
-    <>
-        <div className={styles.logoHolder}>
-            <img src={isDark ? logoSources["brioh"].dark : logoSources["brioh"].light} alt={version} className={styles.mainLogo} />
-            <img src={src} alt={version} className={styles[version] + " " + styles.icon} />
-        </div>
-    </> 
-  ) 
+    <div className={styles.logoHolder}>
+      <img src={isDark ? logoSources["brioh"].dark : logoSources["brioh"].light} alt={version} className={styles.mainLogo} />
+      <img
+        src={src}
+        alt={version}
+        className={styles.icon + " " + styles[version]}
+      />
+    </div>
+  );
 };

@@ -4,7 +4,8 @@ import { useState } from "react";
 import { faCircleCheck, faClock, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { 
   Header, Footer, Button, Badge, Input, Form, Text, InfoChip, Accordion,
-  Card, CardStack, Modal, ConfettiButton, Tabs, ToastRegion, useToastSystem
+  Card, CardStack, Modal, ConfettiButton, Tabs, ToastRegion, useToastSystem,
+  Logo
 } from "@/components/index";
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
 
@@ -617,6 +618,24 @@ export default function Styleguide() {
               },
             ]}
           />
+        </section>
+
+        <section className={styles.section}>
+          <Text as="h2">Logos</Text>
+          <Text as="p" tone="secondary">
+            Logos represent the brand visually and should be used consistently across the application.
+          </Text>
+          <br/>
+          
+          <Logo version="brioh-card" />
+          <Text as="p">brioh-card</Text>
+
+          <Logo version="brioh-heart" />
+          <Text as="p">brioh-heart</Text>
+        
+          <Logo version="brioh-star" />
+          <Text as="p">brioh-star</Text>
+          <br/>
         </section>
       </main>
 

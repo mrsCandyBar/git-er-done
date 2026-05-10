@@ -29,17 +29,40 @@
     width: 24px;
     height: 30px;
     left: 43%;
+    animation: spin-card 2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
   }
   &.brioh-heart {
     width: 33px;
     height: 31px;
     left: 40%;
+    animation: heartbeat 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
   &.brioh-star {
     width: 28px;
     height: 29px;
     left: 42%;
+    z-index: 2;
+    animation: hover-star 2.4s ease-in-out infinite;
   }
+
+@keyframes hover-star {
+  0%, 100% { transform: translateY(5) rotate(0deg); }
+  50% { transform: translateY(0px) rotate(15deg); }
+}
 }
 
+/* Card spin animation */
+@keyframes spin-card {
+  0% { transform: rotateY(0deg); }
+  30% { transform: rotateY(360deg); }
+  100% { transform: rotateY(360deg); }
+}
 
+/* Heart beat animation */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  10%, 30% { transform: scale(1.12); }
+  20% { transform: scale(0.95); }
+  40% { transform: scale(1.08); }
+  50% { transform: scale(1); }
+}

@@ -1,10 +1,10 @@
 
-import HeartLogoShowcase from "../HeartLogoShowcase";
+import { Logo } from "@/components/index";
 
 export default function Header() {
   return (
     <header>
-      <HeartLogoShowcase />
+      <Logo version="brioh-card" alt="Brioh Card Logo" style={{ width: 64, height: 64 }} />
     </header>
   );
 }
