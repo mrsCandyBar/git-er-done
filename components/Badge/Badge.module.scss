@@ -1,65 +1,281 @@
 @use '../../assets/styles/variables' as v;
 
-.stack {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
+$lightBG: #ededed;
+$darkBG:  #171717;
+$txtLight:#000000;
+$txtDark: #ededed;
+
+.wrapper {
+  display: block;
+  text-align: center;
+  background: $txtLight;
+  border: 2.5px solid $txtLight;
+  color: $txtDark;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  min-width: 150px;
+  height: 150px;
+  position: relative;
+
+  &.round {
+    border-radius: 999px;
+
+    .label {
+      font-family: 'Cherry Bomb One', sans-serif;
+      font-weight: normal;
+      font-size: 1.05rem;
+      fill: $txtDark;
+    }
+
+    .subtitle {
+      font-size: 0.75rem;
+      text-decoration-line: overline;
+      font-weight: normal;
+      fill: $txtDark;
+    }
+
+    .notoIcon {
+      font-size: 4.7rem;
+      font-family: 'Noto Emoji', sans-serif;
+      position: absolute;
+      top: 47%;
+      left: 51%;
+      transform: translate(-50%, -50%) rotate(14deg);
+    }
+  }
+
+  &.square {
+    border-radius: 12px;
+
+    .notoIcon {
+      font-size: 4.8rem;
+      font-family: 'Noto Emoji', sans-serif;
+      position: absolute;
+      top: 53%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .label {
+      position: absolute;
+      top: 1%;
+      left: 0;
+      right: 0;
+      font-size: 1.1rem;
+      line-height: 1.9em;
+      letter-spacing: -0.02em;
+      fill: $txtDark;
+      text-decoration: wavy;
+      text-decoration-line: underline;
+    }
+
+    .subtitle {
+      position: absolute;
+      bottom: 3%;
+      left: 0;
+      right: 0;
+      font-size: 1rem;
+      font-family: 'Cherry Bomb One', sans-serif;
+      font-weight: normal;
+      fill: $txtDark;
+    }
+  }
+
+  &.window {
+    border-radius: 999px 999px 200px 200px;
+
+    .label {
+      font-family: 'Cherry Bomb One', sans-serif;
+      letter-spacing: -0.3px;
+      font-weight: normal;
+      font-size: 18px;
+      text-decoration: underline;
+      fill: $txtDark;
+    }
+
+    .notoIcon {
+      font-size: 5.4rem;
+      font-family: 'Noto Emoji', sans-serif;
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &.text {
+    border: none;
+    box-shadow: none;
+    height: 130px;
+    background: none;
+
+    .textStyle {
+      font-family: 'Cherry Bomb One';
+      font-size: 50px;
+    }
+
+    .textStyle2 {
+      font-family: 'Cherry Bomb One';
+      letter-spacing: 15px;
+      font-size: 30px;
+    }
+
+    .mainText { fill: $txtDark; }
+    .mainBackgroundBorder { fill: $txtLight; stroke: $txtLight; }
+    .secondaryBorder { stroke: $txtLight; }
+    .mainBorder { stroke: $txtLight; }
+  }
+
+  &.iconWrapper {
+    border: none;
+    box-shadow: none;
+    background: none;
+    height: 130px;   
+
+    .textStyle {
+      font-family: 'Noto Emoji', sans-serif;
+      font-size: 70px;
+    }
+
+    .mainText { fill: $txtDark; }
+    .secondaryBorder { stroke: $txtLight; }
+    .mainBorder { stroke: $txtLight; }
+  }
+
+
+
+
+
+  &.dark {
+    .label { font-family: Google Sans; font-weight: normal; letter-spacing: 0.05em; text-decoration: none; }
+  }
+  
+  &.light {
+    border-color: $txtLight;
+    background-color: $txtDark;
+    //box-shadow: none;
+
+    .icon, .notoIcon {
+      color: $txtLight;
+    }
+
+    .label { fill: $txtLight; font-family: Mynerve; font-weight: bold; }
+    .subtitle { fill: $txtLight; }
+
+    &.square {
+      .label { color: $txtLight !important; }
+      .subtitle { color: $txtLight !important; }
+    }
+
+    &.text {
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+
+      .mainText { fill: $txtLight; }
+      .mainBackgroundBorder {
+        fill: $txtDark;
+        stroke: $txtDark;
+      }
+      .secondaryBorder { stroke: $txtDark; }
+      .mainBorder { stroke: $txtLight; }
+    }
+
+    &.iconWrapper {
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+
+      .mainText { fill: $txtLight; }
+      .secondaryBorder { stroke: $txtDark; }
+      .mainBorder { stroke: $txtLight; }
+    }
+  }
+
+
+  &.full {
+    border-color: rgb(177, 107, 82);
+    background-color: rgb(240, 217, 176);
+
+    .notoIcon, &.iconWrapper .mainText {
+      font-family: 'Noto Color Emoji', sans-serif;
+    }
+
+    .icon, .notoIcon {
+      color: rgb(82, 28, 28);;
+      filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5));
+    }
+
+    .label { fill: rgb(173, 78, 78); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    .subtitle { fill:rgb(148, 96, 0); }
+
+    &.square {
+      .label { color: rgb(148, 96, 0) !important; }
+      .subtitle { color:rgb(173, 78, 78) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    }
+
+    &.text {
+      border: none !important;
+      background: none !important;
+
+      .mainText { fill: rgb(173, 78, 78); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .mainBackgroundBorder {
+        fill: rgb(240, 217, 176);
+        stroke: rgb(240, 217, 176);
+      }
+      .secondaryBorder { stroke: rgb(240, 217, 176); }
+      .mainBorder { stroke:rgb(177, 107, 82); }
+    }
+
+    &.iconWrapper {
+      border: none !important;
+      background: none !important;
+
+      .mainText { fill:rgb(173, 78, 78); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .secondaryBorder { stroke: rgb(240, 217, 176); }
+      .mainBorder { stroke:rgb(177, 107, 82); }
+    }
+  }
 }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  border: 2px solid var(--color-text-primary);
-  border-radius: 999px;
+.icon {
+  font-size: 5.9rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.notoIcon {
+  font-size: 5.9rem;
+  font-family: 'Noto Emoji', sans-serif;
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Curved label and subtitle
+.curveSvg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 150px;
+  height: 150px;
+  pointer-events: none;
+}
+
+.label {
   font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  transform: rotate(-6deg);
-  box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.2);
+  fill: var(--color-text-primary);
 }
 
 .subtitle {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--color-text-secondary);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: 999px;
-  padding: 3px 8px;
-}
-
-.sunshine {
-  background: #ffe36e;
-  color: #2a1f00;
-}
-
-.mint {
-  background: #b8f2c1;
-  color: #09340f;
-}
-
-.coral {
-  background: #ffc2b8;
-  color: #4a1306;
-}
-
-.sky {
-  background: #b9e5ff;
-  color: #082f48;
-}
-
-.slate {
-  background: #d9dde4;
-  color: #1b2430;
-}
-
-@media (max-width: v.$breakpoint-sm) {
-  .badge {
-    font-size: 0.72rem;
-    padding: 5px 10px;
-  }
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0em;
+  text-transform: uppercase;
+  fill: var(--color-text-primary);
 }

@@ -5,7 +5,15 @@
 @import "./styles/_google-sans.scss";
 
 // Google Fonts: Mansalva & Mynerve
+
+// Noto Emoji, Noto Color Emoji, Emot Font
 @import url('https://fonts.googleapis.com/css2?family=Mansalva&family=Mynerve&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Modak&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Emoji&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+// Emot Font is not available on Google Fonts; if you have a local or CDN link, add it here.
+
 
 // ─── CSS Custom Properties ────────────────────────────────────────────────────
 
@@ -47,7 +55,7 @@ body {
   color: var(--color-text-primary);
   background: var(--color-bg);
   line-height: 1.4em;
-  font-family: 'Google Sans', Arial, Helvetica, sans-serif;
+  font-family: 'Google Sans', 'Noto Emoji', 'Noto Color Emoji', 'Emot Font', Arial, Helvetica, sans-serif;
 }
 
 body::after {
