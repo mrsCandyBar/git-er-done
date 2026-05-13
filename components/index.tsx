@@ -1,5 +1,6 @@
 export { default as Accordion } from "./Accordion";
 export { default as Badge } from "./Badge";
+export { default as BadgeCollection } from "./BadgeCollection";
 export { default as Button } from "./Button";
 export { default as Card } from "./Card";
 export { default as CardStack } from "./CardStack";

@@ -7,12 +7,12 @@ export type BadgeVariant = "round" | "window" | "square" | "text" | "icon";
 export type BadgeType = "dark" | "light" | "color" | "gradient" | "full";
 
 type BadgeProps = {
-
-  icon?: ReactNode;
   notoIcon?: string;
   iconWidth?: number;
   label: ReactNode;
   labelOffset?: number;
+  labelRoundOffset?: number;
+  labelWidth?: number;
   subtitle?: ReactNode;
   subtitleOffset?: number;
   variant?: BadgeVariant;
@@ -28,11 +28,12 @@ type BadgeProps = {
 };
 
 export default function Badge({
-  icon,
   notoIcon,
   iconWidth,
   label,
   labelOffset = 0,
+  labelRoundOffset = 0,
+  labelWidth = 0,
   subtitle,
   subtitleOffset = 0,
   variant = "square",
@@ -88,12 +89,6 @@ export default function Badge({
               </text>
             )}
           </svg>
-          {icon && <div className={styles.icon} 
-            data-colorlight={color?.light} 
-            data-colordark={color?.dark} 
-            data-coloraccent={color?.accent}
-            data-colorcontrast={color?.contrast}
-            data-colormedian={color?.median}>{icon}</div>}
           {notoIcon && <div className={styles.notoIcon} 
             data-colorlight={color?.light} 
             data-colordark={color?.dark} 
@@ -130,7 +125,7 @@ export default function Badge({
                 data-coloraccent={color?.accent}
                 data-colorcontrast={color?.contrast}
                 data-colormedian={color?.median}
-              ><textPath href="#badge-label-path" startOffset={`${labelOffset}%`}>{label}</textPath></text>
+              ><textPath href="#badge-label-path" startOffset={`${labelRoundOffset}%`}>{label}</textPath></text>
             )}
             {subtitle && (
               <text 
@@ -143,13 +138,6 @@ export default function Badge({
               ><textPath href="#badge-subtitle-path" startOffset={`${subtitleOffset}%`}>{subtitle}</textPath></text>
             )}
           </svg>
-          {icon && <div className={styles.icon}
-              data-colorlight={color?.light} 
-              data-colordark={color?.dark} 
-              data-coloraccent={color?.accent}
-              data-colorcontrast={color?.contrast}
-              data-colormedian={color?.median}
-            >{icon}</div>}
           {notoIcon && <div className={styles.notoIcon}
               data-colorlight={color?.light} 
               data-colordark={color?.dark} 
@@ -183,13 +171,6 @@ export default function Badge({
               data-colorcontrast={color?.contrast}
               data-colormedian={color?.median}
             >{subtitle}</div>}
-          {icon && <div className={styles.icon}
-              data-colorlight={color?.light} 
-              data-colordark={color?.dark} 
-              data-coloraccent={color?.accent}
-              data-colorcontrast={color?.contrast}
-              data-colormedian={color?.median}
-            >{icon}</div>}
           {notoIcon && <div className={styles.notoIcon}
               data-colorlight={color?.light} 
               data-colordark={color?.dark} 
@@ -210,7 +191,7 @@ export default function Badge({
           data-colormedian={color?.median}
         >
           {label && (
-            <svg width={iconWidth} height="200">
+            <svg width={labelWidth} height="200">
               <g id={`textGroup_` + randomIndex}>
                 {label && splitLabel(label).map((line:string, index:number) => {
                   const randomInt = Math.floor(Math.random() * 1000) + 1;
@@ -224,22 +205,22 @@ export default function Badge({
                         data-coloraccent={color?.accent}
                         data-colorcontrast={color?.contrast}
                         data-colormedian={color?.median}>
-                        {line}
+                        {line}{index === splitLabel(label).length - 1 ? "!" : ""}
                       </text>
                     </defs>
 
                     <use 
-                      x={0 } y={index > 0 ? 40 * index : 0 } 
+                      x={0 } y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
                       className={` ${styles.textStyle} ${styles.mainBorder} ${styles.hide}`}
                     />
                     <use 
-                      x={0 } y={index > 0 ? 40 * index : 0 } 
+                      x={0 } y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
                       className={` ${styles.textStyle} ${styles.secondaryBorder} ${styles.hide}`}
                     />
                     <use 
-                      x={0 }  y={index > 0 ? 40 * index : 0 } 
+                      x={0 }  y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
                       className={` ${styles.textStyle} ${styles.mainText} ${styles.hide}`}
                     />
@@ -305,21 +286,12 @@ export default function Badge({
                   data-colorcontrast={color?.contrast}
                   data-colormedian={color?.median}
                 >
-                  {label}
-                </text>
-                <text id="iconLabel2"
-                  data-colorlight={color?.light} 
-                  data-colordark={color?.dark} 
-                  data-coloraccent={color?.accent}
-                  data-colorcontrast={color?.contrast}
-                  data-colormedian={color?.median}
-                >
-                  BLAH!
+                  {notoIcon}
                 </text>
               </defs>
 
               <use 
-                x="20" y="80" 
+                x="15" y="80" 
                 href="#iconLabel" 
                 strokeWidth="40" 
                 strokeLinejoin="round" 
@@ -331,7 +303,7 @@ export default function Badge({
                 data-colormedian={color?.median}
               />
               <use 
-                x="20" y="80" 
+                x="15" y="80" 
                 href="#iconLabel" 
                 strokeWidth="28" 
                 strokeLinejoin="round" 
@@ -343,7 +315,7 @@ export default function Badge({
                 data-colormedian={color?.median}
               />
               <use 
-                x="20" y="80" 
+                x="15" y="80" 
                 href="#iconLabel" 
                 className={` ${styles.textStyle} ${styles.mainText}`}
                 data-colorlight={color?.light} 

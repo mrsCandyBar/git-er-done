@@ -110,7 +110,7 @@
 
     .textStyle {
       font-family: 'Cherry Bomb One';
-      font-size: 50px;
+      font-size: 45px;
     }
 
     .textStyle2 {
@@ -121,6 +121,7 @@
   }
 
   &.iconWrapper {
+    min-width: 120px;
     height: 130px;   
 
     .textStyle {
@@ -137,7 +138,7 @@
       .subtitle { font-family: Google Sans; font-weight: normal; }
     } 
     &.text {
-      .textStyle, .textStyle2 { font-family: Google Sans; font-weight: bold; font-size: 44px; }
+      .textStyle { font-family: Google Sans; font-weight: bold; font-size: 42px; }
     } 
   }
   
@@ -260,30 +261,30 @@
   }
 
   &.light {
-    border-color: attr(data-colormedian type(<color>));
+    border-color: attr(data-coloraccent type(<color>));
     background-color: attr(data-colorlight type(<color>));
-    color: attr(data-colormedian type(<color>));
+    color: attr(data-coloraccent type(<color>));
 
     .icon, .notoIcon {
-      color: attr(data-colormedian type(<color>));
+      color: attr(data-coloraccent type(<color>));
     }
 
     .label {
-      color: attr(data-colormedian type(<color>));
-      fill: attr(data-colormedian type(<color>));
+      color: attr(data-coloraccent type(<color>));
+      fill: attr(data-coloraccent type(<color>));
     }
 
     .subtitle {
-      color: attr(data-colormedian type(<color>));
-      fill: attr(data-colormedian type(<color>));
+      color: attr(data-coloraccent type(<color>));
+      fill: attr(data-coloraccent type(<color>));
     }
 
-    .label { fill: attr(data-colormedian type(<color>)); }
-    .subtitle { fill: attr(data-colormedian type(<color>)); }
+    .label { fill: attr(data-coloraccent type(<color>)); }
+    .subtitle { fill: attr(data-coloraccent type(<color>)); }
 
     &.square {
-      .label { color: attr(data-colormedian type(<color>)) !important; }
-      .subtitle { color: attr(data-colormedian type(<color>)) !important; }
+      .label { color: attr(data-coloraccent type(<color>)) !important; }
+      .subtitle { color: attr(data-coloraccent type(<color>)) !important; }
     }
 
     &.text {
@@ -291,7 +292,7 @@
       background: none !important;
       box-shadow: none !important;
 
-      .mainText { fill: attr(data-colormedian type(<color>)); }
+      .mainText { fill: attr(data-coloraccent type(<color>)); }
       .mainBackgroundBorder {
         fill: attr(data-colorlight type(<color>));
         stroke: attr(data-colorlight type(<color>));
@@ -305,7 +306,7 @@
       background: none !important;
       box-shadow: none !important;
 
-      .mainText { fill: attr(data-colormedian type(<color>)); }
+      .mainText { fill: attr(data-coloraccent type(<color>)); }
       .secondaryBorder { stroke: attr(data-colorlight type(<color>)); }
       .mainBorder { stroke: attr(data-colorlight type(<color>)); }
     }

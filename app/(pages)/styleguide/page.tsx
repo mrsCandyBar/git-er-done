@@ -5,7 +5,8 @@ import { faCircleCheck, faClock, faTriangleExclamation } from "@fortawesome/free
 import { 
   Header, Footer, Button, Badge, Input, Form, Text, InfoChip, Accordion,
   Card, CardStack, Modal, ConfettiButton, Tabs, ToastRegion, useToastSystem,
-  Logo
+  Logo,
+  BadgeCollection
 } from "@/components/index";
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
 import StyleguideThemeToggle from "@/components/StyleguideThemeToggle";
@@ -125,172 +126,24 @@ export default function Styleguide() {
           </Text>
           <br/>
           
-          <Text as="h3">Dark</Text>
-          <div className={styles.badgeGrid}>
-            <Badge 
-              variant="window"
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="You got this!" 
-              labelOffset={52}
-            />
-
-            <Badge 
-              variant="round"
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="You got this!" 
-              labelOffset={17}
-              subtitle="Started Apr 14, 2026"
-              subtitleOffset={48}
-            />
-
-            <Badge 
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="Keep going" 
-              subtitle="you got this!" 
-              variant="square" 
-            />
-          </div>
-
-          <div className={styles.badgeGrid}>
-            <Badge 
-              label="Keep Going!"
-              variant="text" 
-              iconWidth={185}
-            />
-            <Badge 
-              label="🤖"
-              variant="icon" 
-              iconWidth={130}
-            />
-          </div>
-
-          <Text as="h3">Light</Text>
-          <div className={styles.badgeGrid}>
-            <Badge 
-              type="light"
-              variant="window"
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="You got this!" 
-              labelOffset={54}
-            />
-
-            <Badge 
-              type="light"
-              variant="round"
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="You got this!" 
-              labelOffset={17}
-              subtitle="Started Apr 14, 2026"
-              subtitleOffset={48}
-            />
-
-            <Badge 
-              type="light"
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="Keep going" 
-              subtitle="you got this!" 
-              variant="square" 
-            />
-          </div>
-
-          <div className={styles.badgeGrid}>
-            <Badge 
-              type="light"
-              label="Keep Going!"
-              variant="text" 
-              iconWidth={185}
-            />
-            <Badge 
-              type="light"
-              label="🤖"
-              variant="icon" 
-              iconWidth={130}
-            />
-          </div>
-
-          <Text as="h3">Full</Text>
-          <div className={styles.badgeGrid}>
-            <Badge 
-              type="full"
-              variant="window"
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="You got this!" 
-              labelOffset={52}
-              color = {{
-                accent: "#ad4e4e",
-                contrast: "#f0d9b0",
-                median: "#b16b52",
-              }}
-            />
-
-            <Badge 
-              type="full"
-              variant="round"
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="You got this!" 
-              labelOffset={17}
-              subtitle="Started Apr 14, 2026"
-              subtitleOffset={48}
-              color = {{
-                accent: "#ad4e4e",
-                contrast: "#f0d9b0",
-                median: "#b16b52",
-              }}
-            />
-
-            <Badge 
-              type="full"
-              //icon={<FontAwesomeIcon icon={faCircleCheck} />}
-              notoIcon="🤖"
-              label="Keep going" 
-              subtitle="you got this!" 
-              variant="square" 
-              color = {{
-                accent: "#ad4e4e",
-                contrast: "#f0d9b0",
-                median: "#b16b52",
-              }}
-            />
-          </div>
-
-          <div className={styles.badgeGrid}>
-            <Badge 
-              type="full"
-              label="Keep Going!"
-              variant="text" 
-              iconWidth={185}
-              color = {{
-                accent: "#ad4e4e",
-                contrast: "#f0d9b0",
-                median: "#b16b52",
-              }}
-            />
-            <Badge 
-              type="full"
-              label="🤖"
-              variant="icon" 
-              iconWidth={130}
-              color = {{
-                accent: "#ad4e4e",
-                contrast: "#f0d9b0",
-                median: "#b16b52",
-              }}
-            />
-          </div>
+          <BadgeCollection badgeInfo={{ 
+            notoIcon: "🤖",
+            iconWidth: 120,
+            label: "Keep going",
+            labelOffset: 56,
+            labelRoundOffset: 25,
+            labelWidth: 165,
+            subtitle: "You got this!",
+            subtitleOffset: 48,
+            color: {
+              light: "#f7e6ca",
+              dark: "#702323",
+              accent: "#c45f5f",
+              contrast: "#f0d9b0",
+              median: "#b16b52",
+            }
+          }}/>
         </section>
-
-
-
-
-
 
         <section className={styles.section}>
           <Text as="h2">Input Fields</Text>

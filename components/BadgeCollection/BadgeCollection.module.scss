@@ -1,0 +1,8 @@
+@use '../../assets/styles/variables' as v;
+
+.badgeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: v.$spacing-sm;
+}
