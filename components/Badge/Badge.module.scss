@@ -1,20 +1,23 @@
 @use '../../assets/styles/variables' as v;
 
-$lightBG: #ededed;
-$darkBG:  #171717;
-$txtLight:#000000;
-$txtDark: #ededed;
-
 .wrapper {
   display: block;
   text-align: center;
-  background: $txtLight;
-  border: 2.5px solid $txtLight;
-  color: $txtDark;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
   min-width: 150px;
   height: 150px;
   position: relative;
+
+  &.window {
+    margin-top: 20px;
+    height: 92px;
+    overflow: hidden;
+
+    .notoIcon {
+      top: 61px !important;
+      font-size: 58px !important;
+    }
+  }
 
   &.round {
     border-radius: 999px;
@@ -23,34 +26,33 @@ $txtDark: #ededed;
       font-family: 'Cherry Bomb One', sans-serif;
       font-weight: normal;
       font-size: 1.05rem;
-      fill: $txtDark;
     }
 
     .subtitle {
       font-size: 0.75rem;
       text-decoration-line: overline;
       font-weight: normal;
-      fill: $txtDark;
     }
 
     .notoIcon {
       font-size: 4.7rem;
       font-family: 'Noto Emoji', sans-serif;
       position: absolute;
-      top: 47%;
-      left: 51%;
+      top: 45%;
+      left: 49%;
       transform: translate(-50%, -50%) rotate(14deg);
     }
   }
 
   &.square {
     border-radius: 12px;
+    border-style: double;
 
     .notoIcon {
       font-size: 4.8rem;
       font-family: 'Noto Emoji', sans-serif;
       position: absolute;
-      top: 53%;
+      top: 49%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
@@ -63,7 +65,6 @@ $txtDark: #ededed;
       font-size: 1.1rem;
       line-height: 1.9em;
       letter-spacing: -0.02em;
-      fill: $txtDark;
       text-decoration: wavy;
       text-decoration-line: underline;
     }
@@ -73,10 +74,9 @@ $txtDark: #ededed;
       bottom: 3%;
       left: 0;
       right: 0;
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-family: 'Cherry Bomb One', sans-serif;
       font-weight: normal;
-      fill: $txtDark;
     }
   }
 
@@ -89,7 +89,6 @@ $txtDark: #ededed;
       font-weight: normal;
       font-size: 18px;
       text-decoration: underline;
-      fill: $txtDark;
     }
 
     .notoIcon {
@@ -103,10 +102,11 @@ $txtDark: #ededed;
   }
 
   &.text {
-    border: none;
-    box-shadow: none;
     height: 130px;
-    background: none;
+
+    .hide {
+      display: none !important;
+    }
 
     .textStyle {
       font-family: 'Cherry Bomb One';
@@ -115,124 +115,50 @@ $txtDark: #ededed;
 
     .textStyle2 {
       font-family: 'Cherry Bomb One';
-      letter-spacing: 15px;
+      letter-spacing: 10px;
       font-size: 30px;
     }
-
-    .mainText { fill: $txtDark; }
-    .mainBackgroundBorder { fill: $txtLight; stroke: $txtLight; }
-    .secondaryBorder { stroke: $txtLight; }
-    .mainBorder { stroke: $txtLight; }
   }
 
   &.iconWrapper {
-    border: none;
-    box-shadow: none;
-    background: none;
     height: 130px;   
 
     .textStyle {
       font-family: 'Noto Emoji', sans-serif;
       font-size: 70px;
     }
-
-    .mainText { fill: $txtDark; }
-    .secondaryBorder { stroke: $txtLight; }
-    .mainBorder { stroke: $txtLight; }
   }
 
-
-
-
-
   &.dark {
-    .label { font-family: Google Sans; font-weight: normal; letter-spacing: 0.05em; text-decoration: none; }
+    .label { font-family: Google Sans; font-weight: bold; letter-spacing: 0.02em; text-decoration: none; }
+    &.round .label { letter-spacing: 0.18em; }
+    &.square {
+      .label { letter-spacing: 0.05em; }
+      .subtitle { font-family: Google Sans; font-weight: normal; }
+    } 
+    &.text {
+      .textStyle, .textStyle2 { font-family: Google Sans; font-weight: bold; font-size: 44px; }
+    } 
   }
   
   &.light {
-    border-color: $txtLight;
-    background-color: $txtDark;
-    //box-shadow: none;
-
-    .icon, .notoIcon {
-      color: $txtLight;
-    }
-
-    .label { fill: $txtLight; font-family: Mynerve; font-weight: bold; }
-    .subtitle { fill: $txtLight; }
-
+    .label { font-family: Mynerve; font-weight: bold; }
     &.square {
-      .label { color: $txtLight !important; }
-      .subtitle { color: $txtLight !important; }
-    }
-
+      .subtitle { font-family: Google Sans; font-weight: normal; }
+    } 
     &.text {
-      border: none !important;
-      background: none !important;
-      box-shadow: none !important;
-
-      .mainText { fill: $txtLight; }
-      .mainBackgroundBorder {
-        fill: $txtDark;
-        stroke: $txtDark;
-      }
-      .secondaryBorder { stroke: $txtDark; }
-      .mainBorder { stroke: $txtLight; }
-    }
-
-    &.iconWrapper {
-      border: none !important;
-      background: none !important;
-      box-shadow: none !important;
-
-      .mainText { fill: $txtLight; }
-      .secondaryBorder { stroke: $txtDark; }
-      .mainBorder { stroke: $txtLight; }
-    }
+      .textStyle, .textStyle2 { font-family: Mynerve; font-weight: bold; }
+    } 
   }
 
-
   &.full {
-    border-color: rgb(177, 107, 82);
-    background-color: rgb(240, 217, 176);
+    &.square {
+      .label { font-family: Cherry Bomb One; font-weight: normal; letter-spacing: 0.1em; }
+      .subtitle { font-family: Google Sans; font-weight: normal; }
+    } 
 
     .notoIcon, &.iconWrapper .mainText {
       font-family: 'Noto Color Emoji', sans-serif;
-    }
-
-    .icon, .notoIcon {
-      color: rgb(82, 28, 28);;
-      filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5));
-    }
-
-    .label { fill: rgb(173, 78, 78); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
-    .subtitle { fill:rgb(148, 96, 0); }
-
-    &.square {
-      .label { color: rgb(148, 96, 0) !important; }
-      .subtitle { color:rgb(173, 78, 78) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
-    }
-
-    &.text {
-      border: none !important;
-      background: none !important;
-
-      .mainText { fill: rgb(173, 78, 78); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
-      .mainBackgroundBorder {
-        fill: rgb(240, 217, 176);
-        stroke: rgb(240, 217, 176);
-      }
-      .secondaryBorder { stroke: rgb(240, 217, 176); }
-      .mainBorder { stroke:rgb(177, 107, 82); }
-    }
-
-    &.iconWrapper {
-      border: none !important;
-      background: none !important;
-
-      .mainText { fill:rgb(173, 78, 78); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
-      .secondaryBorder { stroke: rgb(240, 217, 176); }
-      .mainBorder { stroke:rgb(177, 107, 82); }
     }
   }
 }
@@ -269,13 +195,167 @@ $txtDark: #ededed;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  fill: var(--color-text-primary);
 }
 
 .subtitle {
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0em;
-  text-transform: uppercase;
-  fill: var(--color-text-primary);
 }
+
+
+/* BACKGROUNDS AND COLORS:
+   Linting issues incoming! */
+
+/* stylelint-disable */
+.wrapper {
+  background: attr(data-colordark type(<color>));
+  border: 6.5px solid attr(data-coloraccent type(<color>));
+  color: attr(data-coloraccent type(<color>));
+
+  .label {
+    color: attr(data-coloraccent type(<color>));
+    fill: attr(data-coloraccent type(<color>));
+  }
+
+  .subtitle {
+    color: attr(data-coloraccent type(<color>));
+    fill: attr(data-coloraccent type(<color>));
+  }
+
+  &.window {
+    .label { fill: attr(data-coloraccent type(<color>)); }
+    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+  }
+  
+  &.round {
+    .label { fill: attr(data-coloraccent type(<color>)); }
+    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+  }
+
+  &.square {
+    .label { fill: attr(data-coloraccent type(<color>)); }
+    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+  }
+
+  &.text {
+    border: none;
+    box-shadow: none;
+    background: none;
+
+    .mainText { fill: attr(data-coloraccent type(<color>)); }
+    .mainBackgroundBorder { fill: attr(data-colordark type(<color>)); stroke: attr(data-colordark type(<color>)); }
+    .secondaryBorder { stroke: attr(data-colordark type(<color>)); }
+    .mainBorder { stroke: attr(data-coloraccent type(<color>)); }
+  }
+
+  &.iconWrapper {
+    border: none;
+    box-shadow: none;
+    background: none;
+
+    .mainText { fill: attr(data-coloraccent type(<color>)); }
+    .secondaryBorder { stroke: attr(data-colordark type(<color>)); }
+    .mainBorder { stroke: attr(data-coloraccent type(<color>)); }
+  }
+
+  &.light {
+    border-color: attr(data-colormedian type(<color>));
+    background-color: attr(data-colorlight type(<color>));
+    color: attr(data-colormedian type(<color>));
+
+    .icon, .notoIcon {
+      color: attr(data-colormedian type(<color>));
+    }
+
+    .label {
+      color: attr(data-colormedian type(<color>));
+      fill: attr(data-colormedian type(<color>));
+    }
+
+    .subtitle {
+      color: attr(data-colormedian type(<color>));
+      fill: attr(data-colormedian type(<color>));
+    }
+
+    .label { fill: attr(data-colormedian type(<color>)); }
+    .subtitle { fill: attr(data-colormedian type(<color>)); }
+
+    &.square {
+      .label { color: attr(data-colormedian type(<color>)) !important; }
+      .subtitle { color: attr(data-colormedian type(<color>)) !important; }
+    }
+
+    &.text {
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+
+      .mainText { fill: attr(data-colormedian type(<color>)); }
+      .mainBackgroundBorder {
+        fill: attr(data-colorlight type(<color>));
+        stroke: attr(data-colorlight type(<color>));
+      }
+      .secondaryBorder { stroke: attr(data-colorlight type(<color>)); }
+      .mainBorder { stroke: attr(data-colorlight type(<color>)); }
+    }
+
+    &.iconWrapper {
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+
+      .mainText { fill: attr(data-colormedian type(<color>)); }
+      .secondaryBorder { stroke: attr(data-colorlight type(<color>)); }
+      .mainBorder { stroke: attr(data-colorlight type(<color>)); }
+    }
+  }
+
+
+  &.full {
+    border-color: attr(data-coloraccent type(<color>));
+    background-color: attr(data-colorcontrast type(<color>));
+
+    .icon, .notoIcon {
+      color: attr(data-coloraccent type(<color>));
+      filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5));
+    }
+
+    .label { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    .subtitle { fill:attr(data-colormedian type(<color>)); }
+
+    &.window {
+      .label { color: attr(data-coloraccent type(<color>)) !important; }
+      .subtitle { color:attr(data-colormedian type(<color>)) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    }
+
+    &.square {
+      .label { color: attr(data-coloraccent type(<color>)) !important; }
+      .subtitle { color:attr(data-colormedian type(<color>)) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    }
+
+    &.text {
+      border: none !important;
+      background: none !important;
+
+      .mainText { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .mainBackgroundBorder {
+        fill: attr(data-colorcontrast type(<color>));
+        stroke: attr(data-colorcontrast type(<color>));
+      }
+      .secondaryBorder { stroke: attr(data-colorcontrast type(<color>)); }
+      .mainBorder { stroke:attr(data-coloraccent type(<color>)); }
+    }
+
+    &.iconWrapper {
+      border: none !important;
+      background: none !important;
+
+      .mainText { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .secondaryBorder { stroke: attr(data-colorcontrast type(<color>)); }
+      .mainBorder { stroke:attr(data-coloraccent type(<color>)); }
+    }
+  }
+}
+
+/* stylelint-enable */

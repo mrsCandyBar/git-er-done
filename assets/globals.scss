@@ -2,11 +2,11 @@
 @use './styles/reset';
 @use './styles/typography';
 @use './styles/buttons';
-@import "./styles/_google-sans.scss";
 
 // Google Fonts: Mansalva & Mynerve
 
 // Noto Emoji, Noto Color Emoji, Emot Font
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Mansalva&family=Mynerve&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Modak&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');

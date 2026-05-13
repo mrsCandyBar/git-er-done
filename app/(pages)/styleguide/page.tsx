@@ -8,7 +8,6 @@ import {
   Logo
 } from "@/components/index";
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
-
 import StyleguideThemeToggle from "@/components/StyleguideThemeToggle";
 import styles from "./page.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -69,7 +68,7 @@ export default function Styleguide() {
             <Text as="blockquote" tone="secondary">
               This is block text for callouts, quotes, and notes that need a little extra emphasis. 
               This project uses shared typography and spacing tokens, so this section is a useful smoke
-              test after global style changes. <span>- Written by Me on {new Date().toLocaleDateString()}</span>
+              test after global style changes. <span>- Written by Me on 2026/05/13</span>
             </Text>
             <Text as="ul">
               <Text as="li" tone="secondary">Unordered and ordered list items looks the same one</Text>
@@ -157,9 +156,9 @@ export default function Styleguide() {
 
           <div className={styles.badgeGrid}>
             <Badge 
-              label="WOOT!"
+              label="Keep Going!"
               variant="text" 
-              iconWidth={210}
+              iconWidth={185}
             />
             <Badge 
               label="🤖"
@@ -203,9 +202,9 @@ export default function Styleguide() {
           <div className={styles.badgeGrid}>
             <Badge 
               type="light"
-              label="WOOT!"
+              label="Keep Going!"
               variant="text" 
-              iconWidth={210}
+              iconWidth={185}
             />
             <Badge 
               type="light"
@@ -224,6 +223,11 @@ export default function Styleguide() {
               notoIcon="🤖"
               label="You got this!" 
               labelOffset={52}
+              color = {{
+                accent: "#ad4e4e",
+                contrast: "#f0d9b0",
+                median: "#b16b52",
+              }}
             />
 
             <Badge 
@@ -235,6 +239,11 @@ export default function Styleguide() {
               labelOffset={17}
               subtitle="Started Apr 14, 2026"
               subtitleOffset={48}
+              color = {{
+                accent: "#ad4e4e",
+                contrast: "#f0d9b0",
+                median: "#b16b52",
+              }}
             />
 
             <Badge 
@@ -244,21 +253,36 @@ export default function Styleguide() {
               label="Keep going" 
               subtitle="you got this!" 
               variant="square" 
+              color = {{
+                accent: "#ad4e4e",
+                contrast: "#f0d9b0",
+                median: "#b16b52",
+              }}
             />
           </div>
 
           <div className={styles.badgeGrid}>
             <Badge 
               type="full"
-              label="WOOT!"
+              label="Keep Going!"
               variant="text" 
-              iconWidth={210}
+              iconWidth={185}
+              color = {{
+                accent: "#ad4e4e",
+                contrast: "#f0d9b0",
+                median: "#b16b52",
+              }}
             />
             <Badge 
               type="full"
               label="🤖"
               variant="icon" 
               iconWidth={130}
+              color = {{
+                accent: "#ad4e4e",
+                contrast: "#f0d9b0",
+                median: "#b16b52",
+              }}
             />
           </div>
         </section>
