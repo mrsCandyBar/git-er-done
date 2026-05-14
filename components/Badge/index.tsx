@@ -1,7 +1,9 @@
 
 import type { ReactNode } from "react";
 import styles from "./Badge.module.scss";
+import BadgeIcon from "../BadgeIcon";
 import React from "react";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 export type BadgeVariant = "round" | "window" | "square" | "text" | "icon";
 export type BadgeType = "dark" | "light" | "color" | "gradient" | "full";
@@ -9,6 +11,7 @@ export type BadgeType = "dark" | "light" | "color" | "gradient" | "full";
 type BadgeProps = {
   notoIcon?: string;
   iconWidth?: number;
+  iconHeight?: number;
   label: ReactNode;
   labelOffset?: number;
   labelRoundOffset?: number;
@@ -18,6 +21,12 @@ type BadgeProps = {
   variant?: BadgeVariant;
   type?: BadgeType;
   className?: string;
+  fontsizes?: number[];
+  fontsubtitlesizes?: number[];
+  fontcolorsizes?: number[];
+  fontcolorsubtitlesizes?: number[];
+  iconfontsizes?: number[];
+  iconfontcolorsizes?: number[];
   color: {
     light?: string;
     dark?: string;
@@ -30,6 +39,7 @@ type BadgeProps = {
 export default function Badge({
   notoIcon,
   iconWidth,
+  iconHeight,
   label,
   labelOffset = 0,
   labelRoundOffset = 0,
@@ -39,6 +49,12 @@ export default function Badge({
   variant = "square",
   type = "dark",
   className = "",
+  fontsizes = [18, 20, 30, 42],
+  fontsubtitlesizes = [18, 20],
+  fontcolorsizes = [20, 28, 30, 40],
+  fontcolorsubtitlesizes = [15, 20],
+  iconfontsizes = [65, 80, 70, 70],
+  iconfontcolorsizes = [60, 65, 70, 70],
   color = {
     light: "#7c2a2a",
     dark: "#f0d9b0",
@@ -56,7 +72,10 @@ export default function Badge({
     return label;
   }
 
-   const randomIndex = Math.floor(Math.random() * 1000) + 1 
+  const randomIndex = Math.floor(Math.random() * 1000) + 1 
+  if (!iconHeight) {
+    iconHeight = iconWidth;
+  }
 
   return (
     <>
@@ -79,6 +98,7 @@ export default function Badge({
             {label && (
               <text 
                 className={styles.label}
+                data-fontsize={type === "full" ? fontcolorsizes[0] : fontsizes[0]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}
@@ -94,7 +114,14 @@ export default function Badge({
             data-colordark={color?.dark} 
             data-coloraccent={color?.accent}
             data-colorcontrast={color?.contrast}
-            data-colormedian={color?.median}>{notoIcon}</div>}
+            data-colormedian={color?.median}>
+              <BadgeIcon 
+                notoIcon={notoIcon} 
+                iconWidth={iconWidth} 
+                iconHeight={iconHeight} 
+                fontfamily={type == "full" ? "Noto Color Emoji" : "Noto Emoji"}
+                fontsize={type == "full" ? iconfontcolorsizes[0] : iconfontsizes[0]}
+                color={color} /></div>}
         </div>
       )}
       
@@ -109,17 +136,18 @@ export default function Badge({
         >
           <svg viewBox="0 0 150 150" className={styles.curveSvg}>
             <defs>
-              <path d="M 2, 68 
+              <path d="M 4, 69 
               a 45,45 0 1,0 130,0 
               a 45,45 0 1,0 -130,0" id="badge-label-path" />
               <path d="
-                M 125, 68 
-                a 45,45 0 1,1 -113,0 
-                a 45,45 0 1,1 113,0" id="badge-subtitle-path" />
+                M 119, 69 
+                a 45,45 0 1,1 -100,0 
+                a 45,45 0 1,1 100,0" id="badge-subtitle-path" />
             </defs>
             {label && (
               <text 
                 className={styles.label}
+                data-fontsize={type === "full" ? fontcolorsizes[1] : fontsizes[1]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}
@@ -130,6 +158,7 @@ export default function Badge({
             {subtitle && (
               <text 
                 className={styles.subtitle}
+                data-fontsize={type === "full" ? fontcolorsubtitlesizes[0] : fontsubtitlesizes[0]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}
@@ -144,7 +173,13 @@ export default function Badge({
               data-coloraccent={color?.accent}
               data-colorcontrast={color?.contrast}
               data-colormedian={color?.median}
-            >{notoIcon}</div>}
+            ><BadgeIcon 
+                notoIcon={notoIcon} 
+                iconWidth={iconWidth} 
+                iconHeight={iconHeight} 
+                fontfamily={type == "full" ? "Noto Color Emoji" : "Noto Emoji"}
+                fontsize={type == "full" ? iconfontcolorsizes[1] : iconfontsizes[1]}
+                color={color} /></div>}
         </div>
       )}
 
@@ -158,6 +193,7 @@ export default function Badge({
           data-colormedian={color?.median}
         >
           {label && <div className={styles.label}
+              data-fontsize={type === "full" ? fontcolorsizes[2] : fontsizes[2]}
               data-colorlight={color?.light} 
               data-colordark={color?.dark} 
               data-coloraccent={color?.accent}
@@ -165,6 +201,7 @@ export default function Badge({
               data-colormedian={color?.median}
             >{label}</div>}
           {subtitle && <div className={styles.subtitle}
+              data-fontsize={type === "full" ? fontcolorsubtitlesizes[1] : fontsubtitlesizes[1]}
               data-colorlight={color?.light} 
               data-colordark={color?.dark} 
               data-coloraccent={color?.accent}
@@ -177,7 +214,13 @@ export default function Badge({
               data-coloraccent={color?.accent}
               data-colorcontrast={color?.contrast}
               data-colormedian={color?.median}
-            >{notoIcon}</div>}
+            ><BadgeIcon 
+                notoIcon={notoIcon} 
+                iconWidth={iconWidth} 
+                iconHeight={iconHeight} 
+                fontfamily={type == "full" ? "Noto Color Emoji" : "Noto Emoji"}
+                fontsize={type == "full" ? iconfontcolorsizes[2] : iconfontsizes[2]}
+                color={color} /></div>}
         </div>
       )}
 
@@ -200,6 +243,7 @@ export default function Badge({
                   <React.Fragment key={uniqueId}>
                     <defs>
                       <text id={`mainLabel_${uniqueId}`}
+
                         data-colorlight={color?.light} 
                         data-colordark={color?.dark} 
                         data-coloraccent={color?.accent}
@@ -212,16 +256,19 @@ export default function Badge({
                     <use 
                       x={0 } y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
+                      data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
                       className={` ${styles.textStyle} ${styles.mainBorder} ${styles.hide}`}
                     />
                     <use 
                       x={0 } y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
+                      data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
                       className={` ${styles.textStyle} ${styles.secondaryBorder} ${styles.hide}`}
                     />
                     <use 
                       x={0 }  y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
+                      data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
                       className={` ${styles.textStyle} ${styles.mainText} ${styles.hide}`}
                     />
                   </React.Fragment>
@@ -234,6 +281,7 @@ export default function Badge({
                 strokeWidth="40" 
                 strokeLinejoin="round" 
                 className={` ${styles.textStyle} ${styles.mainBorder}`}
+                data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}
@@ -246,6 +294,7 @@ export default function Badge({
                 strokeWidth="26" 
                 strokeLinejoin="round" 
                 className={` ${styles.textStyle} ${styles.secondaryBorder}`}
+                data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}
@@ -256,6 +305,7 @@ export default function Badge({
                 x={20} y={55} 
                 href={`#textGroup_` + randomIndex} 
                 className={` ${styles.textStyle} ${styles.mainText}`}
+                data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}
@@ -279,7 +329,7 @@ export default function Badge({
           {label && (
             <svg width={iconWidth} height="130">
               <defs>
-                <text id="iconLabel"
+                <text id={`iconLabel_` + randomIndex}
                   data-colorlight={color?.light} 
                   data-colordark={color?.dark} 
                   data-coloraccent={color?.accent}
@@ -292,10 +342,11 @@ export default function Badge({
 
               <use 
                 x="15" y="80" 
-                href="#iconLabel" 
+                href={`#iconLabel_` + randomIndex} 
                 strokeWidth="40" 
                 strokeLinejoin="round" 
                 className={` ${styles.textStyle} ${styles.mainBorder}`}
+                data-fontsize={iconfontsizes[3]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}
@@ -304,10 +355,11 @@ export default function Badge({
               />
               <use 
                 x="15" y="80" 
-                href="#iconLabel" 
+                href={`#iconLabel_` + randomIndex} 
                 strokeWidth="28" 
                 strokeLinejoin="round" 
                 className={` ${styles.textStyle} ${styles.secondaryBorder}`}
+                data-fontsize={iconfontsizes[3]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}
@@ -316,8 +368,9 @@ export default function Badge({
               />
               <use 
                 x="15" y="80" 
-                href="#iconLabel" 
+                href={`#iconLabel_` + randomIndex} 
                 className={` ${styles.textStyle} ${styles.mainText}`}
+                data-fontsize={iconfontsizes[3]}
                 data-colorlight={color?.light} 
                 data-colordark={color?.dark} 
                 data-coloraccent={color?.accent}

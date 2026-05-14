@@ -1,0 +1,364 @@
+@use '../../assets/styles/variables' as v;
+
+.wrapper {
+  display: block;
+  text-align: center;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  min-width: 150px;
+  height: 150px;
+  position: relative;
+
+  &.window {
+    margin-top: 20px;
+    height: 92px;
+    overflow: hidden;
+
+    .notoIcon {
+      top: 61px !important;
+      font-size: 58px !important;
+    }
+  }
+
+  &.round {
+    border-radius: 999px;
+
+    .label {
+      font-family: 'Cherry Bomb One', sans-serif;
+      font-weight: normal;
+      font-size: 1.05rem;
+    }
+
+    .subtitle {
+      font-size: 0.75rem;
+      text-decoration-line: overline;
+      font-weight: normal;
+    }
+
+    .notoIcon {
+      font-size: 4.7rem;
+      font-family: 'Noto Emoji', sans-serif;
+      position: absolute;
+      top: 45%;
+      left: 49%;
+      transform: translate(-50%, -50%) rotate(14deg);
+    }
+  }
+
+  &.square {
+    border-radius: 12px;
+    border-style: double;
+
+    .notoIcon {
+      font-size: 4.8rem;
+      font-family: 'Noto Emoji', sans-serif;
+      position: absolute;
+      top: 49%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .label {
+      position: absolute;
+      top: 1%;
+      left: 0;
+      right: 0;
+      font-size: 1.1rem;
+      line-height: 1.9em;
+      letter-spacing: -0.02em;
+      text-decoration: wavy;
+      text-decoration-line: underline;
+      height: 32px;
+      overflow: hidden;;
+    }
+
+    .subtitle {
+      position: absolute;
+      bottom: 3%;
+      left: 0;
+      right: 0;
+      font-size: 0.9rem;
+      font-family: 'Cherry Bomb One', sans-serif;
+      font-weight: normal;
+    }
+  }
+
+  &.window {
+    border-radius: 999px 999px 200px 200px;
+
+    .label {
+      font-family: 'Cherry Bomb One', sans-serif;
+      letter-spacing: -0.3px;
+      font-weight: normal;
+      font-size: 18px;
+      text-decoration: underline;
+    }
+
+    .notoIcon {
+      font-size: 5.4rem;
+      font-family: 'Noto Emoji', sans-serif;
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &.text {
+    height: 130px;
+
+    .hide {
+      display: none !important;
+    }
+
+    .textStyle {
+      font-family: 'Cherry Bomb One';
+      font-size: 45px;
+    }
+
+    .textStyle2 {
+      font-family: 'Cherry Bomb One';
+      letter-spacing: 10px;
+      font-size: 30px;
+    }
+  }
+
+  &.iconWrapper {
+    min-width: 120px;
+    height: 130px;   
+
+    .textStyle {
+      font-family: 'Noto Emoji', sans-serif;
+      font-size: 70px;
+    }
+  }
+
+  &.dark {
+    .label { font-family: Google Sans; font-weight: bold; letter-spacing: 0.02em; text-decoration: none; }
+    &.round .label { letter-spacing: 0.18em; }
+    &.square {
+      .label { letter-spacing: 0.05em; }
+      .subtitle { font-family: Google Sans; font-weight: normal; }
+    } 
+    &.text {
+      .textStyle { font-family: Google Sans; font-weight: bold; font-size: 42px; }
+    } 
+  }
+  
+  &.light {
+    .label { font-family: Mynerve; font-weight: bold; }
+    &.square {
+      .subtitle { font-family: Google Sans; font-weight: normal; }
+    } 
+    &.text {
+      .textStyle, .textStyle2 { font-family: Mynerve; font-weight: bold; }
+    } 
+  }
+
+  &.full {
+    &.square {
+      .label { font-family: Cherry Bomb One; font-weight: normal; letter-spacing: 0.1em; }
+      .subtitle { font-family: Google Sans; font-weight: normal; }
+    } 
+
+    .notoIcon, &.iconWrapper .mainText {
+      font-family: 'Noto Color Emoji', sans-serif;
+    }
+  }
+}
+
+.icon {
+  font-size: 5.9rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.notoIcon {
+  font-size: 5.9rem;
+  font-family: 'Noto Emoji', sans-serif;
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Curved label and subtitle
+.curveSvg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 150px;
+  height: 150px;
+  pointer-events: none;
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0em;
+}
+
+
+/* BACKGROUNDS AND COLORS:
+   Linting issues incoming! */
+
+/* stylelint-disable */
+.wrapper {
+  background: attr(data-colordark type(<color>));
+  border: 6.5px solid attr(data-coloraccent type(<color>));
+  color: attr(data-coloraccent type(<color>));
+
+  .label {
+    color: attr(data-coloraccent type(<color>));
+    fill: attr(data-coloraccent type(<color>));
+  }
+
+  .subtitle {
+    color: attr(data-coloraccent type(<color>));
+    fill: attr(data-coloraccent type(<color>));
+  }
+
+  &.window {
+    .label { fill: attr(data-coloraccent type(<color>)); }
+    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+  }
+  
+  &.round {
+    .label { fill: attr(data-coloraccent type(<color>)); }
+    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+  }
+
+  &.square {
+    .label { fill: attr(data-coloraccent type(<color>)); }
+    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+  }
+
+  &.text {
+    border: none;
+    box-shadow: none;
+    background: none;
+
+    .mainText { fill: attr(data-coloraccent type(<color>)); }
+    .mainBackgroundBorder { fill: attr(data-colordark type(<color>)); stroke: attr(data-colordark type(<color>)); }
+    .secondaryBorder { stroke: attr(data-colordark type(<color>)); }
+    .mainBorder { stroke: attr(data-coloraccent type(<color>)); }
+  }
+
+  &.iconWrapper {
+    border: none;
+    box-shadow: none;
+    background: none;
+
+    .mainText { fill: attr(data-coloraccent type(<color>)); }
+    .secondaryBorder { stroke: attr(data-colordark type(<color>)); }
+    .mainBorder { stroke: attr(data-coloraccent type(<color>)); }
+  }
+
+  &.light {
+    border-color: attr(data-coloraccent type(<color>));
+    background-color: attr(data-colorlight type(<color>));
+    color: attr(data-coloraccent type(<color>));
+
+    .icon, .notoIcon {
+      color: attr(data-coloraccent type(<color>));
+    }
+
+    .label {
+      color: attr(data-coloraccent type(<color>));
+      fill: attr(data-coloraccent type(<color>));
+    }
+
+    .subtitle {
+      color: attr(data-coloraccent type(<color>));
+      fill: attr(data-coloraccent type(<color>));
+    }
+
+    .label { fill: attr(data-coloraccent type(<color>)); }
+    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+
+    &.square {
+      .label { color: attr(data-coloraccent type(<color>)) !important; }
+      .subtitle { color: attr(data-coloraccent type(<color>)) !important; }
+    }
+
+    &.text {
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+
+      .mainText { fill: attr(data-coloraccent type(<color>)); }
+      .mainBackgroundBorder {
+        fill: attr(data-colorlight type(<color>));
+        stroke: attr(data-colorlight type(<color>));
+      }
+      .secondaryBorder { stroke: attr(data-colorlight type(<color>)); }
+      .mainBorder { stroke: attr(data-colorlight type(<color>)); }
+    }
+
+    &.iconWrapper {
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+
+      .mainText { fill: attr(data-coloraccent type(<color>)); }
+      .secondaryBorder { stroke: attr(data-colorlight type(<color>)); }
+      .mainBorder { stroke: attr(data-colorlight type(<color>)); }
+    }
+  }
+
+
+  &.full {
+    border-color: attr(data-coloraccent type(<color>));
+    background-color: attr(data-colorcontrast type(<color>));
+
+    .icon, .notoIcon {
+      color: attr(data-coloraccent type(<color>));
+      filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5));
+    }
+
+    .label { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    .subtitle { fill:attr(data-colormedian type(<color>)); }
+
+    &.window {
+      .label { color: attr(data-coloraccent type(<color>)) !important; }
+      .subtitle { color:attr(data-colormedian type(<color>)) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    }
+
+    &.square {
+      .label { color: attr(data-coloraccent type(<color>)) !important; }
+      .subtitle { color:attr(data-colormedian type(<color>)) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    }
+
+    &.text {
+      border: none !important;
+      background: none !important;
+
+      .mainText { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .mainBackgroundBorder {
+        fill: attr(data-colorcontrast type(<color>));
+        stroke: attr(data-colorcontrast type(<color>));
+      }
+      .secondaryBorder { stroke: attr(data-colorcontrast type(<color>)); }
+      .mainBorder { stroke:attr(data-coloraccent type(<color>)); }
+    }
+
+    &.iconWrapper {
+      border: none !important;
+      background: none !important;
+
+      .mainText { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .secondaryBorder { stroke: attr(data-colorcontrast type(<color>)); }
+      .mainBorder { stroke:attr(data-coloraccent type(<color>)); }
+    }
+  }
+}
+
+/* stylelint-enable */

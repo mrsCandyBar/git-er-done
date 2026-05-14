@@ -1,0 +1,8 @@
+
+
+.textStyle { 
+  font-family: attr(data-fontfamily); 
+  font-size: attr(data-fontsize px); 
+}
+.mainText { fill: attr(data-coloraccent type(<color>)); }
+.secondaryBorder { stroke: attr(data-colordark type(<color>)); }

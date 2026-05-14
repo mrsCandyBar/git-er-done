@@ -15,7 +15,6 @@
 
     .notoIcon {
       top: 61px !important;
-      font-size: 58px !important;
     }
   }
 
@@ -25,21 +24,19 @@
     .label {
       font-family: 'Cherry Bomb One', sans-serif;
       font-weight: normal;
-      font-size: 1.05rem;
+      font-size: attr(data-fontsize px);
     }
 
     .subtitle {
-      font-size: 0.75rem;
+      font-size: attr(data-fontsize px);
       text-decoration-line: overline;
       font-weight: normal;
     }
 
     .notoIcon {
-      font-size: 4.7rem;
-      font-family: 'Noto Emoji', sans-serif;
       position: absolute;
-      top: 45%;
-      left: 49%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%) rotate(14deg);
     }
   }
@@ -49,8 +46,6 @@
     border-style: double;
 
     .notoIcon {
-      font-size: 4.8rem;
-      font-family: 'Noto Emoji', sans-serif;
       position: absolute;
       top: 49%;
       left: 50%;
@@ -59,11 +54,11 @@
 
     .label {
       position: absolute;
-      top: 1%;
+      top: 5%;
       left: 0;
       right: 0;
-      font-size: 1.1rem;
-      line-height: 1.9em;
+      font-size: attr(data-fontsize px);
+      line-height: 1.2em;
       letter-spacing: -0.02em;
       text-decoration: wavy;
       text-decoration-line: underline;
@@ -74,7 +69,7 @@
       bottom: 3%;
       left: 0;
       right: 0;
-      font-size: 0.9rem;
+      font-size: attr(data-fontsize px);
       font-family: 'Cherry Bomb One', sans-serif;
       font-weight: normal;
     }
@@ -87,13 +82,11 @@
       font-family: 'Cherry Bomb One', sans-serif;
       letter-spacing: -0.3px;
       font-weight: normal;
-      font-size: 18px;
+      font-size: attr(data-fontsize px);
       text-decoration: underline;
     }
 
     .notoIcon {
-      font-size: 5.4rem;
-      font-family: 'Noto Emoji', sans-serif;
       position: absolute;
       top: 60%;
       left: 50%;
@@ -110,13 +103,13 @@
 
     .textStyle {
       font-family: 'Cherry Bomb One';
-      font-size: 45px;
+      font-size: attr(data-fontsize px);
     }
 
     .textStyle2 {
       font-family: 'Cherry Bomb One';
       letter-spacing: 10px;
-      font-size: 30px;
+      font-size: attr(data-fontsize px);
     }
   }
 
@@ -126,7 +119,7 @@
 
     .textStyle {
       font-family: 'Noto Emoji', sans-serif;
-      font-size: 70px;
+      font-size: attr(data-fontsize px);
     }
   }
 
@@ -138,7 +131,7 @@
       .subtitle { font-family: Google Sans; font-weight: normal; }
     } 
     &.text {
-      .textStyle { font-family: Google Sans; font-weight: bold; font-size: 42px; }
+      .textStyle { font-family: Google Sans; font-weight: bold; }
     } 
   }
   
@@ -165,7 +158,6 @@
 }
 
 .icon {
-  font-size: 5.9rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -173,8 +165,6 @@
 }
 
 .notoIcon {
-  font-size: 5.9rem;
-  font-family: 'Noto Emoji', sans-serif;
   position: absolute;
   top: 62%;
   left: 50%;

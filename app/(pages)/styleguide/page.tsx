@@ -127,7 +127,7 @@ export default function Styleguide() {
           <br/>
           
           <BadgeCollection badgeInfo={{ 
-            notoIcon: "🤖",
+            notoIcon: "💪",
             iconWidth: 120,
             label: "Keep going",
             labelOffset: 56,
@@ -141,7 +141,63 @@ export default function Styleguide() {
               accent: "#c45f5f",
               contrast: "#f0d9b0",
               median: "#b16b52",
-            }
+            },
+            fontsizes: [18, 20, 30, 42],
+            fontsubtitlesizes: [18, 20],
+            fontcolorsizes: [20, 28, 30, 40],
+            fontcolorsubtitlesizes: [15, 20],
+            iconfontsizes: [65, 80, 70, 70],
+            iconfontcolorsizes: [60, 65, 70, 70],
+          }}/>
+          <br/>
+
+          <BadgeCollection badgeInfo={{ 
+            notoIcon: "🥳",
+            iconWidth: 120,
+            label: "Heck Yes",
+            labelOffset: 60,
+            labelRoundOffset: 23,
+            labelWidth: 165,
+            subtitle: "You totally ate!",
+            subtitleOffset: 50,
+            color: {
+              light: "#f7e6ca",
+              dark: "#203044",
+              accent: "#3d7b97",
+              contrast: "#b5f8f8",
+              median: "#5283b1",
+            },
+            fontsizes: [18, 20, 30, 42],
+            fontsubtitlesizes: [18, 20],
+            fontcolorsizes: [20, 28, 30, 40],
+            fontcolorsubtitlesizes: [15, 20],
+            iconfontsizes: [65, 80, 70, 70],
+            iconfontcolorsizes: [60, 65, 70, 70],
+          }}/>
+          <br/>
+
+          <BadgeCollection badgeInfo={{ 
+            notoIcon: "🥰",
+            iconWidth: 120,
+            label: "Love Love Love",
+            labelOffset: 49,
+            labelRoundOffset: 5,
+            labelWidth: 165,
+            subtitle: "You totally ate!",
+            subtitleOffset: 50,
+            color: {
+              light: "#f7e6ca",
+              dark: "#74121f",
+              accent: "#da2b2b",
+              contrast: "rgb(255, 255, 255)",
+              median: "#505f6d",
+            },
+            fontsizes: [18, 20, 30, 42],
+            fontsubtitlesizes: [18, 20],
+            fontcolorsizes: [20, 28, 30, 40],
+            fontcolorsubtitlesizes: [15, 20],
+            iconfontsizes: [65, 80, 70, 70],
+            iconfontcolorsizes: [60, 65, 70, 70],
           }}/>
         </section>
 

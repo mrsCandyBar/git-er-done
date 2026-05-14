@@ -12,7 +12,7 @@ type BadgeCollectionProps = {
 };
 
 export default function BadgeCollection({
-  badgeVariants = ["round", "square", "window", "text", "icon"],
+  badgeVariants = ["window", "round", "square", "text", "icon"],
   badgeTypes = ["dark", "full"], //"light", 
   badgeInfo = {},
 }: BadgeCollectionProps) {
@@ -36,6 +36,12 @@ export default function BadgeCollection({
                 subtitleOffset={badgeInfo.subtitleOffset}
                 iconWidth={badgeInfo.iconWidth}
                 color={badgeInfo.color}
+                fontsizes={badgeInfo.fontsizes}
+                fontsubtitlesizes={badgeInfo.fontsubtitlesizes}
+                fontcolorsizes={badgeInfo.fontcolorsizes}
+                fontcolorsubtitlesizes={badgeInfo.fontcolorsubtitlesizes}
+                iconfontsizes={badgeInfo.iconfontsizes}
+                iconfontcolorsizes={badgeInfo.iconfontcolorsizes}
               />
             ))}
           </div>
