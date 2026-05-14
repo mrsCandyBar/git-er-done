@@ -6,50 +6,39 @@ export type BadgeVariant = "round" | "square" | "window" | "text" | "icon";
 export type BadgeType = "dark" | "light" | "full";
 
 type BadgeCollectionProps = {
-  badgeVariants?: BadgeVariant[];
+  badgeVariantsForDark?: BadgeVariant[];
+  badgeVariantsForFull?: BadgeVariant[];
   badgeTypes?: BadgeType[];
   badgeInfo: any;
 };
 
 export default function BadgeCollection({
-  badgeVariants = ["window", "round", "square", "text", "icon"],
+  badgeVariantsForDark = ["round", "text"],
+  badgeVariantsForFull = ["icon", "square"],
   badgeTypes = ["dark", "full"], //"light", 
   badgeInfo = {},
 }: BadgeCollectionProps) {
 
   return (
     <>
-      {badgeTypes.map((type) => (
-        <div key={type}>
-          <Text as="h3">{type.charAt(0).toUpperCase() + type.slice(1)}</Text>
+        <div>
           <div className={styles.badgeGrid}>
-            {badgeVariants.map((variant) => (
-              <Badge 
-                type={type}
-                variant={variant}
-                notoIcon={badgeInfo.notoIcon}
-                label={badgeInfo.label}
-                labelOffset={badgeInfo.labelOffset}
-                labelFullOffset={badgeInfo.labelFullOffset}
-                labelRoundOffset={badgeInfo.labelRoundOffset}
-                labelFullRoundOffset={badgeInfo.labelFullRoundOffset}
-                labelWidth={badgeInfo.labelWidth}
-                subtitle={badgeInfo.subtitle}
-                subtitleOffset={badgeInfo.subtitleOffset}
-                subtitleFullOffset={badgeInfo.subtitleFullOffset}
-                iconWidth={badgeInfo.iconWidth}
-                color={badgeInfo.color}
-                fontsizes={badgeInfo.fontsizes}
-                fontsubtitlesizes={badgeInfo.fontsubtitlesizes}
-                fontcolorsizes={badgeInfo.fontcolorsizes}
-                fontcolorsubtitlesizes={badgeInfo.fontcolorsubtitlesizes}
-                iconfontsizes={badgeInfo.iconfontsizes}
-                iconfontcolorsizes={badgeInfo.iconfontcolorsizes}
-              />
-            ))}
+            {badgeTypes.map((type) => 
+              (type === "dark" ? badgeVariantsForDark : badgeVariantsForFull).map((variant, key) => (
+                <Badge 
+                  key={key}
+                  type={type}
+                  variant={variant}
+                  icon={badgeInfo.icon}
+                  label={badgeInfo.label}
+                  subtitle={badgeInfo.subtitle}
+                  color={badgeInfo.color}
+                />
+              )
+            )) }
           </div>
         </div>
-      )) }
+      
     </>
   );
 }

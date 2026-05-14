@@ -127,87 +127,208 @@ export default function Styleguide() {
           <br/>
           
           <BadgeCollection badgeInfo={{ 
-            notoIcon: "💪",
-            iconWidth: 120,
-            label: "Keep going",
-            labelOffset: 51,
-            labelFullOffset: 51,
-            labelRoundOffset: 17,
-            labelFullRoundOffset: 13,
-            labelWidth: 165,
-            subtitle: "You got this!",
-            subtitleOffset: 45,
-            subtitleFullOffset: 48,
+            icon: {
+              value: "🛹",
+              width: 120,
+              textSizes: {
+                window: [65, 60],
+                round: [75, 70],
+                square: [70, 90],
+                symbol: [70, 70],
+              },
+              margin_offset: {
+                square: "squash",
+              }
+            },
+            label: {
+              value: "Keep going",
+              offset: 51,
+              offset_full: 51,
+              offset_round: 8,
+              offset_round_full: 0,
+              labelWidth: 165,
+              textSizes: {
+                round: [24, 19],
+                window: [22, 28],
+                square: [30, 38],
+                text: [42, 45],
+              }
+            },
+            subtitle: {
+              value: "You got this!",
+              offset: 51,
+              offset_full: 52,
+              offset_round: 50,
+              offset_round_full: 60,
+              textSizes: {
+                window: [19, 18],
+                round: [20, 17],
+                square: [18, 18],
+              }
+            },
             color: {
-              light: "#f7e6ca",
-              dark: "#702323",
-              accent: "#c45f5f",
+              light: "#f0d9b0",
+              dark: "#f0d9b0",
+              accent: "#ad4e4e",
               contrast: "#f0d9b0",
               median: "#b16b52",
-            },
-            fontsizes: [19, 22, 30, 42],
-            fontsubtitlesizes: [20, 18],
-            fontcolorsizes: [19, 28, 30, 40],
-            fontcolorsubtitlesizes: [15, 18],
-            iconfontsizes: [65, 70, 70, 70],
-            iconfontcolorsizes: [60, 70, 60, 70],
+            }
           }}/>
           <br/>
 
           <BadgeCollection badgeInfo={{ 
-            notoIcon: "🥳",
-            iconWidth: 120,
-            label: "Heck Yeah",
-            labelOffset: 50,
-            labelFullOffset: 55,
-            labelRoundOffset: 20,
-            labelFullRoundOffset: 0,
-            labelWidth: 165,
-            subtitle: "You did it!",
-            subtitleOffset: 55,
-            subtitleFullOffset: 65,
+            icon: {
+              value: "🏆",
+              width: 120,
+              textSizes: {
+                window: [65, 60],
+                round: [65, 65],
+                square: [65, 75],
+                symbol: [70, 70],
+              },
+              margin_offset: {
+                window: "right",
+                square: "squash",
+              }
+            },
+            label: {
+              value: "Got'it Done",
+              offset: 50,
+              offset_full: 55,
+              offset_round: 0,
+              offset_round_full: 11,
+              labelWidth: 180,
+              textSizes: {
+                window: [28, 20],
+                round: [26, 25],
+                square: [35, 29],
+                text: [50, 49],
+              }
+            },
+            subtitle: {
+              value: "congratulations!",
+              offset: 50,
+              offset_full: 51,
+              offset_round: 59,
+              offset_round_full: 53,
+              textSizes: {
+                window: [16, 16],
+                round: [13, 20],
+                square: [20, 20],
+              }
+            },
             color: {
               light: "#f7e6ca",
               dark: "#203044",
-              accent: "#3d7b97",
-              contrast: "#b5f8f8",
+              accent: "#bd8c44",
+              contrast: "#203044",
               median: "#5283b1",
-            },
-            fontsizes: [15, 20, 30, 45],
-            fontsubtitlesizes: [14, 20],
-            fontcolorsizes: [20, 28, 35, 50],
-            fontcolorsubtitlesizes: [15, 20],
-            iconfontsizes: [65, 80, 65, 70],
-            iconfontcolorsizes: [60, 65, 60, 70],
+            }
           }}/>
           <br/>
 
           <BadgeCollection badgeInfo={{ 
-            notoIcon: "🥰",
-            iconWidth: 120,
-            label: "Love Love Love",
-            labelOffset: 49,
-            labelFullOffset: 50,
-            labelRoundOffset: 5,
-            labelFullRoundOffset: 0,
-            labelWidth: 165,
-            subtitle: "| | | ||| | | | ||| |",
-            subtitleOffset: 49,
-            subtitleFullOffset: 5,
+            icon: {
+              value: "💖",
+              width: 120,
+              textSizes: {
+                window: [60, 50],
+                round: [55, 65],
+                square: [70, 105],
+                symbol: [70, 70],
+              },
+              margin_offset: {
+                round: "top",
+                //square: "squash",
+              }
+            },
+            label: {
+              value: "Love Love Love",
+              offset: 50,
+              offset_full: 50,
+              offset_round: 5,
+              offset_round_full: 0,
+              labelWidth: 165,
+              textSizes: {
+                round: [36, 37],
+                window: [25, 37],
+                square: [30, 22],
+                text: [50, 50],
+              }
+            },
+            subtitle: {
+              value: "| | | | | |",
+              offset: 49,
+              offset_full: 51,
+              offset_round: 48,
+              offset_round_full: 2,
+              textSizes: {
+                window: [25, 20],
+                round: [0, 0],
+                square: [20, 20],
+              }
+            },
             color: {
               light: "#f7e6ca",
-              dark: "#74121f",
-              accent: "#da2b2b",
-              contrast: "rgb(255, 255, 255)",
+              dark: "#e097bf",
+              accent: "#5a6980",
+              contrast: "#e097bf",
               median: "#505f6d",
-            },
-            fontsizes: [25, 25, 30, 50],
-            fontsubtitlesizes: [18, 20],
-            fontcolorsizes: [21, 37, 28, 50],
-            fontcolorsubtitlesizes: [0, 20],
-            iconfontsizes: [65, 70, 70, 70],
-            iconfontcolorsizes: [80, 60, 70, 70],
+            }
           }}/>
+
+          <br/>
+
+          <BadgeCollection badgeInfo={{ 
+            icon: {
+              value: "🎂",
+              width: 120,
+              textSizes: {
+                window: [65, 80],
+                round: [68, 60],
+                square: [70, 105],
+                symbol: [70, 70],
+              },
+              margin_offset: {
+                //square: "squash",
+              }
+            },
+            label: {
+              value: "It's Your Birthday",
+              offset: 50,
+              offset_full: 50,
+              offset_round: 5,
+              offset_round_full: 0,
+              labelWidth: 260,
+              textSizes: {
+                round: [28, 29],
+                window: [25, 37],
+                square: [23, 24],
+                text: [50, 50],
+              }
+            },
+            subtitle: {
+              value: "",
+              offset: 49,
+              offset_full: 51,
+              offset_round: 54,
+              offset_round_full: 2,
+              textSizes: {
+                window: [25, 20],
+                round: [0, 0],
+                square: [20, 20],
+              }
+            },
+            color: {
+              light: "#e7eb90",
+              dark: "#a52243",
+              accent: "#e6af2e",
+              contrast: "#a52243",
+              median: "#fadf63",
+            }
+          }}/>
+
+          
         </section>
 
         <section className={styles.section}>

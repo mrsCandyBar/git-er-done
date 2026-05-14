@@ -3,33 +3,58 @@ import type { ReactNode } from "react";
 import styles from "./Badge.module.scss";
 import BadgeIcon from "../BadgeIcon";
 import React from "react";
-import { icon } from "@fortawesome/fontawesome-svg-core";
 
 export type BadgeVariant = "round" | "window" | "square" | "text" | "icon";
 export type BadgeType = "dark" | "light" | "color" | "gradient" | "full";
 
 type BadgeProps = {
-  notoIcon?: string;
-  iconWidth?: number;
-  iconHeight?: number;
-  label: ReactNode;
-  labelOffset?: number;
-  labelFullOffset?: number;
-  labelRoundOffset?: number;
-  labelFullRoundOffset?: number;
-  labelWidth?: number;
-  subtitle?: ReactNode;
-  subtitleOffset?: number;
-  subtitleFullOffset?: number;
   variant?: BadgeVariant;
   type?: BadgeType;
   className?: string;
-  fontsizes?: number[];
-  fontsubtitlesizes?: number[];
-  fontcolorsizes?: number[];
-  fontcolorsubtitlesizes?: number[];
-  iconfontsizes?: number[];
-  iconfontcolorsizes?: number[];
+  icon?: {
+    type?: "Noto Color Emoji" | "Noto Emoji";
+    value?: string;
+    width?: number;
+    height?: number;
+    textSizes: {
+      round: number[];
+      window: number[];
+      square: number[];
+      symbol: number[];
+    };
+    margin_offset?: {
+      round: string;
+      window: string;
+      square: string;
+      symbol: string;
+    };
+  }
+  label?: {
+    value: string;
+    offset?: number;
+    offset_full?: number;
+    offset_round?: number;
+    offset_round_full?: number;
+    labelWidth?: number;
+    textSizes: {
+      round: number[];
+      window: number[];
+      square: number[];
+      text: number[];
+    }
+  }
+  subtitle?: {
+    value: string;
+    offset?: number;
+    offset_full?: number;
+    offset_round?: number;
+    offset_round_full?: number;
+    textSizes: {
+      window: number[];
+      round: number[];
+      square: number[];
+    }
+  }
   color: {
     light?: string;
     dark?: string;
@@ -40,47 +65,72 @@ type BadgeProps = {
 };
 
 export default function Badge({
-  notoIcon,
-  iconWidth,
-  iconHeight,
-  label,
-  labelOffset = 0,
-  labelFullOffset = 0,
-  labelRoundOffset = 0,
-  labelFullRoundOffset = 0,
-  labelWidth = 0,
-  subtitle,
-  subtitleOffset = 0,
-  subtitleFullOffset = 0,
   variant = "square",
   type = "dark",
   className = "",
-  fontsizes = [18, 20, 30, 42],
-  fontsubtitlesizes = [18, 20],
-  fontcolorsizes = [20, 28, 30, 40],
-  fontcolorsubtitlesizes = [15, 20],
-  iconfontsizes = [65, 80, 70, 70],
-  iconfontcolorsizes = [60, 65, 70, 70],
+  icon = {
+    type: "Noto Emoji",
+    value: "😀",
+    width: 40,
+    height: 40,
+    textSizes: {
+      round: [10, 10],
+      window: [10, 10],
+      square: [10, 10],
+      symbol: [10, 10],
+    },
+    margin_offset: {
+      round: "",
+      window: "",
+      square: "",
+      symbol: "",
+    }
+  },
+  label = {
+    value: "You got this!",
+    offset: 0,
+    offset_full: 0,
+    offset_round: 0,
+    offset_round_full: 0,
+    labelWidth: 0,
+    textSizes: {
+      round: [10, 10],
+      window: [10, 10],
+      square: [10, 10],
+      text: [10, 10],
+    }
+  },
+  subtitle = {
+    value: "Keep going!",
+    offset: 0,
+    offset_full: 0,
+    offset_round: 0,
+    offset_round_full: 0,
+    textSizes: {
+      window: [10, 10],
+      round: [10, 10],
+      square: [10, 10],
+    }
+  },
   color = {
     light: "#7c2a2a",
     dark: "#f0d9b0",
     accent: "#ad4e4e",
     contrast: "#f0d9b0",
     median: "#b16b52",
-  },
+  }
 }: BadgeProps) {
 
   function splitLabel(label: string | ReactNode): string[] | ReactNode {
-    console.log("Label:", label, label.split(" "));
     if (typeof label === "string") {
       return label.split(" ");
     }
-    return label;
+    return [label];
   }
 
   const randomIndex = Math.floor(Math.random() * 1000) + 1 
-  if (!iconHeight) {
-    iconHeight = iconWidth;
+  if (icon && !icon.height) {
+    icon.height = icon.width;
   }
 
   return (
@@ -88,11 +138,11 @@ export default function Badge({
       {variant == "window" && (
         <div 
           className={`${styles.wrapper} ${styles.window} ${styles[type]} ${className}`.trim()} 
-          data-colorlight={color?.light} 
-          data-colordark={color?.dark} 
-          data-coloraccent={color?.accent}
-          data-colorcontrast={color?.contrast}
-          data-colormedian={color?.median}
+          data-color-light={color?.light} 
+          data-color-dark={color?.dark} 
+          data-color-accent={color?.accent}
+          data-color-contrast={color?.contrast}
+          data-color-median={color?.median}
         >
           <svg viewBox="0 0 150 150" className={styles.curveSvg}>
             <defs>
@@ -104,29 +154,34 @@ export default function Badge({
             {subtitle && (
               <text 
                 className={styles.label}
-                data-fontsize={type === "full" ? fontcolorsizes[0] : fontsizes[0]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
+                data-fontsize={type === "full" ? subtitle.textSizes.window[1] : subtitle.textSizes.window[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
               >
-                <textPath href="#badge-window-subtitle-path" startOffset={`${type === "full" ? labelFullOffset : labelOffset}%`}>{subtitle}</textPath>
+                <textPath 
+                  href="#badge-window-subtitle-path" 
+                  startOffset={`${type === "full" ? subtitle.offset_full : subtitle.offset}%`}>
+                    {subtitle.value}
+                </textPath>
               </text>
             )}
           </svg>
-          {notoIcon && <div className={styles.notoIcon} 
-            data-colorlight={color?.light} 
-            data-colordark={color?.dark} 
-            data-coloraccent={color?.accent}
-            data-colorcontrast={color?.contrast}
-            data-colormedian={color?.median}>
+
+          {icon && <div className={`${styles.notoIcon} ${icon.margin_offset?.window && styles[icon.margin_offset?.window]}`}
+            data-color-light={color?.light} 
+            data-color-dark={color?.dark} 
+            data-color-accent={color?.accent}
+            data-color-contrast={color?.contrast}
+            data-color-median={color?.median}>
               <BadgeIcon 
-                notoIcon={notoIcon} 
-                iconWidth={iconWidth} 
-                iconHeight={iconHeight} 
+                notoIcon={icon.value} 
+                iconWidth={icon.width} 
+                iconHeight={icon.height} 
                 fontfamily={type == "full" ? "Noto Color Emoji" : "Noto Emoji"}
-                fontsize={type == "full" ? iconfontcolorsizes[0] : iconfontsizes[0]}
+                fontsize={type == "full" ? icon.textSizes.window[1] : icon.textSizes.window[0]}
                 color={color} /></div>}
         </div>
       )}
@@ -134,11 +189,11 @@ export default function Badge({
       {variant == "round" && (
         <div 
           className={`${styles.wrapper} ${styles.round} ${styles[type]} ${className}`.trim()}
-          data-colorlight={color?.light} 
-          data-colordark={color?.dark} 
-          data-coloraccent={color?.accent}
-          data-colorcontrast={color?.contrast}
-          data-colormedian={color?.median}
+          data-color-light={color?.light} 
+          data-color-dark={color?.dark} 
+          data-color-accent={color?.accent}
+          data-color-contrast={color?.contrast}
+          data-color-median={color?.median}
         >
           <svg viewBox="0 0 150 150" className={styles.curveSvg}>
             <defs>
@@ -153,38 +208,51 @@ export default function Badge({
             {label && (
               <text 
                 className={styles.label}
-                data-fontsize={type === "full" ? fontcolorsizes[1] : fontsizes[1]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
-              ><textPath href="#badge-label-path" startOffset={`${type === "full" ? labelFullRoundOffset : labelRoundOffset}%`}>{label}</textPath></text>
+                data-fontsize={type === "full" ? label.textSizes.round[1] : label.textSizes.round[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
+              >
+                <textPath 
+                  href="#badge-label-path" 
+                  startOffset={`${type === "full" ? label.offset_round_full : label.offset_round}%`}>
+                    {label.value}
+                </textPath>
+              </text>
             )}
             {subtitle && (
               <text 
                 className={styles.subtitle}
-                data-fontsize={type === "full" ? fontcolorsubtitlesizes[0] : fontsubtitlesizes[0]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
-              ><textPath href="#badge-subtitle-path" startOffset={`${type === "full" ? subtitleFullOffset : subtitleOffset}%`}>{subtitle}</textPath></text>
+                data-fontsize={type === "full" ? subtitle.textSizes.round[1] : subtitle.textSizes.round[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
+              >
+                <textPath 
+                  href="#badge-subtitle-path" 
+                  startOffset={`${type === "full" ? subtitle.offset_round_full : subtitle.offset_round}%`}>
+                    {subtitle.value}
+                  </textPath>
+                </text>
             )}
           </svg>
-          {notoIcon && <div className={styles.notoIcon}
-              data-colorlight={color?.light} 
-              data-colordark={color?.dark} 
-              data-coloraccent={color?.accent}
-              data-colorcontrast={color?.contrast}
-              data-colormedian={color?.median}
+
+          {icon && <div className={`${styles.notoIcon} ${icon.margin_offset?.round && styles[icon.margin_offset?.round]}`}
+              data-color-light={color?.light} 
+              data-color-dark={color?.dark} 
+              data-color-accent={color?.accent}
+              data-color-contrast={color?.contrast}
+              data-color-median={color?.median}
             ><BadgeIcon 
-                notoIcon={notoIcon} 
-                iconWidth={iconWidth} 
-                iconHeight={iconHeight} 
+                notoIcon={icon.value} 
+                iconWidth={icon.width} 
+                iconHeight={icon.height} 
                 fontfamily={type == "full" ? "Noto Color Emoji" : "Noto Emoji"}
-                fontsize={type == "full" ? iconfontcolorsizes[1] : iconfontsizes[1]}
+                fontsize={type == "full" ? icon.textSizes.round[1] : icon.textSizes.round[0]}
                 color={color} /></div>}
         </div>
       )}
@@ -192,57 +260,59 @@ export default function Badge({
       {variant == "square" && (
         <div 
           className={`${styles.wrapper} ${styles.square} ${styles[type]} ${className}`.trim()}
-          data-colorlight={color?.light} 
-          data-colordark={color?.dark} 
-          data-coloraccent={color?.accent}
-          data-colorcontrast={color?.contrast}
-          data-colormedian={color?.median}
+          data-color-light={color?.light} 
+          data-color-dark={color?.dark} 
+          data-color-accent={color?.accent}
+          data-color-contrast={color?.contrast}
+          data-color-median={color?.median}
         >
           {label && <div className={styles.label}
-              data-fontsize={type === "full" ? fontcolorsizes[2] : fontsizes[2]}
-              data-colorlight={color?.light} 
-              data-colordark={color?.dark} 
-              data-coloraccent={color?.accent}
-              data-colorcontrast={color?.contrast}
-              data-colormedian={color?.median}
-            >{label}</div>}
-          {notoIcon && <div className={styles.notoIcon}
-              data-colorlight={color?.light} 
-              data-colordark={color?.dark} 
-              data-coloraccent={color?.accent}
-              data-colorcontrast={color?.contrast}
-              data-colormedian={color?.median}
+              data-fontsize={type === "full" ? label.textSizes.square[1] : label.textSizes.square[0]}
+              data-color-light={color?.light} 
+              data-color-dark={color?.dark} 
+              data-color-accent={color?.accent}
+              data-color-contrast={color?.contrast}
+              data-color-median={color?.median}
+            >{label.value}</div>}
+
+          {icon && <div className={`${styles.notoIcon} ${icon.margin_offset?.square && styles[icon.margin_offset?.square]}`}
+              data-color-light={color?.light} 
+              data-color-dark={color?.dark} 
+              data-color-accent={color?.accent}
+              data-color-contrast={color?.contrast}
+              data-color-median={color?.median}
             ><BadgeIcon 
-                notoIcon={notoIcon} 
-                iconWidth={iconWidth} 
-                iconHeight={iconHeight} 
+                notoIcon={icon.value} 
+                iconWidth={icon.width} 
+                iconHeight={icon.height} 
                 fontfamily={type == "full" ? "Noto Color Emoji" : "Noto Emoji"}
-                fontsize={type == "full" ? iconfontcolorsizes[2] : iconfontsizes[2]}
+                fontsize={type == "full" ? icon.textSizes.square[1] : icon.textSizes.square[0]}
                 color={color} /></div>}
+                
           {subtitle && <div className={styles.subtitle}
-              data-fontsize={type === "full" ? fontcolorsubtitlesizes[1] : fontsubtitlesizes[1]}
-              data-colorlight={color?.light} 
-              data-colordark={color?.dark} 
-              data-coloraccent={color?.accent}
-              data-colorcontrast={color?.contrast}
-              data-colormedian={color?.median}
-            >{subtitle}</div>}
+              data-fontsize={type === "full" ? subtitle.textSizes.square[1] : subtitle.textSizes.square[0]}
+              data-color-light={color?.light} 
+              data-color-dark={color?.dark} 
+              data-color-accent={color?.accent}
+              data-color-contrast={color?.contrast}
+              data-color-median={color?.median}
+            >{subtitle.value}</div>}
         </div>
       )}
 
       {variant == "text" && (
         <div 
           className={`${styles.wrapper} ${styles.text} ${styles[type]} ${className}`.trim()}
-          data-colorlight={color?.light} 
-          data-colordark={color?.dark} 
-          data-coloraccent={color?.accent}
-          data-colorcontrast={color?.contrast}
-          data-colormedian={color?.median}
+          data-color-light={color?.light} 
+          data-color-dark={color?.dark} 
+          data-color-accent={color?.accent}
+          data-color-contrast={color?.contrast}
+          data-color-median={color?.median}
         >
           {label && (
-            <svg width={labelWidth} height="200">
+            <svg width={label.labelWidth} height="200">
               <g id={`textGroup_` + randomIndex}>
-                {label && splitLabel(label).map((line:string, index:number) => {
+                {label?.value && splitLabel(label.value).map((line:string, index:number) => {
                   const randomInt = Math.floor(Math.random() * 1000) + 1;
                   const uniqueId =randomInt + "_" + index;
                   return (
@@ -250,31 +320,31 @@ export default function Badge({
                     <defs>
                       <text id={`mainLabel_${uniqueId}`}
 
-                        data-colorlight={color?.light} 
-                        data-colordark={color?.dark} 
-                        data-coloraccent={color?.accent}
-                        data-colorcontrast={color?.contrast}
-                        data-colormedian={color?.median}>
-                        {line}{index === splitLabel(label).length - 1 ? "!" : ""}
+                        data-color-light={color?.light} 
+                        data-color-dark={color?.dark} 
+                        data-color-accent={color?.accent}
+                        data-color-contrast={color?.contrast}
+                        data-color-median={color?.median}>
+                        {line}{index == splitLabel(label.value).length - 1 ? "!" : ""}
                       </text>
                     </defs>
 
                     <use 
                       x={0 } y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
-                      data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
+                      data-fontsize={type === "full" ? label.textSizes.text[1] : label.textSizes.text[0]}
                       className={` ${styles.textStyle} ${styles.mainBorder} ${styles.hide}`}
                     />
                     <use 
                       x={0 } y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
-                      data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
+                      data-fontsize={type === "full" ? label.textSizes.text[1] : label.textSizes.text[0]}
                       className={` ${styles.textStyle} ${styles.secondaryBorder} ${styles.hide}`}
                     />
                     <use 
                       x={0 }  y={index > 0 ? 38 * index : 0 } 
                       href={`#mainLabel_${uniqueId}`} 
-                      data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
+                      data-fontsize={type === "full" ? label.textSizes.text[1] : label.textSizes.text[0]}
                       className={` ${styles.textStyle} ${styles.mainText} ${styles.hide}`}
                     />
                   </React.Fragment>
@@ -287,12 +357,12 @@ export default function Badge({
                 strokeWidth="40" 
                 strokeLinejoin="round" 
                 className={` ${styles.textStyle} ${styles.mainBorder}`}
-                data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
+                data-fontsize={type === "full" ? label.textSizes.text[1] : label.textSizes.text[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
               />
               <use 
                 x={20} y={55} 
@@ -300,23 +370,23 @@ export default function Badge({
                 strokeWidth="26" 
                 strokeLinejoin="round" 
                 className={` ${styles.textStyle} ${styles.secondaryBorder}`}
-                data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
+                data-fontsize={type === "full" ? label.textSizes.text[1] : label.textSizes.text[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
               />
               <use 
                 x={20} y={55} 
                 href={`#textGroup_` + randomIndex} 
                 className={` ${styles.textStyle} ${styles.mainText}`}
-                data-fontsize={type === "full" ? fontcolorsizes[3] : fontsizes[3]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
+                data-fontsize={type === "full" ? label.textSizes.text[1] : label.textSizes.text[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
               />
             </svg>
           )}
@@ -326,23 +396,23 @@ export default function Badge({
       {variant == "icon" && (
         <div 
           className={`${styles.wrapper} ${styles.iconWrapper} ${styles[type]} ${className}`.trim()}
-          data-colorlight={color?.light} 
-          data-colordark={color?.dark} 
-          data-coloraccent={color?.accent}
-          data-colorcontrast={color?.contrast}
-          data-colormedian={color?.median}
+          data-color-light={color?.light} 
+          data-color-dark={color?.dark} 
+          data-color-accent={color?.accent}
+          data-color-contrast={color?.contrast}
+          data-color-median={color?.median}
         >  
           {label && (
-            <svg width={iconWidth} height="130">
+            <svg width={icon.width} height={icon.height}>
               <defs>
                 <text id={`iconLabel_` + randomIndex}
-                  data-colorlight={color?.light} 
-                  data-colordark={color?.dark} 
-                  data-coloraccent={color?.accent}
-                  data-colorcontrast={color?.contrast}
-                  data-colormedian={color?.median}
+                  data-color-light={color?.light} 
+                  data-color-dark={color?.dark} 
+                  data-color-accent={color?.accent}
+                  data-color-contrast={color?.contrast}
+                  data-color-median={color?.median}
                 >
-                  {notoIcon}
+                  {icon.value}
                 </text>
               </defs>
 
@@ -352,12 +422,12 @@ export default function Badge({
                 strokeWidth="40" 
                 strokeLinejoin="round" 
                 className={` ${styles.textStyle} ${styles.mainBorder}`}
-                data-fontsize={iconfontsizes[3]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
+                data-fontsize={type === "full" ? icon.textSizes.symbol[1] : icon.textSizes.symbol[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
               />
               <use 
                 x="15" y="80" 
@@ -365,23 +435,23 @@ export default function Badge({
                 strokeWidth="28" 
                 strokeLinejoin="round" 
                 className={` ${styles.textStyle} ${styles.secondaryBorder}`}
-                data-fontsize={iconfontsizes[3]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
+                data-fontsize={type === "full" ? icon.textSizes.symbol[1] : icon.textSizes.symbol[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
               />
               <use 
                 x="15" y="80" 
                 href={`#iconLabel_` + randomIndex} 
                 className={` ${styles.textStyle} ${styles.mainText}`}
-                data-fontsize={iconfontsizes[3]}
-                data-colorlight={color?.light} 
-                data-colordark={color?.dark} 
-                data-coloraccent={color?.accent}
-                data-colorcontrast={color?.contrast}
-                data-colormedian={color?.median}
+                data-fontsize={type === "full" ? icon.textSizes.symbol[1] : icon.textSizes.symbol[0]}
+                data-color-light={color?.light} 
+                data-color-dark={color?.dark} 
+                data-color-accent={color?.accent}
+                data-color-contrast={color?.contrast}
+                data-color-median={color?.median}
               />
             </svg>
           )}

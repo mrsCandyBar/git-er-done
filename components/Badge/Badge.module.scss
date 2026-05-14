@@ -8,6 +8,56 @@
   height: 150px;
   position: relative;
 
+  .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .notoIcon {
+    position: absolute;
+    top: 62%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &.top {
+      top: 55% !important;
+    }
+    &.right {
+      left: 56% !important
+    }
+    &.center {
+      margin: 0px auto;
+    }
+    &.squash {
+      margin: -35px auto -20px auto;
+    }
+  }
+
+  // Curved label and subtitle
+  .curveSvg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 150px;
+    height: 150px;
+    pointer-events: none;
+  }
+
+  .label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0em;
+  }
+
   &.window {
     margin-top: 20px;
     height: 92px;
@@ -37,13 +87,12 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) rotate(14deg);
+      transform: translate(-50%, -50%);
     }
   }
 
   &.square {
     border-radius: 12px;
-    border-style: double;
     position: relative;
     max-width: 150px;
     overflow: hidden;
@@ -53,7 +102,6 @@
       top: 49%;
       left: 50%;
       transform: translate(-50%, -50%);
-      margin: -40px 0px -20px;
     }
 
     .label {
@@ -62,8 +110,8 @@
       font-size: attr(data-fontsize px);
       line-height: 1em;
       letter-spacing: -0.02em;
-      text-decoration: wavy;
-      text-decoration-line: underline;
+      //text-decoration: wavy;
+      //text-decoration-line: underline;
     }
 
     .subtitle {
@@ -122,7 +170,7 @@
   }
 
   &.dark {
-    .label { font-family: Google Sans; font-weight: bold; letter-spacing: 0.02em; text-decoration: none; }
+    //.label { font-family: Google Sans; font-weight: bold; letter-spacing: 0.02em; text-decoration: none; }
     &.round .label { letter-spacing: 0.18em; }
     &.square {
       .label { letter-spacing: 0.05em; }
@@ -146,11 +194,13 @@
   &.full {
     &.square {
       .label { 
-        margin-top: 3px;
-        font-family: Cherry Bomb One; 
-        font-weight: normal; 
-        letter-spacing: 0.1em; 
-        line-height: 1.2em;
+        margin-top: 15px;
+        margin-bottom: -8px;
+        font-family: 'Mynerve', sans-serif; 
+        font-weight: bold; 
+        letter-spacing: -0.03em; 
+        line-height: 1em;
+        rotate: -5deg;
       }
       .subtitle { font-family: Google Sans; font-weight: normal; }
     } 
@@ -161,76 +211,39 @@
   }
 }
 
-.icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.notoIcon {
-  position: absolute;
-  top: 62%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-// Curved label and subtitle
-.curveSvg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 150px;
-  height: 150px;
-  pointer-events: none;
-}
-
-.label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.subtitle {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0em;
-}
-
 
 /* BACKGROUNDS AND COLORS:
    Linting issues incoming! */
 
 /* stylelint-disable */
 .wrapper {
-  background: attr(data-colordark type(<color>));
-  border: 6.5px solid attr(data-coloraccent type(<color>));
-  color: attr(data-coloraccent type(<color>));
+  background: attr(data-color-dark type(<color>));
+  border: 6.5px solid attr(data-color-accent type(<color>));
+  color: attr(data-color-accent type(<color>));
 
   .label {
-    color: attr(data-coloraccent type(<color>));
-    fill: attr(data-coloraccent type(<color>));
+    color: attr(data-color-accent type(<color>));
+    fill: attr(data-color-accent type(<color>));
   }
 
   .subtitle {
-    color: attr(data-coloraccent type(<color>));
-    fill: attr(data-coloraccent type(<color>));
+    color: attr(data-color-accent type(<color>));
+    fill: attr(data-color-accent type(<color>));
   }
 
   &.window {
-    .label { fill: attr(data-coloraccent type(<color>)); }
-    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+    .label { fill: attr(data-color-accent type(<color>)); }
+    .subtitle { fill: attr(data-color-accent type(<color>)); }
   }
   
   &.round {
-    .label { fill: attr(data-coloraccent type(<color>)); }
-    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+    .label { fill: attr(data-color-accent type(<color>)); }
+    .subtitle { fill: attr(data-color-accent type(<color>)); }
   }
 
   &.square {
-    .label { fill: attr(data-coloraccent type(<color>)); }
-    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+    .label { fill: attr(data-color-accent type(<color>)); }
+    .subtitle { fill: attr(data-color-accent type(<color>)); }
   }
 
   &.text {
@@ -238,10 +251,10 @@
     box-shadow: none;
     background: none;
 
-    .mainText { fill: attr(data-coloraccent type(<color>)); }
-    .mainBackgroundBorder { fill: attr(data-colordark type(<color>)); stroke: attr(data-colordark type(<color>)); }
-    .secondaryBorder { stroke: attr(data-colordark type(<color>)); }
-    .mainBorder { stroke: attr(data-coloraccent type(<color>)); }
+    .mainText { fill: attr(data-color-accent type(<color>)); }
+    .mainBackgroundBorder { fill: attr(data-color-dark type(<color>)); stroke: attr(data-color-dark type(<color>)); }
+    .secondaryBorder { stroke: attr(data-color-dark type(<color>)); }
+    .mainBorder { stroke: attr(data-color-accent type(<color>)); }
   }
 
   &.iconWrapper {
@@ -249,36 +262,36 @@
     box-shadow: none;
     background: none;
 
-    .mainText { fill: attr(data-coloraccent type(<color>)); }
-    .secondaryBorder { stroke: attr(data-colordark type(<color>)); }
-    .mainBorder { stroke: attr(data-coloraccent type(<color>)); }
+    .mainText { fill: attr(data-color-accent type(<color>)); }
+    .secondaryBorder { stroke: attr(data-color-dark type(<color>)); }
+    .mainBorder { stroke: attr(data-color-accent type(<color>)); }
   }
 
   &.light {
-    border-color: attr(data-coloraccent type(<color>));
-    background-color: attr(data-colorlight type(<color>));
-    color: attr(data-coloraccent type(<color>));
+    border-color: attr(data-color-accent type(<color>));
+    background-color: attr(data-color-light type(<color>));
+    color: attr(data-color-accent type(<color>));
 
     .icon, .notoIcon {
-      color: attr(data-coloraccent type(<color>));
+      color: attr(data-color-accent type(<color>));
     }
 
     .label {
-      color: attr(data-coloraccent type(<color>));
-      fill: attr(data-coloraccent type(<color>));
+      color: attr(data-color-accent type(<color>));
+      fill: attr(data-color-accent type(<color>));
     }
 
     .subtitle {
-      color: attr(data-coloraccent type(<color>));
-      fill: attr(data-coloraccent type(<color>));
+      color: attr(data-color-accent type(<color>));
+      fill: attr(data-color-accent type(<color>));
     }
 
-    .label { fill: attr(data-coloraccent type(<color>)); }
-    .subtitle { fill: attr(data-coloraccent type(<color>)); }
+    .label { fill: attr(data-color-accent type(<color>)); }
+    .subtitle { fill: attr(data-color-accent type(<color>)); }
 
     &.square {
-      .label { color: attr(data-coloraccent type(<color>)) !important; }
-      .subtitle { color: attr(data-coloraccent type(<color>)) !important; }
+      .label { color: attr(data-color-accent type(<color>)) !important; }
+      .subtitle { color: attr(data-color-accent type(<color>)) !important; }
     }
 
     &.text {
@@ -286,13 +299,13 @@
       background: none !important;
       box-shadow: none !important;
 
-      .mainText { fill: attr(data-coloraccent type(<color>)); }
+      .mainText { fill: attr(data-color-accent type(<color>)); }
       .mainBackgroundBorder {
-        fill: attr(data-colorlight type(<color>));
-        stroke: attr(data-colorlight type(<color>));
+        fill: attr(data-color-light type(<color>));
+        stroke: attr(data-color-light type(<color>));
       }
-      .secondaryBorder { stroke: attr(data-colorlight type(<color>)); }
-      .mainBorder { stroke: attr(data-colorlight type(<color>)); }
+      .secondaryBorder { stroke: attr(data-color-light type(<color>)); }
+      .mainBorder { stroke: attr(data-color-light type(<color>)); }
     }
 
     &.iconWrapper {
@@ -300,28 +313,28 @@
       background: none !important;
       box-shadow: none !important;
 
-      .mainText { fill: attr(data-coloraccent type(<color>)); }
-      .secondaryBorder { stroke: attr(data-colorlight type(<color>)); }
-      .mainBorder { stroke: attr(data-colorlight type(<color>)); }
+      .mainText { fill: attr(data-color-accent type(<color>)); }
+      .secondaryBorder { stroke: attr(data-color-light type(<color>)); }
+      .mainBorder { stroke: attr(data-color-light type(<color>)); }
     }
   }
 
 
   &.full {
-    border-color: attr(data-coloraccent type(<color>));
-    background-color: attr(data-colorcontrast type(<color>));
+    border-color: attr(data-color-accent type(<color>));
+    background-color: attr(data-color-contrast type(<color>));
 
     .icon, .notoIcon {
-      color: attr(data-coloraccent type(<color>));
-      filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5));
+      color: attr(data-color-accent type(<color>));
+      //filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5));
     }
 
-    .label { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
-    .subtitle { fill:attr(data-colormedian type(<color>)); }
+    .label { fill: attr(data-color-accent type(<color>)); } //filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    .subtitle { fill:attr(data-color-median type(<color>)); }
 
     &.window {
-      .label { color: attr(data-coloraccent type(<color>)) !important; }
-      .subtitle { color:attr(data-colormedian type(<color>)) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .label { color: attr(data-color-accent type(<color>)) !important; }
+      .subtitle { color:attr(data-color-median type(<color>)) !important; }// filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
     }
 
     &.round {
@@ -329,30 +342,30 @@
     }
 
     &.square {
-      .label { color: attr(data-coloraccent type(<color>)) !important; }
-      .subtitle { color:attr(data-colormedian type(<color>)) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .label { color: attr(data-color-accent type(<color>)) !important; }
+      .subtitle { color:attr(data-color-median type(<color>)) !important; }// filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
     }
 
     &.text {
       border: none !important;
       background: none !important;
 
-      .mainText { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .mainText { fill: attr(data-color-accent type(<color>)); }// filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
       .mainBackgroundBorder {
-        fill: attr(data-colorcontrast type(<color>));
-        stroke: attr(data-colorcontrast type(<color>));
+        fill: attr(data-color-contrast type(<color>));
+        stroke: attr(data-color-contrast type(<color>));
       }
-      .secondaryBorder { stroke: attr(data-colorcontrast type(<color>)); }
-      .mainBorder { stroke:attr(data-coloraccent type(<color>)); }
+      .secondaryBorder { stroke: attr(data-color-contrast type(<color>)); }
+      .mainBorder { stroke:attr(data-color-accent type(<color>)); }
     }
 
     &.iconWrapper {
       border: none !important;
       background: none !important;
 
-      .mainText { fill: attr(data-coloraccent type(<color>)); filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
-      .secondaryBorder { stroke: attr(data-colorcontrast type(<color>)); }
-      .mainBorder { stroke:attr(data-coloraccent type(<color>)); }
+      .mainText { fill: attr(data-color-accent type(<color>)); }// filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+      .secondaryBorder { stroke: attr(data-color-contrast type(<color>)); }
+      .mainBorder { stroke:attr(data-color-accent type(<color>)); }
     }
   }
 }
