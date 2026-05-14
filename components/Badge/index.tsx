@@ -14,10 +14,13 @@ type BadgeProps = {
   iconHeight?: number;
   label: ReactNode;
   labelOffset?: number;
+  labelFullOffset?: number;
   labelRoundOffset?: number;
+  labelFullRoundOffset?: number;
   labelWidth?: number;
   subtitle?: ReactNode;
   subtitleOffset?: number;
+  subtitleFullOffset?: number;
   variant?: BadgeVariant;
   type?: BadgeType;
   className?: string;
@@ -42,10 +45,13 @@ export default function Badge({
   iconHeight,
   label,
   labelOffset = 0,
+  labelFullOffset = 0,
   labelRoundOffset = 0,
+  labelFullRoundOffset = 0,
   labelWidth = 0,
   subtitle,
   subtitleOffset = 0,
+  subtitleFullOffset = 0,
   variant = "square",
   type = "dark",
   className = "",
@@ -95,7 +101,7 @@ export default function Badge({
                 a 45,45 0 1,1 -93,0 
                 a 45,45 0 1,1 93,0" id="badge-window-subtitle-path" />
             </defs>
-            {label && (
+            {subtitle && (
               <text 
                 className={styles.label}
                 data-fontsize={type === "full" ? fontcolorsizes[0] : fontsizes[0]}
@@ -105,7 +111,7 @@ export default function Badge({
                 data-colorcontrast={color?.contrast}
                 data-colormedian={color?.median}
               >
-                <textPath href="#badge-window-subtitle-path" startOffset={`${labelOffset}%`}>{label}</textPath>
+                <textPath href="#badge-window-subtitle-path" startOffset={`${type === "full" ? labelFullOffset : labelOffset}%`}>{subtitle}</textPath>
               </text>
             )}
           </svg>
@@ -153,7 +159,7 @@ export default function Badge({
                 data-coloraccent={color?.accent}
                 data-colorcontrast={color?.contrast}
                 data-colormedian={color?.median}
-              ><textPath href="#badge-label-path" startOffset={`${labelRoundOffset}%`}>{label}</textPath></text>
+              ><textPath href="#badge-label-path" startOffset={`${type === "full" ? labelFullRoundOffset : labelRoundOffset}%`}>{label}</textPath></text>
             )}
             {subtitle && (
               <text 
@@ -164,7 +170,7 @@ export default function Badge({
                 data-coloraccent={color?.accent}
                 data-colorcontrast={color?.contrast}
                 data-colormedian={color?.median}
-              ><textPath href="#badge-subtitle-path" startOffset={`${subtitleOffset}%`}>{subtitle}</textPath></text>
+              ><textPath href="#badge-subtitle-path" startOffset={`${type === "full" ? subtitleFullOffset : subtitleOffset}%`}>{subtitle}</textPath></text>
             )}
           </svg>
           {notoIcon && <div className={styles.notoIcon}
@@ -200,14 +206,6 @@ export default function Badge({
               data-colorcontrast={color?.contrast}
               data-colormedian={color?.median}
             >{label}</div>}
-          {subtitle && <div className={styles.subtitle}
-              data-fontsize={type === "full" ? fontcolorsubtitlesizes[1] : fontsubtitlesizes[1]}
-              data-colorlight={color?.light} 
-              data-colordark={color?.dark} 
-              data-coloraccent={color?.accent}
-              data-colorcontrast={color?.contrast}
-              data-colormedian={color?.median}
-            >{subtitle}</div>}
           {notoIcon && <div className={styles.notoIcon}
               data-colorlight={color?.light} 
               data-colordark={color?.dark} 
@@ -221,6 +219,14 @@ export default function Badge({
                 fontfamily={type == "full" ? "Noto Color Emoji" : "Noto Emoji"}
                 fontsize={type == "full" ? iconfontcolorsizes[2] : iconfontsizes[2]}
                 color={color} /></div>}
+          {subtitle && <div className={styles.subtitle}
+              data-fontsize={type === "full" ? fontcolorsubtitlesizes[1] : fontsubtitlesizes[1]}
+              data-colorlight={color?.light} 
+              data-colordark={color?.dark} 
+              data-coloraccent={color?.accent}
+              data-colorcontrast={color?.contrast}
+              data-colormedian={color?.median}
+            >{subtitle}</div>}
         </div>
       )}
 

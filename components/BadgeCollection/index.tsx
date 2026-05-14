@@ -30,10 +30,13 @@ export default function BadgeCollection({
                 notoIcon={badgeInfo.notoIcon}
                 label={badgeInfo.label}
                 labelOffset={badgeInfo.labelOffset}
+                labelFullOffset={badgeInfo.labelFullOffset}
                 labelRoundOffset={badgeInfo.labelRoundOffset}
+                labelFullRoundOffset={badgeInfo.labelFullRoundOffset}
                 labelWidth={badgeInfo.labelWidth}
                 subtitle={badgeInfo.subtitle}
                 subtitleOffset={badgeInfo.subtitleOffset}
+                subtitleFullOffset={badgeInfo.subtitleFullOffset}
                 iconWidth={badgeInfo.iconWidth}
                 color={badgeInfo.color}
                 fontsizes={badgeInfo.fontsizes}

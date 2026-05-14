@@ -44,31 +44,29 @@
   &.square {
     border-radius: 12px;
     border-style: double;
+    position: relative;
+    max-width: 150px;
+    overflow: hidden;
 
     .notoIcon {
-      position: absolute;
+      position: relative;
       top: 49%;
       left: 50%;
       transform: translate(-50%, -50%);
+      margin: -40px 0px -20px;
     }
 
     .label {
-      position: absolute;
-      top: 5%;
-      left: 0;
-      right: 0;
+      max-width: 100%;
+      margin-top: 9px;
       font-size: attr(data-fontsize px);
-      line-height: 1.2em;
+      line-height: 1em;
       letter-spacing: -0.02em;
       text-decoration: wavy;
       text-decoration-line: underline;
     }
 
     .subtitle {
-      position: absolute;
-      bottom: 3%;
-      left: 0;
-      right: 0;
       font-size: attr(data-fontsize px);
       font-family: 'Cherry Bomb One', sans-serif;
       font-weight: normal;
@@ -147,7 +145,13 @@
 
   &.full {
     &.square {
-      .label { font-family: Cherry Bomb One; font-weight: normal; letter-spacing: 0.1em; }
+      .label { 
+        margin-top: 3px;
+        font-family: Cherry Bomb One; 
+        font-weight: normal; 
+        letter-spacing: 0.1em; 
+        line-height: 1.2em;
+      }
       .subtitle { font-family: Google Sans; font-weight: normal; }
     } 
 
@@ -318,6 +322,10 @@
     &.window {
       .label { color: attr(data-coloraccent type(<color>)) !important; }
       .subtitle { color:attr(data-colormedian type(<color>)) !important; filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5)); }
+    }
+
+    &.round {
+      .label { letter-spacing: 0.15em; }
     }
 
     &.square {
