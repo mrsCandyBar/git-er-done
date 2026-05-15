@@ -2,8 +2,8 @@ import Text from "../Text";
 import styles from "./BadgeCollection.module.scss";
 import Badge from "../Badge";
 
-export type BadgeVariant = "round" | "square" | "window" | "text" | "icon";
-export type BadgeType = "dark" | "light" | "full";
+export type BadgeVariant = "round" | "square" | "text" | "icon";
+export type BadgeType = "outline" | "full";
 
 type BadgeCollectionProps = {
   badgeVariantsForDark?: BadgeVariant[];
@@ -15,7 +15,7 @@ type BadgeCollectionProps = {
 export default function BadgeCollection({
   badgeVariantsForDark = ["round", "text"],
   badgeVariantsForFull = ["icon", "square"],
-  badgeTypes = ["dark", "full"], //"light", 
+  badgeTypes = ["outline", "full"],
   badgeInfo = {},
 }: BadgeCollectionProps) {
 
@@ -24,7 +24,7 @@ export default function BadgeCollection({
         <div>
           <div className={styles.badgeGrid}>
             {badgeTypes.map((type) => 
-              (type === "dark" ? badgeVariantsForDark : badgeVariantsForFull).map((variant, key) => (
+              (type === "outline" ? badgeVariantsForDark : badgeVariantsForFull).map((variant, key) => (
                 <Badge 
                   key={key}
                   type={type}

@@ -12,6 +12,7 @@ import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
 import StyleguideThemeToggle from "@/components/StyleguideThemeToggle";
 import styles from "./page.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { text } from "stream/consumers";
 
 export default function Styleguide() {
   const [showClosableCard, setShowClosableCard] = useState(true);
@@ -129,49 +130,37 @@ export default function Styleguide() {
           <BadgeCollection badgeInfo={{ 
             icon: {
               value: "🛹",
-              width: 120,
+              width: 130,
+              height: 105,
               textSizes: {
-                window: [65, 60],
-                round: [75, 70],
-                square: [70, 90],
-                symbol: [70, 70],
+                round: 75,
+                symbol: 70,
               },
-              margin_offset: {
-                square: "squash",
-              }
             },
             label: {
               value: "Keep going",
-              offset: 51,
-              offset_full: 51,
-              offset_round: 8,
+              textSticker: ["Keep", "going!"],
+              offset_round: 5,
               offset_round_full: 0,
               labelWidth: 165,
+              labelHeight: 135,
               textSizes: {
-                round: [24, 19],
-                window: [22, 28],
-                square: [30, 38],
+                round: [30, 19],
                 text: [42, 45],
               }
             },
             subtitle: {
-              value: "You got this!",
-              offset: 51,
-              offset_full: 52,
-              offset_round: 50,
+              //value: "You got this!",
+              value: "✪ ✦ ✶ ✦ ✪ ✦ ",
+              offset_round: 48,
               offset_round_full: 60,
               textSizes: {
-                window: [19, 18],
                 round: [20, 17],
-                square: [18, 18],
               }
             },
             color: {
-              light: "#f0d9b0",
-              dark: "#f0d9b0",
-              accent: "#ad4e4e",
-              contrast: "#f0d9b0",
-              median: "#b16b52",
+              accent: "#f0d9b0",
+              contrast: "#ad4e4e",
             }
           }}/>
           <br/>
@@ -180,49 +169,35 @@ export default function Styleguide() {
             icon: {
               value: "🏆",
               width: 120,
+              height: 120,
               textSizes: {
-                window: [65, 60],
-                round: [65, 65],
-                square: [65, 75],
-                symbol: [70, 70],
-              },
-              margin_offset: {
-                window: "right",
-                square: "squash",
+                round: 55,
+                symbol: 70,
               }
             },
             label: {
               value: "Got'it Done",
-              offset: 50,
-              offset_full: 55,
-              offset_round: 0,
+              textSticker: ["Got'it", "Done!"],
+              offset_round: 5,
               offset_round_full: 11,
               labelWidth: 180,
+              labelHeight: 125,
               textSizes: {
-                window: [28, 20],
-                round: [26, 25],
-                square: [35, 29],
+                round: [29, 25],
                 text: [50, 49],
               }
             },
             subtitle: {
               value: "congratulations!",
-              offset: 50,
-              offset_full: 51,
-              offset_round: 59,
+              offset_round: 50,
               offset_round_full: 53,
               textSizes: {
-                window: [16, 16],
                 round: [13, 20],
-                square: [20, 20],
               }
             },
             color: {
-              light: "#f7e6ca",
-              dark: "#203044",
               accent: "#bd8c44",
               contrast: "#203044",
-              median: "#5283b1",
             }
           }}/>
           <br/>
@@ -230,50 +205,36 @@ export default function Styleguide() {
           <BadgeCollection badgeInfo={{ 
             icon: {
               value: "💖",
-              width: 120,
+              width: 135,
+              height: 130,
               textSizes: {
-                window: [60, 50],
-                round: [55, 65],
-                square: [70, 105],
-                symbol: [70, 70],
-              },
-              margin_offset: {
-                round: "top",
-                //square: "squash",
+                round: 55,
+                symbol: 80,
               }
             },
             label: {
-              value: "Love Love Love",
-              offset: 50,
-              offset_full: 50,
-              offset_round: 5,
+              value: "Love✦Love✶Love",
+              textSticker: ["love*", "✶love", " love✦"],
+              offset_round: 3,
               offset_round_full: 0,
-              labelWidth: 165,
+              labelWidth: 200,
+              labelHeight: 160,
               textSizes: {
-                round: [36, 37],
-                window: [25, 37],
-                square: [30, 22],
+                round: [32, 37],
                 text: [50, 50],
               }
             },
             subtitle: {
-              value: "| | | | | |",
-              offset: 49,
-              offset_full: 51,
-              offset_round: 48,
+              value: "★",
+              offset_round: 47,
               offset_round_full: 2,
               textSizes: {
-                window: [25, 20],
-                round: [0, 0],
-                square: [20, 20],
+                round: [25, 0],
               }
             },
             color: {
-              light: "#f7e6ca",
-              dark: "#e097bf",
               accent: "#5a6980",
               contrast: "#e097bf",
-              median: "#505f6d",
             }
           }}/>
 
@@ -283,48 +244,35 @@ export default function Styleguide() {
             icon: {
               value: "🎂",
               width: 120,
+              height: 140,
               textSizes: {
-                window: [65, 80],
-                round: [68, 60],
-                square: [70, 105],
-                symbol: [70, 70],
-              },
-              margin_offset: {
-                //square: "squash",
+                round: 70,
+                symbol: 90,
               }
             },
             label: {
               value: "It's Your Birthday",
-              offset: 50,
-              offset_full: 50,
-              offset_round: 5,
+              textSticker: ["Hej!☺", "It's your", "Birthday!"],
+              offset_round: -56,
               offset_round_full: 0,
               labelWidth: 260,
+              labelHeight: 170,
               textSizes: {
-                round: [28, 29],
-                window: [25, 37],
-                square: [23, 24],
+                round: [31, 29],
                 text: [50, 50],
               }
             },
             subtitle: {
-              value: "",
-              offset: 49,
-              offset_full: 51,
-              offset_round: 54,
+              value: "Go shorty! it's yo'",
+              offset_round: 55,
               offset_round_full: 2,
               textSizes: {
-                window: [25, 20],
-                round: [0, 0],
-                square: [20, 20],
+                round: [16, 0],
               }
             },
             color: {
-              light: "#e7eb90",
-              dark: "#a52243",
               accent: "#e6af2e",
               contrast: "#a52243",
-              median: "#fadf63",
             }
           }}/>
 
