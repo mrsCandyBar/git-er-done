@@ -142,11 +142,11 @@ export default function Styleguide() {
               textSticker: ["Keep", "going!"],
               offset_round: 5,
               offset_round_full: 0,
-              labelWidth: 165,
+              labelWidth: 175,
               labelHeight: 135,
               textSizes: {
                 round: [30, 19],
-                text: [42, 45],
+                text: [46, 45],
               }
             },
             subtitle: {
@@ -163,7 +163,6 @@ export default function Styleguide() {
               contrast: "#ad4e4e",
             }
           }}/>
-          <br/>
 
           <BadgeCollection badgeInfo={{ 
             icon: {
@@ -200,7 +199,6 @@ export default function Styleguide() {
               contrast: "#203044",
             }
           }}/>
-          <br/>
 
           <BadgeCollection badgeInfo={{ 
             icon: {
@@ -217,7 +215,7 @@ export default function Styleguide() {
               textSticker: ["love*", "✶love", " love✦"],
               offset_round: 3,
               offset_round_full: 0,
-              labelWidth: 200,
+              labelWidth: 185,
               labelHeight: 160,
               textSizes: {
                 round: [32, 37],
@@ -238,8 +236,6 @@ export default function Styleguide() {
             }
           }}/>
 
-          <br/>
-
           <BadgeCollection badgeInfo={{ 
             icon: {
               value: "🎂",
@@ -252,14 +248,14 @@ export default function Styleguide() {
             },
             label: {
               value: "It's Your Birthday",
-              textSticker: ["Hej!☺", "It's your", "Birthday!"],
+              textSticker: ["Hej!☺", "it*s your", "Birthday!"],
               offset_round: -56,
               offset_round_full: 0,
               labelWidth: 260,
               labelHeight: 170,
               textSizes: {
                 round: [31, 29],
-                text: [50, 50],
+                text: [47, 50],
               }
             },
             subtitle: {

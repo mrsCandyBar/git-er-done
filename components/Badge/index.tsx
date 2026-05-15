@@ -213,7 +213,7 @@ export default function Badge({
                 x={20} y={55} 
                 href={`#textGroup_` + randomIndex} 
                 strokeWidth="26" 
-                strokeLinejoin="round" 
+                strokeLinejoin="round"
                 className={` ${styles.textStyle} ${styles.secondaryBorder}`}
                 data-fontsize={type === "full" ? label.textSizes.text[1] : label.textSizes.text[0]}
                 data-color-accent={color?.accent}
