@@ -218,10 +218,13 @@ function deserializeError(str: string): Error {
 }
 
 export function httpGet<TResponse = any>(path: string, config: GenericRequestConfig = {}) {
+  if (SHOULD_USE_DUMMY_DATA) {
+    const dummyResponse = returnDummyData("GET", path, config);
+    return Promise.resolve(<TResponse>dummyResponse);
+  }
+
   const mergedConfig = { ...defaultConfig, ...config, method: "GET", path };
-  const response = SHOULD_USE_DUMMY_DATA ? 
-    returnDummyData("GET", path, config) : 
-    genericRequest<TResponse>(mergedConfig);
+  const response = genericRequest<TResponse>(mergedConfig);
   return response;
 }
 
@@ -230,10 +233,13 @@ export function httpPost<TResponse = any, TBody = unknown>(
   body: TBody,
   config: GenericRequestConfig = {}
 ) {
+  if (SHOULD_USE_DUMMY_DATA) {
+    const dummyResponse = returnDummyData("POST", path, body);
+    return Promise.resolve(<TResponse>dummyResponse);
+  }
+
   const mergedConfig = { ...defaultConfig, ...config, method: "POST", path, body };
-  const response = SHOULD_USE_DUMMY_DATA ?
-    <TResponse>returnDummyData("POST", path, body) :
-    genericRequest<TResponse>(mergedConfig);
+  const response = genericRequest<TResponse>(mergedConfig);
   return response;
 }
 
@@ -242,10 +248,13 @@ export function httpPut<TResponse = any, TBody = unknown>(
   body: TBody,
   config: GenericRequestConfig = {}
 ) {
+  if (SHOULD_USE_DUMMY_DATA) {
+    const dummyResponse = returnDummyData("PUT", path, body);
+    return Promise.resolve(<TResponse>dummyResponse);
+  }
+
   const mergedConfig = { ...defaultConfig, ...config, method: "PUT", path, body };
-  const response = SHOULD_USE_DUMMY_DATA ?
-    <TResponse>returnDummyData("PUT", path, body) :
-    genericRequest<TResponse>(mergedConfig);
+  const response = genericRequest<TResponse>(mergedConfig);
   return response;
 }
 
@@ -254,9 +263,12 @@ export function httpPatch<TResponse = any, TBody = unknown>(
   body: TBody,
   config: GenericRequestConfig = {}
 ) {
+  if (SHOULD_USE_DUMMY_DATA) {
+    const dummyResponse = returnDummyData("PATCH", path, body);
+    return Promise.resolve(<TResponse>dummyResponse);
+  }
+  
   const mergedConfig = { ...defaultConfig, ...config, method: "PATCH", path, body };
-  const response = SHOULD_USE_DUMMY_DATA ?
-    <TResponse>returnDummyData("PATCH", path, body) :
-    genericRequest<TResponse>(mergedConfig);
+  const response = genericRequest<TResponse>(mergedConfig);
   return response;
 }

@@ -94,7 +94,7 @@ export default function CreateTaskModal({
                     You have accomplished many quests with us, and we are so proud of you!
                 </Text>
 
-                <Text as="h1" tone="secondary" fullWidth>
+                <Text as="h2" tone="secondary" fullWidth>
                     <big>💐🤗😽🥹</big>
                 </Text>
 
@@ -108,7 +108,7 @@ export default function CreateTaskModal({
                 </Text>
 
                 <br/>
-                <Text as="h1" tone="secondary" fullWidth>
+                <Text as="h2" tone="secondary" fullWidth>
                     <big>🌼🐎🚞</big>
                 </Text>
                 <Text as="p" tone="secondary" fullWidth>

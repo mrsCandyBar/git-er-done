@@ -49,6 +49,7 @@ export const dashboardActionContent: Record<LastActionType, DashboardActionCardC
 
 export type FriendStatusActionCardContent = {
   eyebrow: (profileName?: string) => ReactNode;
+  eyebrowIcon: string;
   icon: string;
   title: string;
   description?: (profileName: string) => ReactNode;
@@ -60,28 +61,32 @@ export type FriendStatusActionCardContent = {
 
 export const friendStatusActionContent: Record<UserStatusType, FriendStatusActionCardContent> = {
   friend: {
-    eyebrow: () => "Hello there friend!👋",
+    eyebrow: () => "Hello there friend!",
+    eyebrowIcon: "👋",
     icon: "🎴",
     title: "You're new here, let's get you set up with your first quest!",
     primaryLabel: () => "Let's Go!",
     primaryHref: () => "/tasks/form/new",
   },
   friend_new: {
-    eyebrow: () => `Time to shift gears ✨`,
+    eyebrow: () => `Time to shift gears`,
+    eyebrowIcon: "✨",
     icon: "🎉",
     title: "Mind over Matter",
     primaryLabel: () => "Tiny step, big mood shift ✨",
     primaryHref: () => "/task",
   },
   friend_dear: {
-    eyebrow: () => "smooth sailing 🛥️",
+    eyebrow: () => "smooth sailing",
+    eyebrowIcon: "🛥️",
     icon: "🫶",
     title: "Thank you for sharing your inspirations and aspirations with us. Here's a 🎁 for you",
     primaryLabel: () => "Accept Gift ✨",
     primaryHref: () => "/tasks/form/new",
   },
   friend_close: {
-    eyebrow: () => "You're a close friend! 💖",
+    eyebrow: () => "You're a close friend!",
+    eyebrowIcon: "💖",
     icon: "🌟",
     title: "Thank you for being with us on this journey.",
     primaryLabel: () => "Continue Exploring 🌍",

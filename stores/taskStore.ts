@@ -8,17 +8,18 @@ export type TaskRecord = {
 	name: string;
 	description: string;
 	state: Column["state"];
-	recurId?: string;
+	recurId?: string | null | undefined;
 	checklist?: Task[];
-	createdDate?: string;
-	startedDate?: string;
-	updatedDate?: string;
+	userId: string;
+	createdDate?: string | null | undefined;
+	startedDate?: string | null | undefined;
+	updatedDate?: string | null | undefined;
 	completed?: {
-		completedDate?: string;
+		completedDate?: string | null | undefined;
 		mood?: Mood;
-		finalNotes?: string;
+		finalNotes?: string | null | undefined;
 		recur?: boolean;
-		keepsakeUrl?: string;
+		keepsakeUrl?: string | null | undefined;
 	}
 };
 

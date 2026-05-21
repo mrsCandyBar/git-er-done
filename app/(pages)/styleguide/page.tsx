@@ -11,8 +11,7 @@ import {
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
 import StyleguideThemeToggle from "@/components/StyleguideThemeToggle";
 import styles from "./page.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { text } from "stream/consumers";
+import { rewards } from "@/assets/achievements/rewards";
 
 export default function Styleguide() {
   const [showClosableCard, setShowClosableCard] = useState(true);
@@ -25,7 +24,7 @@ export default function Styleguide() {
 
       <main id="styleguide-root" className={styles.wrapper}>
         <section className={styles.section}>
-          <Text as="h1">Styleguide</Text>
+          <Text as="h2">Styleguide</Text>
           <Text as="p" tone="secondary">
             This page showcases baseline native HTML elements for quick visual checks while building new
             UI.
@@ -33,7 +32,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.fixedSection}>
-          <Text as="h2">Theme Preview</Text>
+          <Text as="h3">Theme Preview</Text>
           <Text as="p" tone="secondary" className={styles.helperText}>
             Toggle this page between light and dark previews without changing your system appearance.
           </Text>
@@ -43,7 +42,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Text Elements</Text>
+          <Text as="h3">Text Elements</Text>
           <div className={styles.stack}>
             <Text as="h1">Heading 1</Text>
             <Text as="h2">Heading 2</Text>
@@ -85,7 +84,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Buttons</Text>
+          <Text as="h3">Buttons</Text>
           <div className={styles.row}>
             <Button type="button" variant="filled">
               Filled
@@ -120,163 +119,22 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Badges</Text>
+          <Text as="h3">Badges</Text>
           <Text as="p" tone="secondary">
             Reusable motivational and reward badges. <br/>
             Mix variants to fit context and mood.
           </Text>
           <br/>
           
-          <BadgeCollection badgeInfo={{ 
-            icon: {
-              value: "🛹",
-              width: 130,
-              height: 105,
-              textSizes: {
-                round: 75,
-                symbol: 70,
-              },
-            },
-            label: {
-              value: "Keep going",
-              textSticker: ["Keep", "going!"],
-              offset_round: 5,
-              offset_round_full: 0,
-              labelWidth: 175,
-              labelHeight: 135,
-              textSizes: {
-                round: [30, 19],
-                text: [46, 45],
-              }
-            },
-            subtitle: {
-              //value: "You got this!",
-              value: "✪ ✦ ✶ ✦ ✪ ✦ ",
-              offset_round: 48,
-              offset_round_full: 60,
-              textSizes: {
-                round: [20, 17],
-              }
-            },
-            color: {
-              accent: "#f0d9b0",
-              contrast: "#ad4e4e",
-            }
-          }}/>
-
-          <BadgeCollection badgeInfo={{ 
-            icon: {
-              value: "🏆",
-              width: 120,
-              height: 120,
-              textSizes: {
-                round: 55,
-                symbol: 70,
-              }
-            },
-            label: {
-              value: "Got'it Done",
-              textSticker: ["Got'it", "Done!"],
-              offset_round: 5,
-              offset_round_full: 11,
-              labelWidth: 180,
-              labelHeight: 125,
-              textSizes: {
-                round: [29, 25],
-                text: [50, 49],
-              }
-            },
-            subtitle: {
-              value: "congratulations!",
-              offset_round: 50,
-              offset_round_full: 53,
-              textSizes: {
-                round: [13, 20],
-              }
-            },
-            color: {
-              accent: "#bd8c44",
-              contrast: "#203044",
-            }
-          }}/>
-
-          <BadgeCollection badgeInfo={{ 
-            icon: {
-              value: "💖",
-              width: 135,
-              height: 130,
-              textSizes: {
-                round: 55,
-                symbol: 80,
-              }
-            },
-            label: {
-              value: "Love✦Love✶Love",
-              textSticker: ["love*", "✶love", " love✦"],
-              offset_round: 3,
-              offset_round_full: 0,
-              labelWidth: 185,
-              labelHeight: 160,
-              textSizes: {
-                round: [32, 37],
-                text: [50, 50],
-              }
-            },
-            subtitle: {
-              value: "★",
-              offset_round: 47,
-              offset_round_full: 2,
-              textSizes: {
-                round: [25, 0],
-              }
-            },
-            color: {
-              accent: "#5a6980",
-              contrast: "#e097bf",
-            }
-          }}/>
-
-          <BadgeCollection badgeInfo={{ 
-            icon: {
-              value: "🎂",
-              width: 120,
-              height: 140,
-              textSizes: {
-                round: 70,
-                symbol: 90,
-              }
-            },
-            label: {
-              value: "It's Your Birthday",
-              textSticker: ["Hej!☺", "it*s your", "Birthday!"],
-              offset_round: -56,
-              offset_round_full: 0,
-              labelWidth: 260,
-              labelHeight: 170,
-              textSizes: {
-                round: [31, 29],
-                text: [47, 50],
-              }
-            },
-            subtitle: {
-              value: "Go shorty! it's yo'",
-              offset_round: 55,
-              offset_round_full: 2,
-              textSizes: {
-                round: [16, 0],
-              }
-            },
-            color: {
-              accent: "#e6af2e",
-              contrast: "#a52243",
-            }
-          }}/>
-
-          
+          {rewards.map((reward:any, index:number) => (
+            <BadgeCollection 
+              key={index} 
+              badgeInfo={reward} />
+          ))}
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Input Fields</Text>
+          <Text as="h3">Input Fields</Text>
           <br/>
 
           <div className={styles.stack}>
@@ -322,7 +180,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Form Example</Text>
+          <Text as="h3">Form Example</Text>
           <br/>
 
           <Form
@@ -348,7 +206,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Form Component</Text>
+          <Text as="h3">Form Component</Text>
           <Text as="p" tone="secondary">
             The Form component auto-generates fields from a configuration array, reducing boilerplate for new forms.
           </Text>
@@ -394,7 +252,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Form with Checkboxes and Radio Buttons</Text>
+          <Text as="h3">Form with Checkboxes and Radio Buttons</Text>
           <Text as="p" tone="secondary">
             Forms can include checkbox groups for multiple selections and radio buttons for single selection.
           </Text>
@@ -430,7 +288,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Form with Validation Errors</Text>
+          <Text as="h3">Form with Validation Errors</Text>
           <Text as="p" tone="secondary">
             The Form component supports error messages that display below each field.
           </Text>
@@ -461,7 +319,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Info Chips</Text>
+          <Text as="h3">Info Chips</Text>
           <div className={styles.row}>
             <InfoChip label="Draft" />
             <InfoChip label="In Review" />
@@ -475,7 +333,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Cards</Text>
+          <Text as="h3">Cards</Text>
           <Text as="p" tone="secondary">
             Card content is fully optional. Use only the blocks you need for each scenario.
           </Text>
@@ -578,7 +436,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Modal</Text>
+          <Text as="h3">Modal</Text>
           <Text as="p" tone="secondary">
             Reusable modal with overlay close, escape close, and optional action buttons.
           </Text>
@@ -602,7 +460,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Toasts / Notifications</Text>
+          <Text as="h3">Toasts / Notifications</Text>
           <Text as="p" tone="secondary">
             Trigger contextual notifications that auto-dismiss after a short delay.
           </Text>
@@ -663,7 +521,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Confetti</Text>
+          <Text as="h3">Confetti</Text>
           <Text as="p" tone="secondary">
             A short celebratory confetti burst for wins, completions, and milestone moments.
           </Text>
@@ -706,7 +564,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Tabs</Text>
+          <Text as="h3">Tabs</Text>
           <Text as="p" tone="secondary">
             Use tabs to switch between related content views without leaving the page.
           </Text>
@@ -746,7 +604,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Accordion</Text>
+          <Text as="h3">Accordion</Text>
           <Text as="p" tone="secondary">
             Accordions help collapse larger content blocks while keeping the page scannable.
           </Text>
@@ -786,7 +644,7 @@ export default function Styleguide() {
         </section>
 
         <section className={styles.section}>
-          <Text as="h2">Logos</Text>
+          <Text as="h3">Logos</Text>
           <Text as="p" tone="secondary">
             Logos represent the brand visually and should be used consistently across the application.
           </Text>

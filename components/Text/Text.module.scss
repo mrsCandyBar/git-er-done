@@ -36,7 +36,6 @@
   text-align: right;
 }
 /*
-.h0,
 .h1,
 .h2,
 .h3,
@@ -46,25 +45,25 @@
   max-width: v.$max-width-heading * 1.5;
 }*/
 
-.h0 {
+.h1 {
   font-size: v.$font-size-xl * 1.5;
   font-weight: v.$font-weight-semibold;
   line-height: v.$line-height-xl * 1.45;
 }
 
-.h1 {
+.h2 {
   font-size: v.$font-size-xl;
   font-weight: v.$font-weight-semibold;
   line-height: v.$line-height-xl;
 }
 
-.h2 {
+.h3 {
   font-size: v.$font-size-lg;
   font-weight: v.$font-weight-semibold;
   line-height: v.$line-height-lg;
 }
 
-.h3 {
+.h4 {
   font-size: 24px;
   font-weight: v.$font-weight-semibold;
   line-height: 1.35;

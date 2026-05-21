@@ -82,7 +82,7 @@ export default function RecurTaskPage() {
           is a powerful reminder of what you are capable of.
         </Text>
 
-        <Text as="h1" align="center" fullWidth>
+        <Text as="h2" align="center" fullWidth>
           {recurTask?.name || " ... "}
         </Text>
 

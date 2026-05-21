@@ -26,3 +26,11 @@ p {
   line-height: v.$line-height-base;
   text-wrap: balance;
 }
+
+.icon {
+  font-family: "Noto Emoji", sans-serif;
+
+  &.color {
+    font-family: "Noto Color Emoji", sans-serif;
+  }
+}

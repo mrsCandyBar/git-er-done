@@ -7,7 +7,7 @@ export default function Support() {
     <>
       <Header />
       <div className="intro">
-          <Text as="h1">We're Here to Help</Text>
+          <Text as="h2">We're Here to Help</Text>
           <Text as="p">
             Sometimes tasks feel overwhelming, and that's okay. We're here to support you every step of the way. 
             Whether you have questions, feedback, or need assistance getting started, don't hesitate to reach out.

@@ -63,7 +63,7 @@ export default function Account() {
         Thank you for taking part in the Brioh experience.
       </Text>
 
-      <Text as="h2" fullWidth align="center">
+      <Text as="h3" fullWidth align="center">
         Lets Continue Questing, <br/>
         Aspiring and Achieving<br/>
         with Brioh today!
@@ -72,8 +72,8 @@ export default function Account() {
 
       <Card>
         <br/>
-        <Text as="h2" align="center">Mio Brioh!</Text>
-        <Text as="h3" align="center">$10 Monthly</Text>
+        <Text as="h3" align="center">Mio Brioh!</Text>
+        <Text as="h4" align="center">$10 Monthly</Text>
         <Text as="p" align="center">
           for everyone who wants to do and achieve more<br/> 
           Our goal is to support and keep track of your journey for YOU</Text>
@@ -94,7 +94,7 @@ export default function Account() {
 
       <br/>
       
-      <Text as="h1" fullWidth align="center"><big>🫶</big></Text>
+      <Text as="h2" fullWidth align="center"><big>🫶</big></Text>
       <Text as="p" fullWidth align="center">
         Your subscription will help us continue to <br/>
         develop and improve the Brioh Experience.

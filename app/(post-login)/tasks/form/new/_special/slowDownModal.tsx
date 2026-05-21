@@ -17,7 +17,7 @@ export default function SlowDownModal({ isOpen, onClose, maxTasksAllowed }: Slow
       showFooterCloseButton={false}
     >
       <Card bare minHeight={false}>
-        <Text as="h1" tone="secondary" fullWidth>
+        <Text as="h2" tone="secondary" fullWidth>
           <big>🏇🏻💨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _🏰 🐲!!!</big>
         </Text>
 

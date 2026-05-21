@@ -4,6 +4,9 @@ import Script from 'next/script';
 import { useEffect } from 'react';
 import { userStore } from "@/stores";
 import { useRouter } from "next/navigation";
+import Button from './Button';
+
+const SHOULD_USE_DUMMY_DATA = process.env.NEXT_PUBLIC_USE_DUMMY_DATA === "true";
 
 type GoogleCredentialResponse = {
   credential: string;
@@ -34,6 +37,11 @@ export default function GoogleLoginButton() {
   useEffect(() => {
     if (!window.google) return;
 
+    if (SHOULD_USE_DUMMY_DATA) {
+      console.log("Using dummy data mode - Google login will return a simulated user profile.");
+      return;
+    }
+
     const googleSignInDiv = document.getElementById('googleSignInDiv');
     if (!googleSignInDiv) return;
 
@@ -51,18 +59,19 @@ export default function GoogleLoginButton() {
   async function handleCredentialResponse(response: GoogleCredentialResponse) {
     const idToken = response.credential;
     let data = userStore.loginWithGoogle(idToken).then(() => {
+      console.log("Login successful, navigating to profile page...", data);
       router.push("/profile");
 
     }).catch(error => {
       console.error("Login failed:", error);
     });
-
-    console.log(data);
   }
 
   return (
     <>
       <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
+      <Button onClick={() => handleCredentialResponse({ credential: 'test' })}>Login with Google</Button>
+      
       <div id="googleSignInDiv" />
     </>
   );

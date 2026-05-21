@@ -10,23 +10,30 @@ export type TaskCategoryModel = {
 export type CategoryBuckets = Record<TaskCategory, string[]>;
 
 export type UserInspiration = {
-  inspiration: string;
+  inspirations: string;
   reason: string;
   url: string;
 };
 
 export type UserAchievement = {
   completed: CategoryBuckets;
+  completedAt?: string;
   recognised: string[];
 };
 
 export type UserProfile = {
-  id?: string;
-  status: UserStatusType;
+  _id: string;
+  about?: string;
+  achievements: UserAchievement[];
+  aspirations: CategoryBuckets;
+  dob?: string | null;
+  email: string;
+  googleId: string;
+  authProvider: string;
+  inspirations: UserInspiration[];
+  lastLoginDate: string;
   name: string;
   profilePicture: string;
-  dob?: string;
-  about?: string;
   progressUpdatePush?: {
     schedule?: "daily" | "weekly" | "monthly";
     lastUpdatedDate?: string;
@@ -34,11 +41,35 @@ export type UserProfile = {
     updatedDate?: string;
   };
   startedDate: string;
+  status: UserStatusType;
   updatedDate: string;
-  lastLoginDate: string;
-  inspirations: UserInspiration[];
-  achievements: UserAchievement[];
-  aspirations: CategoryBuckets;
+};
+
+export type loginResponse = {
+  message?: string;
+  isNewUser?: boolean;
+  user: {
+    _id: string;
+    about?: string;
+    achievements: UserAchievement[];
+    aspirations: CategoryBuckets;
+    dob?: string;
+    email: string;
+    googleid: string;
+    inspirations: UserInspiration[];
+    lastLoginDate: string;
+    name: string;
+    profilePicture: string;
+    progressUpdatePush?: {
+      schedule?: "daily" | "weekly" | "monthly";
+      lastUpdatedDate?: string;
+      lastUpdateSent?: string;
+      updatedDate?: string;
+    };
+    startedDate: string;
+    status: UserStatusType;
+    updatedDate: string;
+  }
 };
 
 export const USER_PROFILE_STORAGE_KEY = "brioh-user-profile";

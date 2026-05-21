@@ -23,7 +23,7 @@ export default function Dashboard() {
         <Card
           eyebrow={<Text as="h4">{card.eyebrow}</Text>}
           icon={card.icon}
-          title={<Text as="h2">{card.title}</Text>}
+          title={<Text as="h3">{card.title}</Text>}
           description={<Text tone="secondary">{card.description(lastAction.taskName)}</Text>}
           actions={(
             <>

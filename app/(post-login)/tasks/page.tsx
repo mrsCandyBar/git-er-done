@@ -56,15 +56,15 @@ export default function TasksPage() {
         <div className={styles.welcomeCopy}>
 
             <br/>
-            <Text as="h1" tone="secondary">😊🫳🎴</Text>
+            <Text as="h2" tone="secondary">😊🫳🎴</Text>
             <Text as="p" tone="secondary">Choose a card</Text>
 
             <br/>
-            <Text as="h1" tone="secondary">😗🫸💨 🎴</Text>
+            <Text as="h2" tone="secondary">😗🫸💨 🎴</Text>
             <Text as="p" tone="secondary">Not this one? Swipe it away.</Text>
 
             <br/>
-            <Text as="h1" tone="secondary">🗃️🎴 👋😏</Text>
+            <Text as="h2" tone="secondary">🗃️🎴 👋😏</Text>
             <Text as="p" tone="secondary">All tasks can be put on pause. Don't stress</Text>
 
             <br/>

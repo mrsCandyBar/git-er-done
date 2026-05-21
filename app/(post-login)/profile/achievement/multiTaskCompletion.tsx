@@ -91,8 +91,7 @@ export default function MultiTaskCompletionInsights({
       </Text>
 
       <div className={styles.badgeRow}>
-        <Badge label="Level up" subtitle="Reward unlocked" variant="sky" />
-        <Badge label="Focus mode" variant="slate" />
+        {/* Example badges, replace with dynamic badges based on user's achievements */}
       </div>
 
       <Text as="p" tone="secondary">
@@ -108,7 +107,7 @@ export default function MultiTaskCompletionInsights({
       </Text>
       <br/>
       <Card
-        title={<Text as="h2">Let's take a closer look 👀</Text>}
+        title={<Text as="h3">Let's take a closer look 👀</Text>}
         description={
           <>
             <Text as="p" tone="secondary">
@@ -151,7 +150,7 @@ export default function MultiTaskCompletionInsights({
               Brioh is designed to help 🫵 reconnect with yourself.
             </Text>
             <br/>
-            <Text as="h1" align="center" fullWidth> 🧙‍♀️🚞🤴🏰💂</Text>
+            <Text as="h2" align="center" fullWidth> 🧙‍♀️🚞🤴🏰💂</Text>
             <br/>
             <Text as="p" align="center" tone="secondary">
               You have achieved all this since we met<br/>

@@ -9,7 +9,7 @@ export default function Login() {
         <Header />
       </div>
       <div className={styles.intro}>
-        <Text as="h0" className={styles.introText}>Let's do great things together</Text>
+        <Text as="h2" className={styles.introText}>Let's do great things together</Text>
         <div style={{ width: '300px' }}>
           <GoogleLoginButton />
         </div>

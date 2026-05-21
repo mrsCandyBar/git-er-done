@@ -21,6 +21,7 @@ export default function PostLoginLayout({
     async function checkSession() {
       try {
         const result = await userStore.tryRestoreSession();
+        console.log("Session restore result:", result);
         if (result == "success") {
           setAuthorized(true);
         } else {

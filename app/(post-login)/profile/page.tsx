@@ -60,7 +60,7 @@ export default function Profile() {
           <Card
             eyebrow={<Text as="h4">{card.eyebrow()}</Text>}
             icon={card.profileImage(currentUserProfile.profilePicture)}
-            title={<Text as="h2">{card.title(currentUserProfile.name)}</Text>}
+            title={<Text as="h3">{card.title(currentUserProfile.name)}</Text>}
           >
             <MultiTaskCompletionInsights currentUserProfile={currentUserProfile} />
           </Card>

@@ -57,7 +57,7 @@ export default function SingleTaskCompletionInsights({
     <Card
       eyebrow={<Text as="h4">{card.eyebrow()}</Text>}
       icon={card.profileImage(profilePicture)}
-      title={<Text as="h2">{card.title(profileName)}</Text>}
+      title={<Text as="h3">{card.title(profileName)}</Text>}
       description={
         <>
           {showSingleTaskInsights && (
@@ -75,7 +75,9 @@ export default function SingleTaskCompletionInsights({
                 icon={task.icon}
               >
                 <>
+                  {/* Example badges, replace with dynamic badges based on task completion details
                   <Badge label="Mission Complete!" variant="sunshine" />
+                  */}
                   <Text as="p">
                     This was: <b>{taskStore.getTaskCategoryName(task.category)}</b>, {task?.checklist? "and had a list of goals that could be achieved" : "and easy to accomplish"}<br/><br/>
                   </Text>
@@ -86,7 +88,9 @@ export default function SingleTaskCompletionInsights({
                     You did this on <b>{moment(task.completed?.completedDate).format("MMMM Do, YYYY")}</b>{task.startedDate ? <> over <b>{moment(task.completed?.completedDate).diff(moment(task.startedDate), "hours")} hours</b></> : null}.<br/>
                     it made you feel <b>{task.completed && task.completed.mood && getTaskMoodLabel(task.completed.mood)}</b><br/>
                   </Text>
+                  {/* Example badges, replace with dynamic badges based on task completion details
                   <Badge label="Mood Check" variant="sunshine" />
+                  */}
 
                   {task.checklist && task.checklist.length > 0 && (
                     <>
@@ -95,7 +99,9 @@ export default function SingleTaskCompletionInsights({
                       </Text>
 
                       <TaskTable tasks={task.checklist} useIcons />
+                      {/* Example badges, replace with dynamic badges based on task completion details
                       <Badge label={`${Math.floor((completedChecklistCount / task.checklist.length) * 100)}% complete!`} variant="sunshine" />
+                      */}
                     </>
                   )}
                   
@@ -134,7 +140,7 @@ export default function SingleTaskCompletionInsights({
                   Brioh is designed to help 🫵 reconnect with 🫵.
                 </Text>
                   <br/>
-                <Text as="h1" align="center" fullWidth> 🧙‍♀️🚞🤴🏰💂</Text>
+                <Text as="h2" align="center" fullWidth> 🧙‍♀️🚞🤴🏰💂</Text>
               </>
             }
             actions={(

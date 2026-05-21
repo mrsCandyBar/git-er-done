@@ -73,11 +73,11 @@ export default function Card({
       )}
 
       {eyebrow && <div className={styles.eyebrow}>{eyebrow}</div>}
-      {icon && <span className={styles.icon} aria-hidden="true">{icon}</span>}
+      {icon && <span className={`${styles.icon} icon color`} aria-hidden="true">{icon}</span>}
 
       {title && (
         <div className={styles.title}>
-          {typeof title === "string" ? <Text as="h2">{title}</Text> : title}
+          {typeof title === "string" ? <Text as="h3">{title}</Text> : title}
         </div>
       )}
 

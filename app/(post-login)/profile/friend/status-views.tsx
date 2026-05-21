@@ -5,6 +5,7 @@ import { Button, Card, Text } from "@/components/index";
 
 type StatusCardContent = {
   eyebrow: (profileName?: string) => ReactNode;
+  eyebrowIcon: string;
   icon: string;
   title: string;
   description?: (profileName: string) => ReactNode;
@@ -27,7 +28,7 @@ export function FriendView({ profileName, card }: SharedViewProps) {
   return (
     <>
       <Card
-        eyebrow={<Text as="h4">{card.eyebrow(profileName)}</Text>}
+        eyebrow={<Text as="h4">{card.eyebrow(profileName)} <span className="icon color">{card.eyebrowIcon}</span></Text>}
         icon={card.icon}
         title={<Text as="h2">{card.title}</Text>}
         actions={(
@@ -44,7 +45,7 @@ export function FriendView({ profileName, card }: SharedViewProps) {
               }
               description={<Text as="p" tone="secondary">This space is for you to explore your passions and dreams</Text>}
               >
-              <Text as="h1">💃🏰🚞</Text>
+              <Text as="h2"><span className="icon color">💃🏰🚞</span></Text>
               <Text as="h3">Inspiration & Aspirations</Text>
               <Text as="p" tone="secondary">
                 Make space for what lights you up, what gets you going, what makes you feel accomplished.
@@ -75,7 +76,7 @@ export function FriendNewView({ profileName, card }: FriendNewViewProps) {
               <b>Inspiration</b> can be anything!<br/> 
             </Text>
 
-            <Text as="h1" tone="secondary" fullWidth>
+            <Text as="h2" tone="secondary" fullWidth>
               <big>
                🧙‍♀️🐉 </big>
             </Text>
@@ -84,7 +85,7 @@ export function FriendNewView({ profileName, card }: FriendNewViewProps) {
             <Text as="p" fullWidth>
               <b>Quest</b> do <b>NOT</b> have to be 'big'
             </Text>
-            <Text as="h1" tone="secondary" fullWidth>
+            <Text as="h2" tone="secondary" fullWidth>
               🏫_🚗&nbsp;&nbsp; = &nbsp;&nbsp;🏰_🐎
             </Text>
             <Text as="p" fullWidth>
@@ -94,7 +95,7 @@ export function FriendNewView({ profileName, card }: FriendNewViewProps) {
            
 
             <br/>
-            <Text as="h1" tone="secondary">
+            <Text as="h2" tone="secondary">
               <big>💁 = 🦹‍♂️</big>
             </Text>
 

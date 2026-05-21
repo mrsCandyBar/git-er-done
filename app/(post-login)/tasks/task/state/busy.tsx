@@ -26,7 +26,8 @@ export default function TaskBusyPage({
       actions={(
         <>
           <div className={styles.stickerStackFloat}>
-            <Badge label="You got this" variant="sunshine" />
+            {/* Example badges, replace with dynamic badges based on task completion details 
+            <Badge label="You got this" variant="sunshine" />*/}
           </div>
           <Button variant="filled" onClick={() => onOpenCompleteTask(task)}>
             I've done it! 💪

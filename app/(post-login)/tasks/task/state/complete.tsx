@@ -21,6 +21,7 @@ export default function TaskCompletePage({ task }: TaskCompletePageProps) {
         actions={(
           <>
             <div className={styles.stickerStackFloat}>
+              {/* Example badges, replace with dynamic badges based on task completion details
               <Badge
                 label="You did it!"
                 subtitle={task.updatedDate ? `Started ${task.updatedDate}` : undefined}
@@ -34,7 +35,7 @@ export default function TaskCompletePage({ task }: TaskCompletePageProps) {
                     Track your progress
                   </Button>
                 </>
-              )}
+              )} */}
             </div>
             <br/>
           </>

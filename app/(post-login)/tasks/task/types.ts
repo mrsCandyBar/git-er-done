@@ -1,6 +1,6 @@
 import type { TaskMood } from "../../../../models/taskMood";
 
-export type Task = { _id?: string; label: string; checked?: boolean, updateDate?: Date };
+export type Task = { _id?: string; label: string; checked?: boolean, updateDate?: string };
 
 export type Mood = TaskMood;
 
