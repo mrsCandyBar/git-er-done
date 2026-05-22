@@ -6,7 +6,41 @@ export type BadgeRecord = {
 	description: string;
 	tagline?: string;
 	gainedFrom?: string;
-	physicalTrait?: Record<string, unknown>;
+	physicalTrait?: {
+		icon: {
+			value: string;
+			width: number;
+			height: number;
+			textSizes: {
+			round: number;
+			symbol: number;
+			}
+		},
+		label: {
+			value: string;
+			textSticker: string[];
+			offset_round: number;
+			offset_round_full: number;
+			labelWidth: number;
+			labelHeight: number;
+			textSizes: {
+			round: number[];
+			text: number[];
+			}
+		},
+		subtitle: {
+			value: string;
+			offset_round: number;
+			offset_round_full: number;
+			textSizes: {
+			round: number[];
+			}
+		},
+		color: {
+			accent: string;
+			contrast: string;
+		}
+	};
 	createdDate?: string | null | undefined;
 	updatedDate?: string | null | undefined;
 };

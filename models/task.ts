@@ -105,7 +105,7 @@ export function countCompletedTasks(profile: UserProfile): number {
         count +
         (completed?.new?.length ?? 0) +
         (completed?.fun?.length ?? 0) +
-        (completed?.task?.length ?? 0)
+        (completed?.quest?.length ?? 0)
         );
     }, 0)
     : 0;
@@ -137,16 +137,17 @@ export type detailCard = {
   title: string;
   description: string;
   checklist?: Task[];
-  createdDate?: string;
-  startedDate?: string;
-  updatedDate?: string;
-  recurId?: string;
+  createdDate?: string | null;
+  startedDate?: string | null;
+  updatedDate?: string | null;
+  recurId?: string | null;
+  badges?: TaskRecord["badges"];
   completed?: {
-    completedDate?: string;
-    finalNotes?: string;
+    completedDate?: string | null;
+    finalNotes?: string | null;
     mood?: Mood;
     recur?: boolean;
-    keepsakeUrl?: string;
+    keepsakeUrl?: string | null;
   }
   state: "waiting" | "busy" | "complete";
 };
@@ -163,6 +164,7 @@ export function toDetailCard(task: TaskRecord): detailCard {
     description: task.description,
     checklist: task.checklist,
     createdDate: task.updatedDate,
+    badges: task.badges,
     completed: task.completed
   };
 }

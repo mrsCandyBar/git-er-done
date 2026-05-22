@@ -4,13 +4,13 @@ import styles from "./Badge.module.scss";
 import BadgeIcon from "../BadgeIcon";
 import React from "react";
 
-export type BadgeVariant = "round"| "text" | "icon";
+export type BadgeVariant = "round"| "text" | "icon" | string;
 export type BadgeType = "outline" | "full";
 
 type BadgeProps = {
-  variant?: BadgeVariant;
-  type?: BadgeType;
-  className?: string;
+  variant?: BadgeVariant | null | undefined;
+  type?: BadgeType | null | undefined;
+  className?: string | null | undefined;
   icon?: {
     type?: "Noto Color Emoji" | "Noto Emoji";
     value?: string;
@@ -20,10 +20,10 @@ type BadgeProps = {
       round: number;
       symbol: number;
     };
-  }
+  };
   label?: {
     value: string;
-    textSticker?: string[];
+    textSticker?: (string)[];
     offset_round?: number;
     offset_round_full?: number;
     labelWidth?: number;
@@ -32,7 +32,7 @@ type BadgeProps = {
       round: number[];
       text: number[];
     }
-  }
+  };
   subtitle?: {
     value: string;
     offset_round?: number;
@@ -40,7 +40,7 @@ type BadgeProps = {
     textSizes: {
       round: number[];
     }
-  }
+  };
   color: {
     accent: string;
     contrast: string;
@@ -98,7 +98,7 @@ export default function Badge({
     <>
       {variant == "round" && (
         <div 
-          className={`${styles.wrapper} ${styles.round} ${styles[type]} ${className}`.trim()}
+          className={`${styles.wrapper} ${styles.round} ${styles.outline} ${className}`.trim()}
           data-color-accent={color?.accent}
           data-color-contrast={color?.contrast}
         >
@@ -142,7 +142,7 @@ export default function Badge({
             )}
           </svg>
 
-          {icon && <div className={`${styles.notoIcon}`}
+          {icon && color && <div className={`${styles.notoIcon}`}
               data-color-accent={color?.accent}
               data-color-contrast={color?.contrast}
             ><BadgeIcon 
@@ -157,7 +157,7 @@ export default function Badge({
 
       {variant == "text" && (
         <div 
-          className={`${styles.wrapper} ${styles.text} ${styles[type]} ${className}`.trim()}
+          className={`${styles.wrapper} ${styles.text} ${styles.outline} ${className}`.trim()}
           data-color-accent={color?.accent}
           data-color-contrast={color?.contrast}
         >
@@ -234,11 +234,11 @@ export default function Badge({
 
       {variant == "icon" && (
         <div 
-          className={`${styles.wrapper} ${styles.iconWrapper} ${styles[type]} ${className}`.trim()}
+          className={`${styles.wrapper} ${styles.iconWrapper} ${styles.full} ${className}`.trim()}
           data-color-accent={color?.accent}
           data-color-contrast={color?.contrast}
         >  
-          {label && (
+          {label && icon && (
             <svg width={icon.width} height={icon.height}>
               <defs>
                 <text id={`iconLabel_` + randomIndex}

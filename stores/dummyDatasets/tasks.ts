@@ -24,22 +24,22 @@ export const dummyTasks_more_completed: TaskRecord[] = [
             "started": {
                 "date": ["1779451140"],
                 "badgeId": "1",
-                "type": "start"
+                "type": "round"
             },
             "paused": {
                 "date": ["1779451140"],
                 "badgeId": "2",
-                "type": "pause"
+                "type": "text"
             },
             "completed": {
                 "date": "1779451140",
                 "badgeId": "3",
-                "type": "complete"
+                "type": "icon"
             },
             "recur": {
                 "date": "1779451140",
                 "badgeId": "4",
-                "type": "recur"
+                "type": "round"
             }
         }
     },
@@ -59,22 +59,22 @@ export const dummyTasks_more_completed: TaskRecord[] = [
             "started": {
                 "date": ["1779451140"],
                 "badgeId": "1",
-                "type": "start"
+                "type": "text"
             },
             "paused": {
                 "date": ["1779451140"],
                 "badgeId": "2",
-                "type": "pause"
+                "type": "icon"
             },
             "completed": {
                 "date": "1779451140",
                 "badgeId": "3",
-                "type": "complete"
+                "type": "round"
             },
             "recur": {
                 "date": "1779451140",
                 "badgeId": "4",
-                "type": "recur"
+                "type": "text"
             }
         },
         "completed": {
@@ -101,22 +101,22 @@ export const dummyTasks_more_completed: TaskRecord[] = [
             "started": {
                 "date": ["1779451140"],
                 "badgeId": "1",
-                "type": "start"
+                "type": "icon"
             },
             "paused": {
                 "date": ["1779451140"],
                 "badgeId": "2",
-                "type": "pause"
+                "type": "round"
             },
             "completed": {
                 "date": "1779451140",
                 "badgeId": "3",
-                "type": "complete"
+                "type": "text"
             },
             "recur": {
                 "date": "1779451140",
                 "badgeId": "4",
-                "type": "recur"
+                "type": "icon"
             }
         },
         "completed": {
@@ -141,22 +141,22 @@ export const dummyTasks_more_completed: TaskRecord[] = [
             "started": {
                 "date": ["1779451140"],
                 "badgeId": "1",
-                "type": "start"
+                "type": "round"
             },
             "paused": {
                 "date": ["1779451140"],
                 "badgeId": "2",
-                "type": "pause"
+                "type": "text"
             },
             "completed": {
                 "date": "1779451140",
                 "badgeId": "3",
-                "type": "complete"
+                "type": "icon"
             },
             "recur": {
                 "date": "1779451140",
                 "badgeId": "4",
-                "type": "recur"
+                "type": "round"
             }
         },
         "checklist": [
@@ -321,22 +321,22 @@ export const dummyTasks_completed: TaskRecord[] = [
             "started": {
                 "date": ["1779451140"],
                 "badgeId": "1",
-                "type": "start"
+                "type": "round"
             },
             "paused": {
                 "date": ["1779451140"],
                 "badgeId": "2",
-                "type": "pause"
+                "type": "round"
             }, 
             "completed": {
                 "date": "1779451140",
                 "badgeId": "3",
-                "type": "complete"
+                "type": "text"
             },
             "recur": {
                 "date": "1779451140",
                 "badgeId": "4",
-                "type": "recur"
+                "type": "round"
             }
         },
         "completed": {
