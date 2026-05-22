@@ -122,7 +122,7 @@ async function parseResponsePayload(response: Response): Promise<unknown> {
   return response.text();
 }
 
-type RequestMethod = "GET" | "POST" | "PUT";
+type RequestMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 
 async function genericRequest<TResponse = any>(config: GenericRequestConfig): Promise<TResponse> {
@@ -269,6 +269,20 @@ export function httpPatch<TResponse = any, TBody = unknown>(
   }
   
   const mergedConfig = { ...defaultConfig, ...config, method: "PATCH", path, body };
+  const response = genericRequest<TResponse>(mergedConfig);
+  return response;
+}
+
+export function httpDelete<TResponse = any>(
+  path: string,
+  config: GenericRequestConfig = {}
+) {
+  if (SHOULD_USE_DUMMY_DATA) {
+    const dummyResponse = returnDummyData("DELETE", path, config);
+    return Promise.resolve(<TResponse>dummyResponse);
+  }
+
+  const mergedConfig = { ...defaultConfig, ...config, method: "DELETE", path };
   const response = genericRequest<TResponse>(mergedConfig);
   return response;
 }

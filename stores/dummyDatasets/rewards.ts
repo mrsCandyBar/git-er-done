@@ -1,7 +1,7 @@
 
 export const rewards = [
     {  
-        _id: 1,
+        _id: "1",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -44,7 +44,7 @@ export const rewards = [
         }
     },
     { 
-        _id: 2,
+        _id: "2",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -86,7 +86,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 3,
+        _id: "3",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -128,7 +128,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 4,
+        _id: "4",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -170,7 +170,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 5,
+        _id: "5",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -212,7 +212,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 6,
+        _id: "6",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -254,7 +254,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 7,
+        _id: "7",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -296,7 +296,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 8,
+        _id: "8",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -338,7 +338,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 9,
+        _id: "9",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -380,7 +380,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 10,
+        _id: "10",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -422,7 +422,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 11,
+        _id: "11",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
@@ -464,7 +464,7 @@ export const rewards = [
         }
     }, 
     {
-        _id: 12,
+        _id: "12",
         title: "First Badge",
         description: "Completed your first milestone.",
         tagline: "You earned it!",
