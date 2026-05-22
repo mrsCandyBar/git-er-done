@@ -19,6 +19,28 @@ export const dummyTasks_more_completed: TaskRecord[] = [
             "finalNotes": "naaaaaaaaaah brah",
             "keepsakeUrl": "",
             "recur": false
+        },
+        "badges": {
+            "started": {
+                "date": ["1779451140"],
+                "badgeId": "1",
+                "type": "start"
+            },
+            "paused": {
+                "date": ["1779451140"],
+                "badgeId": "2",
+                "type": "pause"
+            },
+            "completed": {
+                "date": "1779451140",
+                "badgeId": "3",
+                "type": "complete"
+            },
+            "recur": {
+                "date": "1779451140",
+                "badgeId": "4",
+                "type": "recur"
+            }
         }
     },
     {
@@ -33,6 +55,28 @@ export const dummyTasks_more_completed: TaskRecord[] = [
         "category": "69d769a5b3f97a842c094800",
         "userId": "6a0ed3bc67daa4718618ef6a",
         "checklist": [],
+        "badges": {
+            "started": {
+                "date": ["1779451140"],
+                "badgeId": "1",
+                "type": "start"
+            },
+            "paused": {
+                "date": ["1779451140"],
+                "badgeId": "2",
+                "type": "pause"
+            },
+            "completed": {
+                "date": "1779451140",
+                "badgeId": "3",
+                "type": "complete"
+            },
+            "recur": {
+                "date": "1779451140",
+                "badgeId": "4",
+                "type": "recur"
+            }
+        },
         "completed": {
             "mood": "confused",
             "completedDate": "2026-05-21T09:54:25.416Z",
@@ -53,6 +97,28 @@ export const dummyTasks_more_completed: TaskRecord[] = [
         "category": "69d769a5b3f97a842c094800",
         "checklist": [],
         "userId": "6a0ed3bc67daa4718618ef6a",
+        "badges": {
+            "started": {
+                "date": ["1779451140"],
+                "badgeId": "1",
+                "type": "start"
+            },
+            "paused": {
+                "date": ["1779451140"],
+                "badgeId": "2",
+                "type": "pause"
+            },
+            "completed": {
+                "date": "1779451140",
+                "badgeId": "3",
+                "type": "complete"
+            },
+            "recur": {
+                "date": "1779451140",
+                "badgeId": "4",
+                "type": "recur"
+            }
+        },
         "completed": {
             "mood": "not-for-me",
             "completedDate": "2026-05-21T09:53:59.558Z",
@@ -71,6 +137,28 @@ export const dummyTasks_more_completed: TaskRecord[] = [
         "recurId": "6a0ed4a467daa4718618ef6c",
         "state": "complete",
         "category": "69d76a08b3f97a842c094801",
+        "badges": {
+            "started": {
+                "date": ["1779451140"],
+                "badgeId": "1",
+                "type": "start"
+            },
+            "paused": {
+                "date": ["1779451140"],
+                "badgeId": "2",
+                "type": "pause"
+            },
+            "completed": {
+                "date": "1779451140",
+                "badgeId": "3",
+                "type": "complete"
+            },
+            "recur": {
+                "date": "1779451140",
+                "badgeId": "4",
+                "type": "recur"
+            }
+        },
         "checklist": [
             {
                 "label": "init guide",
@@ -229,6 +317,28 @@ export const dummyTasks_completed: TaskRecord[] = [
             }
         ],
         "userId": "6a0ed3bc67daa4718618ef6a",
+        "badges": {
+            "started": {
+                "date": ["1779451140"],
+                "badgeId": "1",
+                "type": "start"
+            },
+            "paused": {
+                "date": ["1779451140"],
+                "badgeId": "2",
+                "type": "pause"
+            }, 
+            "completed": {
+                "date": "1779451140",
+                "badgeId": "3",
+                "type": "complete"
+            },
+            "recur": {
+                "date": "1779451140",
+                "badgeId": "4",
+                "type": "recur"
+            }
+        },
         "completed": {
             "mood": "happy",
             "completedDate": "2026-05-21T09:47:14.133Z",

@@ -5,8 +5,9 @@ import {
   dummyCurrentUser, 
   dummyCurrentUser_friend_1_task,
   dummyCurrentUser_friendNew,
+  dummyCurrentUser_friendDear,
   dummyCurrentUser_friendClose, 
-  dummyCurrentUser_friendDear } from "./dummyDatasets/user";
+   } from "./dummyDatasets/user";
 import { 
   dummyTasks,
   dummyTasks_completed,
@@ -16,7 +17,7 @@ import {
 
 let dummySelectedUser: UserProfile | null = null;
 let dummySelectedTask: TaskRecord | null = null;
-let dummyTaskListCache: TaskRecord[] = [...dummyTasks];
+let dummyTaskListCache: TaskRecord[] = [...dummyTasks_more, ...dummyTasks_more_completed];
 
 export function returnDummyData(method: string, path: string, body?: any) {
   if (method === "GET") {
@@ -39,10 +40,11 @@ export function returnDummyData(method: string, path: string, body?: any) {
 
     } else if (path.includes("/tasks/")) {
       const taskId = path.split("/").pop();
-      const foundTask = dummyTasks.find((entry) => entry._id === taskId);
+      const foundTask = dummyTaskListCache.find((entry) => entry._id === taskId);
       if (!foundTask) { throw new Error(`Task ${taskId} not found`); }
       dummySelectedTask = foundTask;
       return dummySelectedTask;
+
     }
   }
 
@@ -52,10 +54,28 @@ export function returnDummyData(method: string, path: string, body?: any) {
       dummySelectedUser = dummyLoginUser.user;
       return dummyLoginUser;
 
+    } else if (path.includes("/tasks/update/")) {
+      const taskId = path.split("/").pop();
+      const foundTask = dummyTaskListCache.findIndex((entry) => entry._id === taskId);
+      if (foundTask === -1) { throw new Error(`Task ${taskId} not found`); }
+      else {
+        dummyTaskListCache[foundTask] = {
+          ...dummyTaskListCache[foundTask],
+          ...body,
+        }
+      }
+      return dummyTaskListCache;
+
     } else if (path.includes("/tasks")) {
-      dummyTaskListCache = (dummyTaskListCache.length > 0) ? 
-          [body, ...dummyTaskListCache] : 
-          [body];
+      const taskId = path.split("/").pop();
+      const foundTask = dummyTaskListCache.findIndex((entry) => entry._id === taskId);
+      if (foundTask === -1) { throw new Error(`Task ${taskId} not found`); }
+      else {
+        dummyTaskListCache[foundTask] = {
+          ...dummyTaskListCache[foundTask],
+          ...body,
+        }
+      }
       return dummyTaskListCache;
     }
   }
@@ -72,51 +92,63 @@ export function returnDummyData(method: string, path: string, body?: any) {
       return dummySelectedUser;
 
     } else if (path.includes("/tasks/start/")) {
-      dummySelectedTask = dummySelectedTask ? {
-				...dummySelectedTask,
-				state: "busy"
-			} : {
-        ...dummyTasks[0],
-        state: "busy"
-      };
+      const taskId = path.split("/").pop();
+      const foundTask = dummyTaskListCache.findIndex((entry) => entry._id === taskId);
+      if (foundTask === -1) { throw new Error(`Task ${taskId} not found`); }
+      else {
+        dummyTaskListCache[foundTask] = {
+          ...dummyTaskListCache[foundTask],
+          state: "busy"
+        }
+      }
 
+      dummySelectedTask = dummyTaskListCache[foundTask]
       return dummySelectedTask;
       
     } else if (path.includes("/tasks/pause/")) {
-      dummySelectedTask = dummySelectedTask ? {
-				...dummySelectedTask,
-				state: "waiting"
-			} : {
-        ...dummyTasks[0],
-        state: "waiting"
-      };
+      const taskId = path.split("/").pop();
+      const foundTask = dummyTaskListCache.findIndex((entry) => entry._id === taskId);
+      if (foundTask === -1) { throw new Error(`Task ${taskId} not found`); }
+      else {
+        dummyTaskListCache[foundTask] = {
+          ...dummyTaskListCache[foundTask],
+          state: "waiting"
+        }
+      }
 
+      dummySelectedTask = dummyTaskListCache[foundTask]
       return dummySelectedTask;
       
     } else if (path.includes("/tasks/")) {
-      dummySelectedTask = dummySelectedTask ? {
-				...dummySelectedTask,
-				...body
-			} : {
-        ...dummyTasks[0],
-        ...body
-      };
+      const taskId = path.split("/").pop();
+      const foundTask = dummyTaskListCache.findIndex((entry) => entry._id === taskId);
+      if (foundTask === -1) { throw new Error(`Task ${taskId} not found`); }
+      else {
+        dummyTaskListCache[foundTask] = {
+          ...dummyTaskListCache[foundTask],
+          ...body
+        }
+      }
 
+      dummySelectedTask = dummyTaskListCache[foundTask]
       return dummySelectedTask;
 
-    } else if (path.includes("/complete")) {
-      if (body) {
-        dummySelectedTask = dummySelectedTask ? {
-          ...dummySelectedTask,
+    } 
+    
+    else if (path.includes("/complete")) {
+      const taskId = path.split("/").pop();
+      const foundTask = dummyTaskListCache.findIndex((entry) => entry._id === taskId);
+      if (foundTask === -1) { throw new Error(`Task ${taskId} not found`); }
+      else {
+        dummyTaskListCache[foundTask] = {
+          ...dummyTaskListCache[foundTask],
           state: "complete",
           completed: { ...body },
-        } : {
-          ...dummyTasks[0],
-          state: "complete",
-          completed: { ...body },
-        };
-        return dummySelectedTask;
+        }
       }
+
+      dummySelectedTask = dummyTaskListCache[foundTask]
+      return dummySelectedTask;
     }
   }
 };

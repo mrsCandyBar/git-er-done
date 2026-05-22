@@ -47,30 +47,54 @@ DONE:
 - compile recurring page info about the recursion task 05/05
 - replace eyebrow with mapping to the correct category type 05/05
 - [BE] achievement notification settings (Progress Update Push) 05/05
-- Update profile status [FE]
-- Test flow and payloads
+- Update profile status [FE] 05/21
+- Test flow and dummy payloads 05/21
+- badge selection and awarding [BE] 05/21
 
 TODO:
 - smoother transition effects (the no-load look)
-- profile page
 - set achievement notification settings (FE)
-- achievements can be gained via FE
-  - achievements for completion in a week is task count: 6, 12 and 18 (max tasks)
-  - achievements for duration: quick thinker: 5 minutes and under, focused: 15 - 30 minutes, locked-in: 30 minutes - 2 hours, mountaineer: 2 hours and higher
-  - achievements for endurance: total completed task count 
-      20 tasks, 
-      50 tasks, 
-      100 tasks, 
-      210 tasks, 
-      430 tasks, 
-      870 tasks, 
-      1750 tasks, 
-      3510 tasks 
+- profile page
+
+- achievements / badges drawers
+- your brio story
+- awarding achievements
+  - achievements can be gained via FE
+    These are given out once the user has reached the rotation limit: see "set achievement notification settings (FE)"
+
+    - achievements for completion in a week is task count: 
+        noice: 5, 
+        whaaat: 10 
+        damn son: 20 (max tasks)
+
+    - achievements for duration: 
+        hummingbird: in and out: 5 minutes and under, 
+        bee: get 'er done: 15 - 30 minutes, 
+        fox: locked-in: 30 minutes - 2 hours, 
+        panther: leaves no loose ends: 2 hours and higher
+
+    - achievements for endurance: total completed task count 
+        1,      starts with 1
+        20,     practice makes perfect
+        50,     you're gettin' good
+        100,    lookit you
+        200,    Smashing
+        350,    whoa, that's awesome
+        500,    I think you have a new fan
+        700,    you've got this
+        1000,   go you!
+        1500,   give em your all
+        2000,   I believe in you!
+        3500,   You got skills
+        5000,   You're awesome!
+        7000,   Can you believe this view?
+        10000,  It all started with 1
  
-- achievements over given time frame
-- achievements page overview
+- achievements over given time frame (calendar and timeline journey)
+- achievements page overview (what you've gained and what you can still achieve)
 - achievements calendar
 - Test flow and payloads
+
 
 
 THEN
@@ -83,5 +107,5 @@ Extra Auth
     - if user leaves page for 30 mins, add a user check. simple prop check for reinit purpose in the user payload
     - if user returns a day later 
       - let the user to use the token to call the data and then prompt them for the prop check
-- Add recurring badge achievements [BE and FE]
 - BucketList
+- Recurring Tasks / Hobbies

@@ -11,7 +11,7 @@ import {
 import ScatteredCardStack from "@/components/CardStack/ScatteredCardStack";
 import StyleguideThemeToggle from "@/components/StyleguideThemeToggle";
 import styles from "./page.module.scss";
-import { rewards } from "@/assets/achievements/rewards";
+import { rewards } from "@/stores/dummyDatasets/rewards";
 
 export default function Styleguide() {
   const [showClosableCard, setShowClosableCard] = useState(true);
@@ -129,7 +129,7 @@ export default function Styleguide() {
           {rewards.map((reward:any, index:number) => (
             <BadgeCollection 
               key={index} 
-              badgeInfo={reward} />
+              badgeInfo={reward.physicalTrait} />
           ))}
         </section>
 

@@ -1,5 +1,5 @@
 import type { Column, Mood, Task } from "../app/(post-login)/tasks/task/types";
-import type { TaskCategory, TaskCategoryModel } from "../models/userProfile";
+import type { TaskCategoryModel } from "../models/userProfile";
 import { httpGet, httpPost, httpPut, type GenericRequestConfig } from "./httpClient";
 
 export type TaskRecord = {
@@ -14,6 +14,28 @@ export type TaskRecord = {
 	createdDate?: string | null | undefined;
 	startedDate?: string | null | undefined;
 	updatedDate?: string | null | undefined;
+	badges?: {
+		started?: {
+			date?: string[] | null | undefined;
+			badgeId?: string | null | undefined;
+			type?: string | null | undefined;
+		};
+		paused?: {
+			date?: string[] | null | undefined;
+			badgeId?: string | null | undefined;
+			type?: string | null | undefined;
+		};
+		completed?: {
+			date?: string | null | undefined;
+			badgeId?: string | null | undefined;
+			type?: string | null | undefined;
+		};
+		recur?: {
+			date?: string | null | undefined;
+			badgeId?: string | null | undefined;
+			type?: string | null | undefined;
+		};
+	}
 	completed?: {
 		completedDate?: string | null | undefined;
 		mood?: Mood;
