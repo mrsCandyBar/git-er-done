@@ -22,8 +22,6 @@ export type TaskRecord = {
 		};
 		paused?: {
 			date?: string[] | null | undefined;
-			badgeId?: string | null | undefined;
-			type?: string | null | undefined;
 		};
 		completed?: {
 			date?: string | null | undefined;

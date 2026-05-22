@@ -2,6 +2,7 @@ export { userStore } from "./userStore";
 export { taskStore } from "./taskStore";
 export { achievementsStore } from "./achievementsStore";
 export { badgesStore } from "./badgesStore";
+
 export {
 	HttpError,
 	httpDelete,
@@ -9,5 +10,5 @@ export {
 	httpPost,
 	httpPut,
 	type QueryParams,
-	type RequestConfig,
+	type GenericRequestConfig,
 } from "./httpClient";

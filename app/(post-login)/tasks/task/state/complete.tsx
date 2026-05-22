@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Badge, Button, Card, Text } from "@/components/index";
-import { getTaskMoodLabel } from "@/models/taskMood";
 import type { detailCard } from "@/models/task";
+import { badgesStore, type BadgeRecord } from "@/stores/badgesStore";
 import styles from "../page.module.scss";
 import moment from "moment";
 
@@ -11,6 +12,31 @@ type TaskCompletePageProps = {
 };
 
 export default function TaskCompletePage({ task }: TaskCompletePageProps) {
+  const [startedBadge, setStartedBadge] = useState<BadgeRecord | null>(null);
+  const [completedBadge, setCompletedBadge] = useState<BadgeRecord | null>(null);
+  const [recurBadge, setRecurBadge] = useState<BadgeRecord | null>(null);
+  const startedBadgeId = task.badges?.started?.badgeId;
+  const completedBadgeId = task.badges?.completed?.badgeId;
+  const recurBadgeId = task.badges?.recur?.badgeId;
+
+  useEffect(() => {
+    if (startedBadgeId) {
+      badgesStore.getBadgeById(startedBadgeId).then((badge) => {
+        setStartedBadge(badge ?? null);
+      });
+    }
+    if (completedBadgeId) {
+      badgesStore.getBadgeById(completedBadgeId).then((badge) => {
+        setCompletedBadge(badge ?? null);
+      });
+    }
+    if (recurBadgeId) {
+      badgesStore.getBadgeById(recurBadgeId).then((badge) => {
+        setRecurBadge(badge ?? null);
+      });
+    }
+  }, [startedBadgeId, completedBadgeId, recurBadgeId]);
+
   return (
     task.completed && (
       <Card
@@ -21,21 +47,33 @@ export default function TaskCompletePage({ task }: TaskCompletePageProps) {
         actions={(
           <>
             <div className={styles.stickerStackFloat}>
-              {/* Example badges, replace with dynamic badges based on task completion details
-              <Badge
-                label="You did it!"
-                subtitle={task.updatedDate ? `Started ${task.updatedDate}` : undefined}
-                variant="mint"
-              />
-              {task.completed.mood && <Badge label={getTaskMoodLabel(task.completed.mood)} variant="coral" />}
-              {task.completed.recur && (
-                <>
-                  <Badge label="We're doing this one again!" variant="sky" />
-                  <Button href={`/tasks/recur/task?recurId=${task.recurId}`} variant="ghost" className={styles.recurProgressLink}>
-                    Track your progress
-                  </Button>
-                </>
-              )} */}
+              {startedBadge && startedBadge.physicalTrait && (
+                <Badge
+                  variant={startedBadgeId}
+                  icon={startedBadge.physicalTrait.icon}
+                  label={startedBadge.physicalTrait.label}
+                  subtitle={startedBadge.physicalTrait.subtitle}
+                  color={startedBadge.physicalTrait.color}
+                />
+              )}
+              {completedBadgeId && completedBadge && completedBadge.physicalTrait && (
+                <Badge
+                  variant={completedBadgeId}
+                  icon={completedBadge.physicalTrait.icon}
+                  label={completedBadge.physicalTrait.label}
+                  subtitle={completedBadge.physicalTrait.subtitle}
+                  color={completedBadge.physicalTrait.color}
+                />
+              )}
+              {recurBadgeId && recurBadge && recurBadge.physicalTrait && (
+                <Badge
+                  variant={recurBadgeId}
+                  icon={recurBadge.physicalTrait.icon}
+                  label={recurBadge.physicalTrait.label}
+                  subtitle={recurBadge.physicalTrait.subtitle}
+                  color={recurBadge.physicalTrait.color}
+                />
+              )}
             </div>
             <br/>
           </>

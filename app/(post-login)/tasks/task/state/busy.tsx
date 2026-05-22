@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Badge, Button, Card, TaskTable, Text } from "@/components/index";
 import type { detailCard } from "@/models/task";
+import { badgesStore, type BadgeRecord } from "@/stores/badgesStore";
 import styles from "../page.module.scss";
 
 type TaskBusyPageProps = {
@@ -17,6 +19,16 @@ export default function TaskBusyPage({
   onSetWaiting,
   onToggleTask,
 }: TaskBusyPageProps) {
+  const [startedBadge, setStartedBadge] = useState<BadgeRecord | null>(null);
+  const badgeId = task.badges?.started?.badgeId;
+
+  useEffect(() => {
+    if (badgeId) {
+      badgesStore.getBadgeById(badgeId).then((badge) => {
+        setStartedBadge(badge ?? null);
+      });
+    }
+  }, [badgeId]);
   return (
     <Card
       eyebrow={<Text as="h4">{task.eyebrow}</Text>}
@@ -26,8 +38,15 @@ export default function TaskBusyPage({
       actions={(
         <>
           <div className={styles.stickerStackFloat}>
-            {/* Example badges, replace with dynamic badges based on task completion details 
-            <Badge label="You got this" variant="sunshine" />*/}
+            {badgeId && startedBadge && startedBadge.physicalTrait && (
+              <Badge
+                variant={badgeId}
+                icon={startedBadge.physicalTrait.icon}
+                label={startedBadge.physicalTrait.label}
+                subtitle={startedBadge.physicalTrait.subtitle}
+                color={startedBadge.physicalTrait.color}
+              />
+            )}
           </div>
           <Button variant="filled" onClick={() => onOpenCompleteTask(task)}>
             I've done it! 💪

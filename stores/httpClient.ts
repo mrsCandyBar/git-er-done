@@ -45,8 +45,10 @@ export type GenericRequestConfig = {
   path?: string;
 };
 
-const defaultConfig: Omit<GenericRequestConfig, "path"> = {
-  headers: { "Content-Type": "application/json" },
+let defaultConfig: Omit<GenericRequestConfig, "path"> = {
+  headers: { 
+    "Content-Type": "application/json" 
+  },
 };
 
 // Helper to set the Authorization header globally
@@ -54,12 +56,15 @@ export function setAuthToken(token: string | null) {
   if (token) {
     defaultConfig.headers = {
       ...defaultConfig.headers,
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     };
+
   } else {
     // Remove the Authorization header
-    const { Authorization, ...rest } = defaultConfig.headers || {};
-    defaultConfig.headers = rest;
+    if (defaultConfig.headers?.toLocaleString().includes("Authorization")) {
+      const { Authorization, ...rest } = defaultConfig.headers as Record<string, string>;
+      defaultConfig.headers = rest;
+    } 
   }
 }
 
@@ -122,7 +127,7 @@ async function parseResponsePayload(response: Response): Promise<unknown> {
   return response.text();
 }
 
-type RequestMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+type RequestMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | string;
 
 
 async function genericRequest<TResponse = any>(config: GenericRequestConfig): Promise<TResponse> {
